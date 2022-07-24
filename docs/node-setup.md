@@ -105,9 +105,15 @@ Since the commands are for Ubuntu, you'll have to modify them if you're using a 
     5. Set the peers:
 
         ```sh
-        sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" ~/.juno/config/config.toml
+        sed -i "s/persistent_peers = .*/persistent_peers = \"$PEERS\"/" ~/.juno/config/config.toml
         ```
-    6. In `~/.juno/config/app.toml`, set the value of the `halt-height` key to `2616300`.
+    6. Set the block height to halt at:
+    
+        ```sh
+        sed -i 's/halt-height = 0/halt-height = 2616300/' ~/.juno/config/app.toml
+        ```
+    7. Follow this step if you want to enable the REST API. In the `[api]` section of `~/.juno/config/app.toml`, set the `enable` key's value to `true`. 
+    8. Follow this step if you want to enable Prometheus. In the `[instrumentation]` section of `~/.juno/config/config.toml`, set the `prometheus` key's value to `true`.
 4. Set up the Juno systemd unit:
     1. Create the unit (replace `ubuntu` with your user):
 
@@ -119,9 +125,9 @@ Since the commands are for Ubuntu, you'll have to modify them if you're using a 
 
         [Service]
         User=ubuntu
-        ExecStart=/home/ubuntu/go/bin/junod start --x-crisis-skip-assert-invariants --halt-height 2616300
+        ExecStart=/home/ubuntu/go/bin/junod start --x-crisis-skip-assert-invariants
         RestartSec=3
-        Restart=no
+        Restart=always
         LimitNOFILE=4096
 
         [Install]
@@ -129,29 +135,14 @@ Since the commands are for Ubuntu, you'll have to modify them if you're using a 
         EOF
         ```
 
-        - We use the `--x-crisis-skip-assert-invariants` flag to skip a check that takes up to several hours to
-          complete. It's recommended to skip it, and it doesn't affect archive nodes anyway.
-        - We use the `--halt-height` flag to schedule the node to halt once it needs to be upgraded.
-        - We set the `Restart` directive to `no` because we don't want the node to automatically restart after it halts.
-          Otherwise the halt would've been useless because the node will resume downloading blocks thereby corrupting
-          the DB.
-    2. Reload systemd:
+        We use the `--x-crisis-skip-assert-invariants` flag to skip a check that takes up to several hours to complete. It's recommended to skip it, and it doesn't affect archive nodes anyway.
+    2. Start the unit:
 
         ```sh
-        sudo systemctl daemon-reload
+        sudo systemctl enable --now junod
         ```
-    3. Enable the unit:
+    3. Verify that it's running:
 
-        ```sh
-        sudo systemctl enable junod
-        ```
-    4. Start the unit:
-
-        ```sh
-        sudo systemctl start junod
-        ```
-    5. Verify that it's running:
-
-        ```sh
-        sudo systemctl status junod
-        ```
+         ```sh
+         sudo systemctl status junod
+         ```

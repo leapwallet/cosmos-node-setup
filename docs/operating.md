@@ -16,10 +16,6 @@ journalctl -fu junod
 
 Follows the journal for the `junod` systemd unit. This is useful to check whether the chain has halted, which block it's currently downloading, any error message that got printed if the node crashed, etc.
 
-## systemd Unit
-
-The value of the `Restart` directive in the `/etc/systemd/system/junod.service` file must be either `no` or `always`. If the `--halt-height` flag has been set when running `junod`, then the value must be `no` because otherwise the node will automatically restart thereby corrupting the database by prcoessing blocks it wasn't programmed to. Otherwise, the value must be `always`.
-
 ## Genesis Error
 
 If the node keeps crashing with the following error message:
@@ -28,7 +24,7 @@ If the node keeps crashing with the following error message:
 Error: error during handshake: error on replay: validator set is nil in genesis and still empty after InitChain
 ```
 
-then you must restore the node via a backup. If you don't have a backup, then you'll have to run the command `junod unsafe-reset-all` which will wipe the DB causing you to have to restart the entire syncing process.
+then you must run `junod unsafe-reset-all` which will wipe the DB. This error only has the potential to surface when initially setting up the node, and not after the node has been downloading blocks, upgrading, etc.
 
 ## Peers
 
@@ -98,23 +94,14 @@ Here's how to upgrade the node:
     ```sh
     junod version
     ```
-7. If there's another upgrade to perform after this one, then follow these steps:
-   1. In `/etc/systemd/system/junod.service`, set the value of the `--halt-height` flag to the next upgrade's target block height. For example, the value of the `ExecStart` directive should look similar to the following if you just upgraded to v3.1.1, and need to prepare for the v4.0.0 upgrade:
+7. Update the halt height:
 
-       ```service
-       ExecStart=/home/ubuntu/go/bin/junod start --x-crisis-skip-assert-invariants --halt-height 2951100
-       ```
-   2. In `/etc/systemd/system/junod.service`, set the value of the `Restart` directive to `no`.
-   3. In `~/.juno/config/app.toml`, set the value of the `halt-height` key to the same block height you had set in step 1. 
-8. If there isn't another upgrade to perform after this one, then follow these steps:
-   1. In `/etc/systemd/system/junod.service`, remove the `--halt-height` flag. For example, the value of the `ExecStart` directive should look similar to the following:
+    ```sh
+    sed -i 's/halt-height = .*/halt-height = <HEIGHT>/' app.toml
+    ```
 
-       ```service
-       ExecStart=/home/ubuntu/go/bin/junod start --x-crisis-skip-assert-invariants
-       ```
-   2. In `/etc/systemd/system/junod.service`, set the value of the `Restart` directive to `always`.
-   3. In `~/.juno/config/app.toml`, set the value of the `halt-height` key to `0`.
-9. Reload systemd:
+    Replace `<HEIGHT>` with the next upgrade's block height if there is one, and `0` otherwise.
+8. Reload systemd:
 
     ```sh
     sudo systemctl daemon-reload
