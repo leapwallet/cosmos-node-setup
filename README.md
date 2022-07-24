@@ -1,2 +1,7 @@
-# juno-aws-setup
-🪐 How to set up a Juno mainnet archive node on AWS
+# Juno AWS Setup
+
+## [Setup](setup.md)
+
+## License
+
+This project is under the [MIT License](LICENSE).
