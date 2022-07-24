@@ -15,6 +15,4 @@
 - See if you need to set the halt height in the service file. Also, maybe "ExecStart" can be shortened
   from `/home/ubuntu/go/bin/junod` to `junod`. Also, maybe we can set `Restart=always` in the service file always.
 - Document enabling APIs.
-- Ensure that the "###Upgrading" section's point 8. iii. has the correct halt height (maybe it's supposed to be -1 by
-  default, or something like that). Also, check if after step 9, something like `sudo systemctl restart junod` must be
-  run.
+- Ensure that the "###Upgrading" section's point 8. iii. has the correct halt height (maybe it's supposed to be -1 by default, or something like that). Also, check if after step 9, something like `sudo systemctl restart junod` must be run.

@@ -1,10 +1,6 @@
 # AWS Configuration
 
-Using a serverless solution such as AWS Fargate would've been more scalable since the primary purpose of an archive node
-is to serve API requests. However, since a blockchain node is a DB and API server combined, it's impossible to use a
-serverless solution. This is because a serverless solution requires the DB to be scaled separately from the API server.
-Since the blockchain combines the two, the DB would get corrupted because the API servers would all be writing to the
-DB, and the DB isn't engineered to handle duplicate writes.
+Using a serverless solution such as AWS Fargate would've been more scalable since the primary purpose of an archive node is to serve API requests. However, since a blockchain node is a DB and API server combined, it's impossible to use a serverless solution. This is because a serverless solution requires the DB to be scaled separately from the API server. Since the blockchain combines the two, the DB would get corrupted because the API servers would all be writing to the DB, and the DB isn't engineered to handle duplicate writes.
 
 ## AWS EC2 Configuration
 
@@ -26,14 +22,11 @@ We recommend using the AMI with the ID `ami-052efd3df9dad4825`.
 
 ### Instance Type
 
-For a validator, the recommended RAM is 32 GB, and the recommended number of CPU cores is 4. Since archive nodes don't
-need more than half of that, we'll use the `t3a.xlarge` instance type because it's the cheapest options that fits our
-needs.
+For a validator, the recommended RAM is 32 GB, and the recommended number of CPU cores is 4. Since archive nodes don't need more than half of that, we'll use the `t3a.xlarge` instance type because it's the cheapest options that fits our needs.
 
 ### Key Pair
 
-It's up to you whether you use a key pair, and which specifications the key pair uses. We recommend you use a key pair,
-and with the following specifications:
+It's up to you whether you use a key pair, and which specifications the key pair uses. We recommend you use a key pair, and with the following specifications:
 
 - **Key pair name**: We recommend something similar to _juno-mainnet-archive-node_.
 - **Key pair type**: RSA
@@ -47,8 +40,7 @@ and with the following specifications:
 - **Firewall (security groups)**:
     - **Security group name**: We recommend something similar to _juno-mainnet-archive-node_.
     - **Description**: We recommend something similar to _Juno mainnet archive node on AWS EC2_.
-    - **Inbound security groups rules** (We recommend adding the following security groups but none of them are
-      mandatory.):
+    - **Inbound security groups rules** (We recommend adding the following security groups but none of them are mandatory.):
         - **Security group rule 1**:
             - **Type**: **SSH**
             - **Source type**: **My IP**
@@ -95,17 +87,13 @@ Therefore, the configuration should be `1x 1000 GiB gp3 Root volume`.
 
 This section deals with setting up AWS EBS backups. It's optional but highly recommended.
 
-It can take several days for a node to finish downloading the older blocks. If the DB gets corrupted (e.g., due to a
-failed upgrade), then you'll have to start syncing from the beginning. Therefore, we recommend taking a daily backup so
-that you'll lose at most a day's syncing progress in case the DB gets corrupted.
+It can take several days for a node to finish downloading older blocks. If the DB gets corrupted (e.g., due to a failed upgrade), then you'll have to start syncing from the beginning again. Therefore, we recommend taking a daily backup so that you'll only lose at most a day's syncing progress in case the DB gets corrupted.
 
-We recommend taking one backup daily because fewer would somewhat defeat the purpose, and taking more than one is
-expensive.
+We recommend taking one backup daily because fewer would somewhat defeat the purpose, and more would be too expensive.
 
 Here's how to set up the daily backup:
 
-1. Add a tag to the EBS volume. We recommend setting the key to something like _Name_, and the value to something like _
-   juno-mainnet-archive-node_.
+1. Add a tag to the EBS volume. We recommend setting the key to something like _Name_, and the value to something like _juno-mainnet-archive-node_.
 2. Go to the Lifecycle Manager page which looks similar to the following screenshot:
 
    ![Lifecycle Manager](lifecycle-manager.png)
@@ -122,5 +110,4 @@ Here's how to set up the daily backup:
     3. Set **Every** to **24 hours**.
     4. Set **Retention type** to **Count**.
     5. Set **Keep** to 1.
-6. To verify that the policy works as expected, check 24 hours from now that a snapshot was created, and check 48 hours
-   from now that the first snapshot has been replaced by a newer one.
+6. To verify that the policy works as expected, check 24 hours from now that a snapshot was created, and check 48 hours from now that the first snapshot has been replaced by a newer one.
