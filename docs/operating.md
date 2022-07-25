@@ -43,7 +43,7 @@ Blocks are synced via peers. If every peer the node is connected to becomes unre
 3. Update the peers:
 
     ```sh
-    sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" ~/.juno/config/config.toml
+    sed -i "s/persistent_peers = .*/persistent_peers = \"$PEERS\"/" ~/.juno/config/config.toml
     ```
 
 ## Available Upgrades

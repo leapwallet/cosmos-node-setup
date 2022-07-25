@@ -1,8 +1,8 @@
 # Juno AWS Setup
 
-This repo explains how to set up a [Juno](https://www.junonetwork.io/) mainnet archive node on AWS. I created it because there are zero articles, videos, etc. on doing this, and even the official docs on how to just set up the Juno node are incorrect.
+This repo explains how to set up a [Juno](https://www.junonetwork.io/) mainnet archive node on AWS. I created it because there are zero articles, videos, etc. on doing this, and even the official docs on how to just set up the Juno node are incorrect. Every section in this document can be used independently of the others. For example, you can swap out the AWS setup in favor of your own hardware configuration, and the rest of the document will still apply verbatim.
 
-Every section in this document can be used independently of the others. For example, you can swap out the AWS setup in favor of your own hardware configuration, and the rest of the document will still apply verbatim.
+This repo is written for people who know nothing about running a Juno node on AWS. While concepts specific to operating Juno nodes on AWS such as which AWS services to use are explained, concepts specific to Juno (e.g., what is a blockchain) and AWS (e.g., what is AWS EBS) aren't explained. This is because the official docs are good, and you can look up only what you need to based on your experience level.
 
 ## To-dos
 

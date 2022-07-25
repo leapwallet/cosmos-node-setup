@@ -18,7 +18,7 @@ Since the commands are for Ubuntu, you'll have to modify them if you're using a 
         ```sh
         sudo apt-get install make build-essential gcc git jq chrony -y
         ```
-    4. Download a version of Go that's greater than or equal to 1.18, and less than 2:
+    4. Download a version of Go that's greater than, or equal to 1.18, and less than 2:
 
         ```sh
         wget https://golang.org/dl/go1.18.2.linux-amd64.tar.gz

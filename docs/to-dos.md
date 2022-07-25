@@ -1,7 +1,6 @@
 # To-dos
 
-- Use EC2 Spot instances, savings plans, and budget alerts.
-- Use two EC2 instances in different AZs for redundancy with a load balancer.
+- Use EC2 Spot instances, savings plans, and budget alerts. Use two EC2 instances in different AZs for redundancy with a load balancer. Obviously, only back up one of the AWS EBS volumes.
 - Use Fish instead of the default shell.
 - Use Terraform.
 - Set up rate limiting.

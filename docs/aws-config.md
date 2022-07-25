@@ -66,7 +66,7 @@ It's up to you whether you use a key pair, and which specifications the key pair
             - **Source type**: **Anywhere**
             - **Description**: We recommend something similar to _Prometheus_.
 
-### Configure storage
+### Configure Storage
 
 - The blockchain is approximately 1 TiB in size.
 - We recommend using a `gp3` root volume because the others are either too slow (e.g., `gp2`) or expensive (e.g., `io2`
