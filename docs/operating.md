@@ -97,7 +97,7 @@ Here's how to upgrade the node:
 7. Update the halt height:
 
     ```sh
-    sed -i 's/halt-height = .*/halt-height = <HEIGHT>/' app.toml
+    sed -i 's/halt-height = .*/halt-height = <HEIGHT>/' ~/.juno/config/app.toml
     ```
 
     Replace `<HEIGHT>` with the next upgrade's block height if there is one, and `0` otherwise.
@@ -105,4 +105,9 @@ Here's how to upgrade the node:
 
     ```sh
     sudo systemctl daemon-reload
+    ```
+9. Restart Juno:
+
+    ```sh
+    sudo systemctl restart junod
     ```
