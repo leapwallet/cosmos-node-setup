@@ -42,29 +42,32 @@ It's up to you whether you use a key pair, and which specifications the key pair
     - **Description**: We recommend something similar to _Juno mainnet archive node on AWS EC2_.
     - **Inbound security groups rules** (We recommend adding the following security groups but none of them are mandatory.):
         - **Security group rule 1**:
+            Add this security group if you need SSH access to the AWS EC2 instance.
+
             - **Type**: **SSH**
             - **Source type**: **My IP**
             - **Description**: We recommend something similar to _SSH for admin desktop_.
         - **Security group rule 2**:
+            Add this security group if you want to allow clients to make REST API calls.
+
             - **Type**: **Custom TCP**
             - **Port range**: 1317
             - **Source type**: **Anywhere**
             - **Description**: We recommend something similar to _Allows the frontends to make REST API calls_.
         - **Security group rule 3**:
+            Add this security group if you want to allow clients to make gRPC calls.
+            
             - **Type**: **Custom TCP**
             - **Port range**: 9090
             - **Source type**: **Anywhere**
             - **Description**: We recommend something similar to _Allows the frontends to make gRPC calls_.
         - **Security group rule 4**:
+            Add this security group if you want to allow clients to make gRPC Web calls.
+            
             - **Type**: **Custom TCP**
             - **Port range**: 9091
             - **Source type**: **Anywhere**
             - **Description**: We recommend something similar to _Allows the frontends to make gRPC Web calls_.
-        - **Security group rule 5**:
-            - **Type**: **Custom TCP**
-            - **Port range**: 26660
-            - **Source type**: **Anywhere**
-            - **Description**: We recommend something similar to _Prometheus_.
 
 ### Configure Storage
 
