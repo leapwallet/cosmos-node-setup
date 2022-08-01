@@ -18,18 +18,17 @@ Follows the journal for the `junod` systemd unit. This is useful to check whethe
 
 ## Genesis Error
 
-If the node keeps crashing with the following error message:
+The node might repeatedly crash with the following error message:
 
 ```
 Error: error during handshake: error on replay: validator set is nil in genesis and still empty after InitChain
 ```
 
-then you must run `junod unsafe-reset-all` which will wipe the DB. This error only has the potential to surface when initially setting up the node, and not after the node has been downloading blocks, upgrading, etc.
+In this case, you must run `junod unsafe-reset-all` which will wipe the DB. This error only has the potential to surface when initially setting up the node, and not after the node has been downloading blocks, upgrading, etc.
 
 ## Peers
 
-Blocks are synced via peers. If every peer the node is connected to becomes unreachable, then you'll have to update the peer list in the following manner:
-
+Blocks are synced via peers. If every peer the node is connected to become unreachable, then you'll have to update the peer list in the following manner:
 1. Create a variable for the repo:
 
     ```sh
@@ -58,14 +57,13 @@ After installing the first version (i.e., 3.0.0), the following versions must be
 |6.0.0|3,159,650|
 |8.0.0|3,851,750|
 
-Since this document may be outdated, please additionally check [this](https://docs.junonetwork.io/validators/mainnet-upgrades) page for versions and block heights. Only check the version tags (e.g., `v8.0.0`), and their respective block heights on the page because the upgradation instructions are confusing at best. Instead, use the [upgradation](#upgrading) section of this document.
+Since this document may be outdated, please additionally check [this](https://docs.junonetwork.io/validators/mainnet-upgrades) page for versions and block heights. Only check the version tags (e.g., `v8.0.0`), and their respective block heights on the page because the upgradation instructions are confusing. Instead, use the [upgradation](#upgrading) section of this document.
 
 In order to get notified of new upgrades, you should join Juno's [#⚡ | validator-lounge](https://discord.com/channels/816256689078403103/816263136491339867) Discord channel where they try to announce new upgrades a few days in advance.
 
 ## Upgrading
 
 Here's how to upgrade the node:
-
 1. Wait for the chain to halt. For example, the block height to install v3.1.1 at is 2,616,300.
 2. Change the directory to where Juno was downloaded:
 

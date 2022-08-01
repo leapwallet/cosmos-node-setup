@@ -12,20 +12,24 @@ Due to an exploit, the Juno chain hard forked into Juno Phoenix (v3.0.0), and th
 
 ## Archive Nodes
 
-Validator nodes can be run by simply installing the latest version of the node, and downloading a snapshot. A snapshot is a fraction of the blockchain's complete state (e.g., a snapshot could just be the latest 300 MiB of a blockchain even if the entire blockchain is 4.3 TiB). However, archive nodes must go through a significantly more complicated process before they can be used because they need to download the entire blockchain.
+Nodes can be run by simply installing the latest version of the node, and downloading a snapshot. A snapshot is the blockchain's DB. There are different types of snapshots (e.g., full node snapshots, archive node snapshots). For example, the snapshot for a full node might only contain the latest 300 MiB of state even if the entire blockchain is 4.3 TiB. Since archive node snapshots are hard to come across (e.g., [ChainLayer](https://www.chainlayer.io/quicksync/) is one of the few services that provide archive node snapshots, but they don't have one for Juno), archive nodes usually have to go through a significantly more complicated process before they can be used since they need to download the entire blockchain.
 
-In order to set up an archive node, the following steps must be taken:
+Whenever you're notified that there's going to be an upgrade (e.g., over a Discord channel) taking place (e.g., in 3 days at block 200), you'll have to upgrade the node using the following steps:
+1. Configure the node to stop downloading blocks at the block height the next upgrade will take place at. For example, if v1 starts at block 1, and v2 starts at block 100, then the node must be configured to stop downloading blocks once it reaches block 100 if the node is currently on v1. Otherwise, the node will be unable to process blocks produced by newer node versions causing the DB to get corrupted.
+2. Once the node stops syncing, replace the current node version with the next version, and resume syncing. For example, if the node is on v1, and the next version is v1.1, then v1 must be uninstalled, and v1.1 must be installed.
 
-1. Install the first version of the node. For example, if the first version is 1, and the latest version is 10, then you'll have to download v1.
-2. Configure the node to stop downloading blocks at the block height the next upgrade took place at. For example, if v1 starts at block 1, and v2 starts at block 100, then the node must be configured to stop downloading blocks once it reaches block 100 if the node is currently on v1. Otherwise, the current version will be unable to process blocks produced by newer node versions causing the database to get corrupted.
-3. Once the node stops syncing, replace the current node version with the next version, and resume syncing. For example, if the node is on v1, and the next version is v1.1, then v1 must be uninstalled, and v1.1 must be installed.
-4. After installing the new version, set the next block height to stop syncing at just as before, and upgrade the software just as before. Repeat this process until the node has finished downloading all the older blocks.
-5. Once the node is on the latest block, you'll have to perform the same steps that validator nodes do for upgrades which is the same as the upgradation process you've previously followed. In essence, once you've been notified that there's going to be an upgrade (e.g., over a Discord channel) taking place (e.g., in 3 days at block 200), you'll have to configure the node to stop syncing at that block height, and upgrade the software.
+Here's how to set up an archive node with a snapshot:
+1. Install the version of the node that the snapshot supports. For example, if the latest node version is 9.0.0, and the snapshot has the blockchain state until last week back when the latest version was 8.0.0, then you'll have to install v8.0.0.
+2. Download the snapshot.
+3. Repeatedly upgrade the node until it's on the latest version.
+
+Here's how to set up an archive node without a snapshot:
+1. Install the first version of the node.
+2. Repeatedly upgrade the node until all the older blocks have been downloaded.
 
 ## Cosmovisor
 
 Cosmovisor is a tool that aims to ease upgrading nodes. Theoretically, it's supposed to automatically download upgrades in advance, and automatically reinstall and restart the node at the correct block height. In practice, it doesn't work as advertised. Here's why we recommend not using Cosmovisor:
-
 - You need to spend time installing it.
 - You need to spend time learning it (different versions have different APIs).
 - You need to spend time updating it, and the updates are buggy (e.g., v1.1.0 can't be installed directly).
