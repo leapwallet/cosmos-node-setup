@@ -20,10 +20,11 @@ We recommend only running one node because they're expensive, and clients can fa
 
 Here's how to set up the hardware:
 - We recommend using a Linux OS; Ubuntu specifically.
-- We recommend using an SSD (preferably an NVMe) with 1 TiB of storage. Since the DB can easily get corrupted, and syncing all over again can take days, it's highly recommended taking a daily backup of either the entire storage device (this way you'll have the correct version of Juno installed for the backup's DB) or the `~/.juno/data` directory (i.e., the DB).
+- We recommend using an SSD (preferably an NVMe) with 1 TiB of storage.
+- Since the DB can easily get corrupted, and syncing all over again can take days, it's highly recommended taking a daily backup of either the entire storage device (this way you'll have the correct version of Juno installed for the backup's DB) or the `~/.juno/data` directory (i.e., the DB). You should keep two backups because if you only keep one, and the backup takes place just after the DB gets corrupted, then the only backup will also be corrupted.
 - The architecture must be 64-bit (x86).
-- We recommend 16 GiB of RAM.
-- We recommend 2 CPU cores.
+- A minimum of 16 GiB of RAM.
+- A minimum of 2 CPU cores.
 - Firewall:
     - If you require SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
     - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.

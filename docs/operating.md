@@ -70,41 +70,36 @@ Here's how to upgrade the node:
     ```sh
     cd ~/juno
     ```
-3. Fetch the tags:
-
-    ```sh
-    git fetch
-    ```
-4. Check out the upgrade's tag:
+3. Check out the upgrade's tag:
 
     ```sh
     git checkout <VERSION>
     ```
 
    Replace `<VERSION>` with the upgrade's tag (e.g., `v3.1.1`).
-5. Install:
+4. Install:
 
     ```sh
     make install
     ```
-6. If the installation succeeded, then the following command will print the `<VERSION>` from step 4:
+5. If the installation succeeded, then the following command will print the `<VERSION>` from step 4:
 
     ```sh
     junod version
     ```
-7. Update the halt height:
+6. Update the halt height:
 
     ```sh
     sed -i 's/halt-height = .*/halt-height = <HEIGHT>/' ~/.juno/config/app.toml
     ```
 
     Replace `<HEIGHT>` with the next upgrade's block height if there is one, and `0` otherwise.
-8. Reload systemd:
+7. Reload systemd:
 
     ```sh
     sudo systemctl daemon-reload
     ```
-9. Restart Juno:
+8. Restart Juno:
 
     ```sh
     sudo systemctl restart junod

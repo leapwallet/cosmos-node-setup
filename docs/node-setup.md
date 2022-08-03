@@ -67,24 +67,19 @@ Here are the steps to set up Juno:
         ```sh
         cd juno
         ```
-    3. Fetch the tags:
+    3. Check out the relevant version:
 
-        ```sh
-        git fetch
-        ```
-    4. Check out the relevant version:
+         ```sh
+         git checkout <TAG>
+         ```
 
-        ```sh
-        git checkout <TAG>
-        ```
-
-       If you're going to download a snapshot, then replace `<TAG>` with the version's tag (tags can be found [here](https://github.com/CosmosContracts/juno/tags)) that the snapshot supports. Otherwise, replace `<TAG>` with the first version's tag (i.e., `v3.0.0`).
-    5. Install:
+        If you're going to download a snapshot, then replace `<TAG>` with the version's tag (tags can be found [here](https://github.com/CosmosContracts/juno/tags)) that the snapshot supports. Otherwise, replace `<TAG>` with the first version's tag (i.e., `v3.0.0`).
+    4. Install:
 
         ```sh
         make install
         ```
-    6. If the installation succeeded, then the following command will print the `<TAG>` (the one selected in a previous step):
+    5. If the installation succeeded, then the following command will print the `<TAG>` (the one selected in a previous step):
 
         ```sh
         junod version
@@ -129,14 +124,14 @@ Here are the steps to set up Juno:
     1. Create the unit:
 
         ```sh
-        sudo tee -a /etc/systemd/system/junod.service << EOF
+        sudo tee /etc/systemd/system/junod.service << EOF
         [Unit]
         Description=Juno Daemon
         Wants=network-online.target
         After=network-online.target
 
         [Service]
-        User=ubuntu
+        User=<USER>
         ExecStart=/home/<USER>/go/bin/junod start --x-crisis-skip-assert-invariants
         RestartSec=3
         Restart=always
@@ -215,40 +210,10 @@ This section explains how to set up the TLS certificate, and URLs for each API y
         reverse_proxy :1317
     }
     ```
-3. Configure the Caddy systemd unit:
+3. Reload Caddy:
 
     ```sh
-    sudo tee /usr/lib/systemd/system/caddy.service << EOF
-    [Unit]
-    Description=Caddy
-    Documentation=https://caddyserver.com/docs/
-    After=network.target network-online.target
-    Requires=network-online.target
-    
-    [Service]
-    Type=notify
-    ExecStart=/usr/bin/caddy run --environ --config /etc/caddy/Caddyfile
-    ExecReload=/usr/bin/caddy reload --config /etc/caddy/Caddyfile --force
-    TimeoutStopSec=5s
-    LimitNOFILE=1048576
-    LimitNPROC=512
-    PrivateTmp=true
-    ProtectSystem=full
-    AmbientCapabilities=CAP_NET_BIND_SERVICE
-    
-    [Install]
-    WantedBy=multi-user.target
-    EOF
-    ```
-4. Reload systemd:
-
-    ```sh
-    sudo systemctl daemon-reload
-    ```
-5. Restart Caddy:
-
-    ```sh
-    sudo systemctl restart caddy
+    sudo systemctl reload caddy
     ```
 
 Except for blocks you deleted from step 2, the following URLs will now be available (`<DOMAIN>` is the same as from step 2):
@@ -302,7 +267,7 @@ This section explains how to set up the hardware metrics.
     1. Create the unit:
 
         ```sh
-        sudo tee -a /etc/systemd/system/node-exporter.service << EOF
+        sudo tee /etc/systemd/system/node-exporter.service << EOF
         [Unit]
         Description=Node Exporter
         Wants=network-online.target
@@ -340,7 +305,11 @@ This section explains how to aggregate the metrics from Juno and Node Exporter.
     ```sh
     cd
     ```
-2. In the `[instrumentation]` section of `~/.juno/config/config.toml`, set the `prometheus` key's value to `true`.
+2. Enable Prometheus:
+
+    ```sh
+    sed -i 's/prometheus = .*/prometheus = true/' ~/.juno/config/config.toml
+    ```
 3. Download Prometheus:
 
     ```sh
@@ -385,12 +354,14 @@ This section explains how to aggregate the metrics from Juno and Node Exporter.
     EOF
     ```
 
-   Replace `<DIR>` with the directory the Prometheus download was extracted to (e.g., `prometheus-2.37.0.linux-amd64`). Replace `<URL>`, `<USERNAME>`, and `<PASSWORD>` with your Grafana Cloud [credentials](https://grafana.com/docs/grafana-cloud/reference/create-api-key/).
-7. Set up the Prometheus systemd unit:
+    Replace `<DIR>` with the directory the Prometheus download was extracted to (e.g., `prometheus-2.37.0.linux-amd64`).
+
+    Replace `<URL>`, `<USERNAME>`, and `<PASSWORD>` with your Grafana Cloud [credentials](https://grafana.com/docs/grafana-cloud/reference/create-api-key/). When creating an API key, set the **Role** to **MetricsPublisher**.
+8. Set up the Prometheus systemd unit:
     1. Create the unit:
 
         ```sh
-        sudo tee -a /etc/systemd/system/prometheus.service << EOF
+        sudo tee /etc/systemd/system/prometheus.service << EOF
         [Unit]
         Description=Prometheus
         Wants=network-online.target
