@@ -9,4 +9,3 @@
 - Set up PANIC.
 - Set up logs.
 - Use Docker.
-- Automate installation similar to how Osmosis did.
