@@ -4,6 +4,8 @@ This repo explains how to set up a [Juno](https://www.junonetwork.io/) mainnet a
 
 This repo is written for people who know nothing about running a Juno node. While concepts specific to operating Juno nodes (e.g., which AWS services to use, how to connect Juno to Prometheus) are explained, concepts specific to Juno (e.g., what is a blockchain), AWS (e.g., what is AWS EBS), etc. aren't explained. This is because the official docs are good, and you can look up only what you need to based on your experience level.
 
+Besides this repo, [NodeJumper](https://nodejumper.io/) is another useful resource.
+
 ## To-dos
 
 This repo is a WIP, and must be updated by the author to include [these](docs/to-dos.md) instructions.
