@@ -1,18 +1,16 @@
 # Concepts
 
-## Why AWS
+## Terms
 
-People say that bare metal is multiple times cheaper than public cloud. This is true if your time is free. Bare metal servers require manually setting up firewalls, learning and using tools such as Ansible, etc. which take exponentially more time to learn, use, and secure than public clouds. In the long run, an experienced sysadmin could potentially save money using bare metal servers because they'll only ever run a single specialized piece of software (i.e., a Juno node but otherwise, it's recommended to use a public cloud.
-
-Regarding the choice of public cloud, GCP is obviously better than AWS but this document uses AWS because the author had to set it up on that due to external factors.
-
-## Juno Versions
-
-Due to an exploit, the Juno chain hard forked into Juno Phoenix (v3.0.0), and the original chain is named Juno Classic. This document is for Juno Phoenix which is the current mainnet.
+This repo uses the following terms:
+- [Juno](https://www.junonetwork.io/)
+- [Sei](https://www.seinetwork.io/)
+- `<CHAIN_DIR>`: The path to where the configuration and data is stored (e.g., `~/.juno` for Juno, `~/.sei` for Sei).
+- `<BINARY>`: The name of the node's executable (e.g., `junod` for Juno, `seid` for Sei).
 
 ## Archive Nodes
 
-Nodes can be run by simply installing the latest version of the node, and downloading a snapshot. A snapshot is the blockchain's DB. There are different types of snapshots (e.g., full node snapshots, archive node snapshots). For example, the snapshot for a full node might only contain the latest 300 MiB of state even if the entire blockchain is 4.3 TiB. Since archive node snapshots are hard to come across (e.g., [ChainLayer](https://www.chainlayer.io/quicksync/) is one of the few services that provide archive node snapshots, but they don't have one for Juno), archive nodes usually have to go through a significantly more complicated process before they can be used since they need to download the entire blockchain.
+Nodes can be run by simply installing the latest version of the node, and downloading a snapshot. A snapshot is the blockchain's DB. There are different types of snapshots (e.g., full node snapshots, archive node snapshots). For example, the snapshot for a full node might only contain the latest 300 MiB of state even if the entire blockchain is 4.3 TiB. Since archive node snapshots are hard to come across (e.g., [ChainLayer](https://www.chainlayer.io/quicksync/) is one of the few services that provide archive node snapshots, but they don't have snapshots for most chains), archive nodes usually have to go through a significantly more complicated process before they can be used since they need to download the entire blockchain.
 
 Whenever you're notified that there's going to be an upgrade (e.g., over a Discord channel) taking place (e.g., in 3 days at block 200), you'll have to upgrade the node using the following steps:
 1. Configure the node to stop downloading blocks at the block height the next upgrade will take place at. For example, if v1 starts at block 1, and v2 starts at block 100, then the node must be configured to stop downloading blocks once it reaches block 100 if the node is currently on v1. Otherwise, the node will be unable to process blocks produced by newer node versions causing the DB to get corrupted.

@@ -4,46 +4,46 @@ Since the commands are for Ubuntu, you might have to modify them if you're using
 
 ## Juno Setup
 
-Here are the steps to set up Juno:
+Here are the steps to set up Juno mainnet archive node:
 1. Go to the home directory:
 
-    ```sh
+    ```shell
     cd
     ```
 2. Set up the dependencies:
     1. Update the package list:
 
-        ```sh
+        ```shell
         sudo apt update
         ```
     2. Install any available updates:
 
-        ```sh
+        ```shell
         sudo apt upgrade -y
         ```
     3. Install the toolchain, and ensure accurate time synchronization:
 
-        ```sh
+        ```shell
         sudo apt install make build-essential gcc git jq chrony -y
         ```
     4. Download a version of Go that's greater than, or equal to 1.18, and less than 2:
 
-        ```sh
+        ```shell
         wget https://golang.org/dl/go1.18.2.linux-amd64.tar.gz
         ```
     5. Install Go:
 
-        ```sh
+        ```shell
         sudo tar xzvf go1.18.2.linux-amd64.tar.gz -C /usr/local
         ```
     6. Delete the Go download:
 
-        ```sh
+        ```shell
         rm go1.18.2.linux-amd64.tar.gz
         ```
     7. Configure Go:
 
-        ```sh
+        ```shell
         tee -a ~/.profile << EOF
         export GOROOT=/usr/local/go
         export GOPATH=$HOME/go
@@ -53,68 +53,68 @@ Here are the steps to set up Juno:
         ```
     8. Refresh environment variables:
 
-        ```sh
+        ```shell
         source ~/.profile
         ```
 3. Install Juno:
     1. Clone the repo:
 
-        ```sh
+        ```shell
         git clone https://github.com/CosmosContracts/juno
         ```
     2. Change the directory:
 
-        ```sh
+        ```shell
         cd juno
         ```
     3. Check out the relevant version:
 
-         ```sh
-         git checkout <TAG>
-         ```
+        ```shell
+        git checkout <TAG>
+        ```
 
         If you're going to download a snapshot, then replace `<TAG>` with the version's tag (tags can be found [here](https://github.com/CosmosContracts/juno/tags)) that the snapshot supports. Otherwise, replace `<TAG>` with the first version's tag (i.e., `v3.0.0`).
     4. Install:
 
-        ```sh
+        ```shell
         make install
         ```
     5. If the installation succeeded, then the following command will print the `<TAG>` (the one selected in a previous step):
 
-        ```sh
+        ```shell
         junod version
         ```
 4. Configure Juno:
     1. Create a variable for the repo:
 
-        ```sh
+        ```shell
         CHAIN_REPO="https://raw.githubusercontent.com/CosmosContracts/mainnet/main/juno-1"
         ```
     2. Create a variable for the peers:
 
-        ```sh
+        ```shell
         PEERS="$(curl -sL "$CHAIN_REPO/persistent_peers.txt")"
         ```
     3. Initialize the chain:
 
-        ```sh
+        ```shell
         junod init <MONIKER> --chain-id juno-1
         ```
 
        Replace `<MONIKER>` with the node's moniker (e.g., `node`).
     4. Download the genesis file:
 
-        ```sh
+        ```shell
         curl https://share.blockpane.com/juno/phoenix/genesis.json > ~/.juno/config/genesis.json
         ```
     5. Set the peers:
 
-        ```sh
+        ```shell
         sed -i "s/persistent_peers = .*/persistent_peers = \"$PEERS\"/" ~/.juno/config/config.toml
         ```
     6. If the node is on the latest version, then skip this step.
     
-        ```sh
+        ```shell
         sed -i 's/halt-height = 0/halt-height = <HEIGHT>/' ~/.juno/config/app.toml
         ```
 
@@ -123,7 +123,7 @@ Here are the steps to set up Juno:
 5. Set up the Juno systemd unit:
     1. Create the unit:
 
-        ```sh
+        ```shell
         sudo tee /etc/systemd/system/junod.service << EOF
         [Unit]
         Description=Juno Daemon
@@ -147,12 +147,12 @@ Here are the steps to set up Juno:
         We use the `--x-crisis-skip-assert-invariants` flag to skip a check that takes up to several hours to complete. It's recommended to skip it, and it doesn't affect archive nodes anyway.
     2. Start the unit:
 
-        ```sh
+        ```shell
         sudo systemctl enable --now junod
         ```
     3. Verify that it's running:
 
-        ```sh
+        ```shell
         sudo systemctl status junod
         ```
 
@@ -166,7 +166,7 @@ This section explains how to use your domain name (e.g., example.com) instead of
 1. Go to your website's DNS section on Cloudflare.
 2. Click **Add record**.
 3. Set the **Type** field to **A**.
-4. Set the **Name (required)** field to something like **juno**.
+4. Set the **Name (required)** field (e.g., **juno-mainnet-archive-node**).
 5. Set the **IPv4 address (required)** field to your server's IP address.
 6. Set the **Proxy status** to **DNS only**.
 7. Set the **TTL** to **Auto**.
@@ -177,7 +177,7 @@ This section explains how to set up the TLS certificate, and URLs for each API y
 1. Install [Caddy](https://caddyserver.com/docs/install) on your server.
 2. Configure Caddy:
 
-    ```sh
+    ```shell
     sudo tee /etc/caddy/Caddyfile << EOF
     <DOMAIN> {
         handle_path /rest-api/* {
@@ -212,7 +212,7 @@ This section explains how to set up the TLS certificate, and URLs for each API y
     ```
 3. Reload Caddy:
 
-    ```sh
+    ```shell
     sudo systemctl reload caddy
     ```
 
@@ -222,7 +222,7 @@ Except for blocks you deleted from step 2, the following URLs will now be availa
 - gRPC Web: `https://<DOMAIN>/grpc-web`
 - Metrics: `https://<DOMAIN>/metrics`
 
-For example (assuming that the REST API is enabled), you can now query a tx using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
+For example (assuming that the REST API is enabled, and you're running a Juno mainnet archive node), you can now query a tx using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
 
 ## Monitoring Setup
 
@@ -239,26 +239,26 @@ This section explains how to set up the hardware metrics.
 
 1. Go to the home directory:
 
-    ```sh
+    ```shell
     cd
     ```
 2. Download Node Exporter:
 
-    ```sh
+    ```shell
     wget <URL>
     ```
    
     Replace `<URL>` with the relevant [URL](https://prometheus.io/download/#node_exporter) (e.g., `https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz`).
 3. Extract the download:
 
-    ```sh
+    ```shell
     tar xvzf <DOWNLOAD>
     ```
    
     Replace `<DOWNLOAD>` with the Node Exporter download name (e.g., `node_exporter-1.3.1.linux-amd64.tar.gz`).
 4. Delete the node_exporter download:
 
-    ```sh
+    ```shell
     rm <DOWNLOAD>
     ```
    
@@ -266,7 +266,7 @@ This section explains how to set up the hardware metrics.
 5. Set up the Node Exporter systemd unit:
     1. Create the unit:
 
-        ```sh
+        ```shell
         sudo tee /etc/systemd/system/node-exporter.service << EOF
         [Unit]
         Description=Node Exporter
@@ -288,52 +288,52 @@ This section explains how to set up the hardware metrics.
         Replace `<USER>` with your user (e.g., `ubuntu`). Replace `<DIR>` with the name of Node Exporter directory (e.g., `node_exporter-1.3.1.linux-amd64`).
     2. Start the unit:
 
-        ```sh
+        ```shell
         sudo systemctl enable --now node-exporter
         ```
     3. Verify that it's running:
 
-        ```sh
+        ```shell
         sudo systemctl status node-exporter
         ```
 
 ### Prometheus
 
-This section explains how to aggregate the metrics from Juno and Node Exporter.
+This section explains how to aggregate the metrics from the Cosmos node, and Node Exporter.
 1. Go to the home directory:
 
-    ```sh
+    ```shell
     cd
     ```
 2. Enable Prometheus:
 
-    ```sh
-    sed -i 's/prometheus = .*/prometheus = true/' ~/.juno/config/config.toml
+    ```shell
+    sed -i 's/prometheus = .*/prometheus = true/' <CHAIN_DIR>/config/config.toml
     ```
 3. Download Prometheus:
 
-    ```sh
+    ```shell
     wget <URL>
     ```
 
    Replace `<URL>` with the relevant [URL](https://prometheus.io/download/#prometheus) (e.g., `https://github.com/prometheus/prometheus/releases/download/v2.37.0/prometheus-2.37.0.linux-amd64.tar.gz` for a Linux amd64 server).
 4. Extract the download:
 
-    ```sh
+    ```shell
     tar xvzf <DOWNLOAD>
     ```
 
    Replace `<DOWNLOAD>` with the Prometheus download name (e.g., `prometheus-2.37.0.linux-amd64.tar.gz`).
 5. Delete the Prometheus download:
 
-    ```sh
+    ```shell
     rm <DOWNLOAD>
     ```
 
    Replace `<DOWNLOAD>` with the Prometheus download name (e.g., `prometheus-2.37.0.linux-amd64.tar.gz`).
 6. Configure Prometheus:
 
-    ```sh
+    ```shell
     tee <DIR>/prometheus.yml << EOF
     global:
       scrape_interval: 15s
@@ -342,7 +342,7 @@ This section explains how to aggregate the metrics from Juno and Node Exporter.
       - job_name: node-exporter
         static_configs:
           - targets: ['localhost:9100']
-      - job_name: juno
+      - job_name: <BINARY>
         static_configs:
           - targets: ['localhost:26660']
 
@@ -360,7 +360,7 @@ This section explains how to aggregate the metrics from Juno and Node Exporter.
 8. Set up the Prometheus systemd unit:
     1. Create the unit:
 
-        ```sh
+        ```shell
         sudo tee /etc/systemd/system/prometheus.service << EOF
         [Unit]
         Description=Prometheus
@@ -382,11 +382,11 @@ This section explains how to aggregate the metrics from Juno and Node Exporter.
        Replace `<USER>` with your user (e.g., `ubuntu`). Replace `<DIR>` with the name of Prometheus directory (e.g., `prometheus-2.37.0.linux-amd64`).
     2. Start the unit:
 
-        ```sh
+        ```shell
         sudo systemctl enable --now prometheus
         ```
     3. Verify that it's running:
 
-        ```sh
+        ```shell
         sudo systemctl status prometheus
         ```
