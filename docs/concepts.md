@@ -5,7 +5,9 @@
 This repo uses the following terms:
 - [Juno](https://www.junonetwork.io/)
 - [Sei](https://www.seinetwork.io/)
-- `<CHAIN_DIR>`: The path to where the configuration and data is stored (e.g., `~/.juno` for Juno, `~/.sei` for Sei).
+- When we refer to Juno mainnet archive nodes, we refer to Juno archive nodes running on the current mainnet (i.e., Juno Phoenix).
+- When we refer to Sei testnet validator nodes, we refer to Sei validator nodes running on the incentivized testnet (i.e., `atlantic-1`).
+- `<CHAIN_DIR>`: The path to where the configuration and data is stored (e.g., `$HOME/.juno` for Juno, `$HOME/.sei` for Sei).
 - `<BINARY>`: The name of the node's executable (e.g., `junod` for Juno, `seid` for Sei).
 
 ## Archive Nodes

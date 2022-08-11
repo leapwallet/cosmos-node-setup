@@ -4,9 +4,7 @@ This repo explains how to set up [Cosmos](https://cosmos.network/) nodes. We cre
 
 This repo is written for people who know nothing about running a Cosmos node. While concepts specific to operating Cosmos nodes (e.g., which AWS services to use, how to connect the node to Prometheus) are explained, concepts specific to Cosmos (e.g., what is a blockchain), AWS (e.g., what is AWS EBS), etc. aren't explained. This is because the official docs are good, and you can look up only what you need to based on your experience level.
 
-## Concepts
-
-You will need to understand these [concepts](docs/concepts.md) in order to effectively run the node.
+## [Concepts](docs/concepts.md)
 
 ## Hardware
 
@@ -14,20 +12,36 @@ Using a serverless solution (e.g., AWS Fargate) would've been more scalable sinc
 
 Here's how to set up the hardware:
 - We recommend using a Linux OS; Ubuntu specifically.
-- We recommend using an SSD (preferably an NVMe). For Juno mainnet archive nodes, and Sei testnet validator nodes, use 1 TiB of storage.
+- Storage:
+  - Use an SSD (preferably an NVMe).
+  - We recommend 1 TiB of storage for Juno mainnet archive nodes.
+  - We recommend a minimum of 100 GiB, and ideally 500 GiB of storage for Sei validator nodes.
 - Since the DB can easily get corrupted, and syncing all over again can take days, it's highly recommended taking a daily backup of either the entire storage device (this way you'll have the correct version of the node installed for the backup's DB) or the `<CHAIN_DIR>/data` directory (i.e., the DB). You should keep two backups because if you only keep one, and the backup takes place just after the DB gets corrupted, then the only backup will also be corrupted.
-- The architecture must be 64-bit (x86).
-- 32 GiB of RAM.
-- 4 CPU cores.
+- The architecture must be x86_64.
+- Memory:
+  - We recommend 16 GiB of RAM for Juno mainnet archive nodes.
+  - We recommend a minimum of 8 GiB RAM, and ideally 16 GiB of RAM for Sei validator nodes.
+- CPU:
+  - We recommend 4 modern CPU cores for Jun mainnet archive nodes.
+  - We recommend a minimum of four 3.2 GHz CPU cores, and ideally six 4.2 GHz CPU cores for Sei validator nodes.
 - Firewall:
     - If you require SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
     - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
 
-If you're using AWS, we recommend using AWS EC2 with AWS EBS. Use AWS Data Lifecycle Manager to create a daily backup.
+We recommend the following if you're using AWS:
+- Use AWS EC2 for the computer.
+- Use AWS EBS for storage.
+- If you're running an archive node, and have synced the blocks yourself because there's no snapshot available, use AWS DLM to create a daily backup of the AWS EBS volume.
 
-## [Node Setup](docs/node-setup.md)
+## [Software Setup](docs/software-setup.md)
 
 ## [Operating the Node](docs/operating.md)
+
+## Credits
+
+- [Juno Docs](https://docs.junonetwork.io/juno/readme)
+- [Sei Docs](https://docs.seinetwork.io/introduction/overview)
+- [NodeJumper](https://nodejumper.io/)
 
 ## License
 
