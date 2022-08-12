@@ -12,18 +12,21 @@ Using a serverless solution (e.g., AWS Fargate) would've been more scalable sinc
 
 Here's how to set up the hardware:
 - We recommend using a Linux OS; Ubuntu specifically.
-- Storage:
-  - Use an SSD (preferably an NVMe).
-  - We recommend 1 TiB of storage for Juno mainnet archive nodes.
-  - We recommend a minimum of 100 GiB, and ideally 500 GiB of storage for Sei validator nodes.
+- Use an SSD (preferably NVMe) for storage.
+
+    Here are node specific recommendations for storage requirements:
+    - Juno mainnet archive node: 1 TiB
+    - Sei validator node: A minimum of 100 GiB, and ideally 500 GiB.
 - Since the DB can easily get corrupted, and syncing all over again can take days, it's highly recommended taking a daily backup of either the entire storage device (this way you'll have the correct version of the node installed for the backup's DB) or the `<CHAIN_DIR>/data` directory (i.e., the DB). You should keep two backups because if you only keep one, and the backup takes place just after the DB gets corrupted, then the only backup will also be corrupted.
 - The architecture must be x86_64.
-- Memory:
-  - We recommend 16 GiB of RAM for Juno mainnet archive nodes.
-  - We recommend a minimum of 8 GiB RAM, and ideally 16 GiB of RAM for Sei validator nodes.
-- CPU:
-  - We recommend 4 modern CPU cores for Jun mainnet archive nodes.
-  - We recommend a minimum of four 3.2 GHz CPU cores, and ideally six 4.2 GHz CPU cores for Sei validator nodes.
+- Here are node specific recommendations for memory requirements:
+    - Juno mainnet archive node: 16 GiB of RAM
+    - Sei validator node: A minimum of 8 GiB, and ideally 16 GiB.
+- Use modern CPU cores.
+
+    Here are node specific recommendations for CPU requirements:
+    - Juno mainnet archive node: 4 CPU cores
+    - Sei validator node: A minimum of four 3.2 GHz CPU cores, and ideally six 4.2 GHz CPU cores.
 - Firewall:
     - If you require SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
     - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
