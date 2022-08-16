@@ -49,6 +49,7 @@ Environment="DAEMON_HOME=$DAEMON_HOME"
 [Install]
 WantedBy=multi-user.target
 " | sudo tee /etc/systemd/system/$DAEMON_NAME.service
+
 sudo systemctl enable --now $DAEMON_NAME
 sudo systemctl status $DAEMON_NAME
 

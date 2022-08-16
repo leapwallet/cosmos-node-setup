@@ -66,6 +66,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     set -x DAEMON_NAME $DAEMON_NAME
     set -x DAEMON_HOME ~/$DAEMON_HOME
     " >> ~/.config/fish/config.fish
+   
     source ~/.config/fish/config.fish
       
     ####################################
@@ -106,7 +107,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     - Set up [2FA](https://www.digitalocean.com/community/tutorials/how-to-configure-multi-factor-authentication-on-ubuntu-18-04) for SSH.
     - Set up [Tendermint KMS](https://docs.evmos.org/validators/security/kms.html) if you're running a validator node.
     - Use a multisig wallet instead of a regular one if you're running a validator node.
-    - Use [Horcrux](https://github.com/strangelove-ventures/horcrux).
+    - Use [Horcrux](https://github.com/strangelove-ventures/horcrux) if you're running a validator node.
     - Set up [Unattended Upgrades](https://github.com/mvo5/unattended-upgrades).
     - Set up a NIDS (network intrusion detection system).
     - Set up a HIDS (host intrusion detection system).
@@ -125,19 +126,30 @@ This optional but recommended section explains how to set up metrics. We explain
     ```shell
     cd
    
+    ##################################
+    ## BEGIN: Install Node Exporter ##
+    ##################################
+   
     set PROMPT 'You\'ll be prompted to enter a URL. The URL is the relevant download link from'
     set PROMPT "$PROMPT https://prometheus.io/download/#node_exporter (e.g., https://github.com/prometheus/"
     set PROMPT "$PROMPT node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz). Enter the URL: "
     read -P $PROMPT URL
    
-    # Install Node Exporter
     wget $URL
     set FILE (printf $URL | sed 's|.*/||')
     tar xvzf $FILE
     rm $FILE
     
-    # Set up systemd unit for Node Exporter
+    ################################
+    ## END: Install Node Exporter ##
+    ################################
+      
+    ##################################################
+    ## BEGIN: Set up systemd unit for Node Exporter ##
+    ##################################################
+   
     set DIR (printf $FILE | sed 's|.tar.gz||')
+   
     printf "\
     [Unit]
     Description=Node Exporter
@@ -154,8 +166,13 @@ This optional but recommended section explains how to set up metrics. We explain
     [Install]
     WantedBy=multi-user.target
     " | sudo tee /etc/systemd/system/node-exporter.service
+   
     sudo systemctl enable --now node-exporter
     sudo systemctl status node-exporter
+   
+    ################################################
+    ## END: Set up systemd unit for Node Exporter ##
+    ################################################
     ```
 3. On your Grafana Cloud instance, create an [API key](https://grafana.com/docs/grafana-cloud/reference/create-api-key/) for the Prometheus integration with the **Role** set to **MetricsPublisher**. Note down the URL, username, and password for use in the next step.
 4. Install Prometheus:
@@ -163,9 +180,20 @@ This optional but recommended section explains how to set up metrics. We explain
     ```shell
     cd
    
-    # Enable Prometheus
+    ##############################
+    ## BEGIN: Enable Prometheus ##
+    ##############################
+   
     sed 's|prometheus = .*|prometheus = true|' -i $DAEMON_HOME/config/config.toml
     sudo systemctl restart $DAEMON_NAME
+    
+    ############################
+    ## END: Enable Prometheus ##
+    ############################
+   
+    ###############################
+    ## BEGIN: Install Prometheus ##
+    ###############################
    
     set PROMPT 'You\'ll be prompted to enter a Prometheus download link. The Prometheus download link is the relevant '
     set PROMPT "$PROMPT URL from https://prometheus.io/download/#prometheus) (e.g., https://github.com/prometheus/"
@@ -173,11 +201,14 @@ This optional but recommended section explains how to set up metrics. We explain
     set PROMPT "$PROMPT Prometheus download link: "
     read -P $PROMPT PROM_URL
    
-    # Install Prometheus
     wget $PROM_URL
     set FILE (printf $PROM_URL | sed 's|.*/||')
     tar xvzf $FILE
     rm $FILE
+
+    #############################
+    ## END: Install Prometheus ##
+    #############################
    
     set DIR (printf $FILE | sed 's|.tar.gz||')
    
@@ -191,7 +222,10 @@ This optional but recommended section explains how to set up metrics. We explain
     set PROMPT "$PROMPT oop09ikiM2YxZDJjOGY5YmJlODUxMmNpoiuyt2IzZDI3YWFlNzQyZGE2ZDdjYiIsIm4iOiJzZWktdGVzdG5ldC12Ykj3): "
     read -P $PROMPT GRAFANA_PASSWORD
    
-    # Configure Prometheus
+    #################################
+    ## BEGIN: Configure Prometheus ##
+    #################################
+   
     printf "\
     global:
       scrape_interval: 15s
@@ -209,7 +243,14 @@ This optional but recommended section explains how to set up metrics. We explain
           password: $GRAFANA_PASSWORD
     " > $DIR/prometheus.yml
    
-    # Set up systemd unit for Prometheus
+    ###############################
+    ## END: Configure Prometheus ##
+    ###############################
+   
+    ###############################################
+    ## BEGIN: Set up systemd unit for Prometheus ##
+    ###############################################
+   
     printf "\
     [Unit]
     Description=Prometheus
@@ -226,8 +267,13 @@ This optional but recommended section explains how to set up metrics. We explain
     [Install]
     WantedBy=multi-user.target
     " | sudo tee /etc/systemd/system/prometheus.service
+   
     sudo systemctl enable --now prometheus
     sudo systemctl status prometheus
+   
+    #############################################
+    ## END: Set up systemd unit for Prometheus ##
+    #############################################
     ```
 
 ## URL Setup
@@ -250,7 +296,9 @@ This section explains how to use your domain name (e.g., example.com) instead of
 This section explains how to set up the TLS certificate, and URLs for each API you want to expose.
 
 ```shell
-# Install Caddy
+##########################
+## BEGIN: Install Caddy ##
+##########################
 sudo apt -y install debian-keyring debian-archive-keyring apt-transport-https
 curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | \
     sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
@@ -259,8 +307,16 @@ curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt | \
 sudo apt update
 sudo apt -y install caddy
 
-# Configure Caddy
+########################
+## END: Install Caddy ##
+########################
+
+############################
+## BEGIN: Configure Caddy ##
+############################
+
 read -P 'Enter the domain (e.g., juno.example.com): ' DOMAIN
+
 printf "\
 $DOMAIN {
     handle_path /rest-api/* {
@@ -281,7 +337,12 @@ $DOMAIN {
     }
 }
 " | sudo tee /etc/caddy/Caddyfile
+
 sudo systemctl reload caddy
+
+##########################
+## END: Configure Caddy ##
+##########################
 ```
 
 Except for disabled APIs (e.g., `https://<DOMAIN>/rest-api` won't work if the node's REST API is disabled), the following URLs will now be available (`<DOMAIN>` is the same as the domain you entered during the prompt):
