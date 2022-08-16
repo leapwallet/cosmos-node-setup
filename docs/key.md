@@ -1,5 +1,7 @@
 # Key
 
+We recommend using a 3/5 multisig wallet. We recommend 3/5 because you don't want to permanently lose access to your funds if two people lose their keys (e.g., one dies, and the other lose their mnemonic). We recommend a multisig because you don't want one person to run away with the funds, get hacked, or accidentally make a tx.
+
 ```shell
 read -P 'A key is named whatever you want. Enter they key: ' KEY
 

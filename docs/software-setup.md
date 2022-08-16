@@ -106,7 +106,6 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
 7. These optional but recommended steps improve your node's security:
     - Set up [2FA](https://www.digitalocean.com/community/tutorials/how-to-configure-multi-factor-authentication-on-ubuntu-18-04) for SSH.
     - Set up [Tendermint KMS](https://docs.evmos.org/validators/security/kms.html) if you're running a validator node.
-    - Use a multisig wallet instead of a regular one if you're running a validator node.
     - Use [Horcrux](https://github.com/strangelove-ventures/horcrux) if you're running a validator node.
     - Set up [Unattended Upgrades](https://github.com/mvo5/unattended-upgrades).
     - Set up a NIDS (network intrusion detection system).
