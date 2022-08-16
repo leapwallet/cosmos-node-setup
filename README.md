@@ -16,20 +16,17 @@ Here's how to set up the hardware:
 
     Here are node specific recommendations for storage requirements:
     - Juno mainnet archive node: 1 TiB
-    - Sei validator node: A minimum of 100 GiB, and ideally 500 GiB.
-- Since the DB can easily get corrupted, and syncing all over again can take days, it's highly recommended taking a daily backup of either the entire storage device (this way you'll have the correct version of the node installed for the backup's DB) or the `<CHAIN_DIR>/data` directory (i.e., the DB). You should keep two backups because if you only keep one, and the backup takes place just after the DB gets corrupted, then the only backup will also be corrupted.
-- The architecture must be x86_64.
-- Here are node specific recommendations for memory requirements:
-    - Juno mainnet archive node: 16 GiB of RAM
-    - Sei validator node: A minimum of 8 GiB, and ideally 16 GiB.
-- Use modern CPU cores.
+    - Validator node: 100 GiB
+- This point only applies to archive nodes since validator nodes can quickly be restored via a snapshot or state sync.
 
-    Here are node specific recommendations for CPU requirements:
-    - Juno mainnet archive node: 4 CPU cores
-    - Sei validator node: A minimum of four 3.2 GHz CPU cores, and ideally six 4.2 GHz CPU cores.
+    Since the DB can easily get corrupted, and syncing all over again can take days, it's highly recommended taking a daily backup of either the entire storage device (this way you'll have the correct version of the node installed for the backup's DB) or the `$DAEMON_HOME/data` directory (i.e., the DB). You should keep two backups because if you only keep one, and the backup takes place just after the DB gets corrupted, then the only backup will also be corrupted.
+- The architecture must be x86_64.
+- 16 GiB of RAM.
+- Four 3.2 GHz CPU cores.
 - Firewall:
     - If you require SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
     - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
+    - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TPC connections on port 26656 from any IP address.
 
 We recommend the following if you're using AWS:
 - Use AWS EC2 for the computer.
@@ -44,7 +41,9 @@ We recommend the following if you're using AWS:
 
 - [Juno Docs](https://docs.junonetwork.io/juno/readme)
 - [Sei Docs](https://docs.seinetwork.io/introduction/overview)
+- [Stride Docs](https://docs.stride.zone/docs)
 - [NodeJumper](https://nodejumper.io/)
+- [Validator Security Checklist](https://docs.evmos.org/validators/security/checklist.html)
 
 ## License
 

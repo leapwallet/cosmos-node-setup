@@ -11,10 +11,10 @@ Prints `true` if the node is still downloading the older blocks, and `false` oth
 ## Logs
 
 ```shell
-journalctl -fu <BINARY>
+journalctl -fu $DAEMON_NAME
 ```
 
-Follows the journal for the `<BINARY>` systemd unit. This is useful to check whether the chain has halted, which block it's currently downloading, any error message that got printed if the node crashed, etc.
+Follows the journal for the `$DAEMON_NAME` systemd unit. This is useful to check whether the chain has halted, which block it's currently downloading, any error message that got printed if the node crashed, etc.
 
 ## Genesis Error
 
@@ -24,7 +24,7 @@ The node might repeatedly crash with the following error message:
 Error: error during handshake: error on replay: validator set is nil in genesis and still empty after InitChain
 ```
 
-In this case, you must run `<BINARY> unsafe-reset-all` (such as for `junod`) or `<BINARY> tendermint --home <CHAIN_DIR> unsafe-reset-all` (such as for `seid`) which will wipe the DB. This error only has the potential to surface when initially setting up the node, and not after the node has been downloading blocks, upgrading, etc.
+In this case, you must run `$DAEMON_NAME unsafe-reset-all` (such as for `junod`) or `$DAEMON_NAME tendermint --home $DAEMON_HOME unsafe-reset-all` (such as for `seid`) which will wipe the DB. This error only has the potential to surface when initially setting up the node, and not after the node has been downloading blocks, upgrading, etc.
 
 ## Upgrades
 
@@ -46,51 +46,44 @@ Since this document may be outdated, please additionally check [this](https://do
 
 ### Upgrading
 
-Here's how to upgrade a node:
-1. Wait for the chain to halt. For example, the block height to install Juno v3.1.1 at is 2,616,300.
-2. Change the directory:
+This section explains how to upgrade a node.
 
-    ```shell
-    cd <DIR>
-    ```
+Set the height at which the node must be upgraded at (e.g., the block height to install Juno v3.1.1 at is 2,616,300):
 
-    Replace `<DIR>` with the directory that the Cosmos node's GitHub repo was downloaded to (e.g., `$HOME/juno`, `$HOME/sei`).
-3. Fetch the tags:
+ ```shell
+ read -P 'Enter the block height to halt at: ' HEIGHT
+ sed "s|halt-height = 0|halt-height = $HEIGHT|" -i $DAEMON_HOME/config/app.toml
+ ```
 
-    ```shell
-    git fetch --tags
-    ```
-4. Check out the upgrade's tag:
+Upgrade the node once it has halted:
 
-    ```shell
-    git checkout <VERSION>
-    ```
+```shell
+###########################
+## BEGIN: Reinstall node ##
+###########################
 
-   Replace `<VERSION>` with the upgrade's tag (e.g., `v3.1.1`).
-5. Install:
+read -P 'Enter the directory the node\'s GitHub repo was downloaded to (e.g., juno): ' DIR
+cd $DIR
+git fetch --tags
+set PROMPT 'Enter the upgrade\'s git tag (e.g., v3.1.1) commit hash (e.g., 4ec1b0ca818561cef04f8e6df84069b14399590e): '
+read -P $PROMPT VERSION
+git checkout VERSION
+make install
 
-    ```shell
-    make install
-    ```
-6. If the installation succeeded, then the following command will print the `<VERSION>` from step 4:
+#########################
+## END: Reinstall node ##
+#########################
 
-    ```shell
-    <BINARY> version
-    ```
-7. Update the halt height:
+############################
+## BEGIN: Set halt height ##
+############################
 
-    ```shell
-    sed 's|halt-height = .*|halt-height = <HEIGHT>|' -i <CHAIN_DIR>/config/app.toml
-    ```
+read -P 'Enter the next block halt height to halt at, or 0 if there isn\'t one: ' HEIGHT
+sed "s|halt-height = 0|halt-height = $HEIGHT|" -i $DAEMON_HOME/config/app.toml
+sudo systemctl daemon-reload
+sudo systemctl restart $DAEMON_NAME
 
-   Replace `<HEIGHT>` with the next upgrade's block height if there is one, and `0` otherwise.
-8. Reload systemd:
-
-    ```shell
-    sudo systemctl daemon-reload
-    ```
-9. Restart the node:
-
-    ```shell
-    sudo systemctl restart <BINARY>
-    ```
+##########################
+## END: Set halt height ##
+##########################
+```
