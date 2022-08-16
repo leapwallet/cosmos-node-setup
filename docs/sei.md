@@ -21,7 +21,7 @@
     ## END: Install Sei ##
     ######################
    
-    read -P 'A moniker is the node\'s moniker which is a name of your choosing. Enter the moniker: ' MONIKER
+    read -P 'A moniker is a name of your choosing for your node. Enter the moniker: ' MONIKER
     seid init $MONIKER --chain-id atlantic-1 -o
     
     curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-incentivized-testnet/genesis.json > \
