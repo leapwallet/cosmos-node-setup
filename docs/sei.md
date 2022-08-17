@@ -11,7 +11,7 @@
     cd sei-chain
    
     set PROMPT 'You\'ll be prompted to enter a tag. The tag must be the most recent tag listed on'
-    set PROMPT "$PROMPT https://github.com/sei-protocol/sei-chain/tags (e.g., 1.2.0beta). Enter the tag: "
+    set PROMPT "$PROMPT https://github.com/sei-protocol/sei-chain/tags (e.g., 1.1.0beta). Enter the tag: "
     read -P $PROMPT TAG
    
     git checkout $TAG
@@ -22,6 +22,8 @@
     ######################
    
     read -P 'A moniker is a name of your choosing for your node. Enter the moniker: ' MONIKER
+    printf "\nset MONIKER $MONIKER\n" >> ~/.config/fish/config.fish
+   
     seid init $MONIKER --chain-id atlantic-1 -o
     
     curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-incentivized-testnet/genesis.json > \
@@ -39,7 +41,7 @@
     ## BEGIN: Set up genesis ##
     ###########################
    
-    read -P 'Enter the address: ' ADDRESS
+    set ADDRESS (seid keys show -a $KEY)
     seid add-genesis-account $ADDRESS 100000000000000000000usei
     seid gentx $KEY 70000000000000000000usei --chain-id sei-chain
     seid collect-gentxs
@@ -75,11 +77,7 @@
         grep -Eo '>atlantic-1.*\.tar.lz4' | \
         tr -d '>' \
     )
-    
-    # Enter a terminal multiplexer session for the next command because it's a long running process
-    tmux
     curl https://snapshots1-testnet.nodejumper.io/sei-testnet/$SNAP_NAME | lz4 -dc - | tar xf - -C ~/.sei
-    exit
       
     ############################
     ## END: Download snapshot ##
@@ -87,21 +85,32 @@
     ```
 4. Set up [Cosmovisor](cosmovisor.md).
 5. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
-   1. Get Sei testnet tokens from the [🚰 | atlantic-1-faucet](https://discord.com/channels/973057323805311026/979272741150687262) Discord channel by sending the message `!faucet <ADDRESS>` where `<ADDRESS>` is the address associated with this validator.
-   2. Create the validator:
+    1. Get Sei testnet tokens from the [🚰 | atlantic-1-faucet](https://discord.com/channels/973057323805311026/979272741150687262) Discord channel by sending the message `!faucet <ADDRESS>` where `<ADDRESS>` is the address associated with this validator.
+    2. Create the validator:
 
-       ```shell
-       seid tx staking create-validator \
-           --amount=900000usei \
-           --pubkey=(seid tendermint show-validator) \
-           --moniker="$MONIKER" \
-           --chain-id=atlantic-1 \
-           --from="$KEY" \
-           --commission-rate=0.10 \
-           --commission-max-rate=0.20 \
-           --commission-max-change-rate=0.01 \
-           --min-self-delegation=1 \
-           --fees=2000usei
-       ```
+        ```shell
+        read -P 'Enter the maximum commission change rate percentage per day (e.g., 0.01): ' COMMISSION_MAX_CHANGE_RATE
+        read -P 'Enter the maximum commission rate percentage (e.g., 0.2): ' COMMISSION_MAX_RATE
+        read -P 'Enter the initial commission rate percentage (e.g., 0.05): ' COMMISSION_RATE
+        read -P '(Optional) Enter the details (e.g., The most secure validator in the Cosmos!): ' DETAILS
+        read -P 'Enter the fees to pay along with tx (e.g., 2000usei): ' FEES
+        read -P 'Enter the minimum self delegation required on the validator (e.g., 1): ' MIN_SELF_DELEGATION
+        read -P '(Optional) Enter the security contact email address (e.g., security@example.com): ' SECURITY_CONTACT
+        read -P '(Optional) Enter your website (e.g., https://validators.example.com): ' WEBSITE
+        seid tx staking create-validator \
+            --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
+            --commission-max-rate $COMMISSION_MAX_RATE \
+            --commission-rate $COMMISSION_RATE \
+            --details $DETAILS \
+            --fees $FEES \
+            --min-self-delegation $MIN_SELF_DELEGATION \
+            --security-contact $SECURITY_CONTACT \
+            --website $WEBSITE \
+            --amount 900000usei \
+            --from $KEY \
+            --moniker $MONIKER \
+            --pubkey (seid tendermint show-validator) \
+            --chain-id atlantic-1
+        ```
 
        Open `https://sei.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed (e.g., `FDDE67944FBD6111EA9898D6F8B5CF9601B4935B5A17CE18209825311A036210`) in your browser to check if the validator was successfully created.

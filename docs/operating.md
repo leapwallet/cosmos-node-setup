@@ -8,14 +8,6 @@ curl -s http://localhost:26657/status | jq .result.sync_info.catching_up
 
 Prints `true` if the node is still downloading the older blocks, and `false` otherwise.
 
-## Logs
-
-```shell
-journalctl -fu $DAEMON_NAME
-```
-
-Follows the journal for the `$DAEMON_NAME` systemd unit. This is useful to check whether the chain has halted, which block it's currently downloading, any error message that got printed if the node crashed, etc.
-
 ## Genesis Error
 
 The node might repeatedly crash with the following error message:

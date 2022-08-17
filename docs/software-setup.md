@@ -44,8 +44,8 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     ## END: Install Go ##
     #####################
    
-    set PROMPT 'Enter the name of the node\'s executable. This is typically the chain's name followed by \"d\" (e.g.,'
-    set PROMPT "$PROMPT junod for Juno, seid for Sei): '  
+    set PROMPT 'Enter the name of the node\'s executable. This is typically the chain\'s name followed by \"d\" (e.g.,'
+    set PROMPT "$PROMPT junod for Juno, seid for Sei): "
     read -P $PROMPT DAEMON_NAME
    
     read -P 'Enter the name of the configuration and data directory (e.g., .juno for Juno, .sei for Sei): ' DAEMON_HOME 
@@ -130,8 +130,9 @@ This optional but recommended section explains how to set up metrics. We explain
     ##################################
    
     set PROMPT 'You\'ll be prompted to enter a URL. The URL is the relevant download link from'
-    set PROMPT "$PROMPT https://prometheus.io/download/#node_exporter (e.g., https://github.com/prometheus/"
-    set PROMPT "$PROMPT node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz). Enter the URL: "
+    set PROMPT "$PROMPT[1]https://prometheus.io/download/#node_exporter (e.g., https://github.com/prometheus/"
+    set PROMPT "$PROMPT[1]node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz). Enter the"
+    set PROMPT "$PROMPT URL: "
     read -P $PROMPT URL
    
     wget $URL
@@ -196,7 +197,7 @@ This optional but recommended section explains how to set up metrics. We explain
    
     set PROMPT 'You\'ll be prompted to enter a Prometheus download link. The Prometheus download link is the relevant '
     set PROMPT "$PROMPT URL from https://prometheus.io/download/#prometheus) (e.g., https://github.com/prometheus/"
-    set PROMPT "$PROMPT prometheus/releases/download/v2.37.0/prometheus-2.37.0.linux-amd64.tar.gz). Enter the "
+    set PROMPT "$PROMPT[1]prometheus/releases/download/v2.37.0/prometheus-2.37.0.linux-amd64.tar.gz). Enter the "
     set PROMPT "$PROMPT Prometheus download link: "
     read -P $PROMPT PROM_URL
    
