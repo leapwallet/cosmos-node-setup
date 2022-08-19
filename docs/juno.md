@@ -38,20 +38,7 @@ Follow these steps to set up a Juno mainnet archive node:
        
     ####################
     ## END: Set peers ##
-    #################### 
-   
-    ############################
-    ## BEGIN: Set halt height ##
-    ############################
-
-    set PROMPT 'Enter the block height to halt at (e.g., 2616300 if you downloaded the first version of the node, 0 if'
-    set PROMPT "$PROMPT you installed the latest version): "
-    read -P $PROMPT HEIGHT
-    sed "s|halt-height = .*|halt-height = $HEIGHT|" -i ~/.juno/config/app.toml
-   
-    ##########################
-    ## END: Set halt height ##
-    ##########################
+    ####################    
     ```
 2. Follow this step if you want to enable the REST API. In the `[api]` section of `~/.juno/config/app.toml`, set the `enable` key's value to `true`.
 3. Set up [Cosmovisor](cosmovisor.md).

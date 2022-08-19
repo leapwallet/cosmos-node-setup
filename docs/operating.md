@@ -40,42 +40,32 @@ Since this document may be outdated, please additionally check [this](https://do
 
 This section explains how to upgrade a node.
 
-Set the height at which the node must be upgraded at (e.g., the block height to install Juno v3.1.1 at is 2,616,300):
-
- ```shell
- read -P 'Enter the block height to halt at: ' HEIGHT
- sed "s|halt-height = 0|halt-height = $HEIGHT|" -i $DAEMON_HOME/config/app.toml
- ```
-
-Upgrade the node once it has halted:
-
 ```shell
-###########################
-## BEGIN: Reinstall node ##
-###########################
-
-read -P 'Enter the directory the node\'s GitHub repo was downloaded to (e.g., juno): ' DIR
+cd
+read -P "Enter the directory the node's GitHub repo was downloaded to relative to $HOME (e.g., sei-chain): " DIR
 cd $DIR
 git fetch --tags
-set PROMPT 'Enter the upgrade\'s git tag (e.g., v3.1.1) commit hash (e.g., 4ec1b0ca818561cef04f8e6df84069b14399590e): '
+
+set PROMPT 'Enter the upgrade\'s git tag (e.g., v3.1.1), or commit hash (e.g.,'
+set PROMPT "$PROMPT 4ec1b0ca818561cef04f8e6df84069b14399590e): "
 read -P $PROMPT VERSION
-git checkout VERSION
+
+git checkout $VERSION
 make install
 
-#########################
-## END: Reinstall node ##
-#########################
+if test ($DAEMON_NAME version) = $VERSION
+    printf "Successfully installed $VERSION\n"
+else
+    printf "Failed to install $VERSION\n"
+    exit 1
+end
 
-############################
-## BEGIN: Set halt height ##
-############################
+mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
+cp $HOME/go/bin/$DAEMON_NAME $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
 
-read -P 'Enter the next block halt height to halt at, or 0 if there isn\'t one: ' HEIGHT
-sed "s|halt-height = 0|halt-height = $HEIGHT|" -i $DAEMON_HOME/config/app.toml
-sudo systemctl daemon-reload
-sudo systemctl restart $DAEMON_NAME
-
-##########################
-## END: Set halt height ##
-##########################
+if test ($DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin/$DAEMON_NAME version) = $VERSION
+    printf 'Successfully scheduled upgrade\n'
+else
+    printf 'Failed to schedule upgrade\n'
+end
 ```
