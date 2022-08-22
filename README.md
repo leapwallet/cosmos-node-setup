@@ -26,7 +26,7 @@ Here's how to set up the hardware:
 - Firewall:
     - If you require SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
     - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
-    - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TPC connections on port 26656 from any IP address.
+    - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TCP connections on port 26656 from any IP address.
 
 We recommend the following if you're using AWS:
 - Use AWS EC2 for the computer.
