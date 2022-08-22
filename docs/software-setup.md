@@ -8,7 +8,10 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
 1. Prepare for installation:
 
     ```shell
-    sudo passwd ubuntu
+    read -P 'Enter y if you\'re using AWS EC2, and n otherwise: ' IS_AWS
+    if test $IS_AWS = 'y'
+        sudo passwd ubuntu
+    end
    
     #########################
     ## BEGIN: Install fish ##
