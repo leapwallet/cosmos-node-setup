@@ -5,14 +5,14 @@ Since the commands are for Ubuntu, you might have to modify them if you're using
 ## Node Setup
 
 Follow these steps to set up a Juno mainnet archive node, Sei testnet validator node, or Stride testnet validator node:
-1. Prepare for installation:
+1. If you're using AWS, set the password:
 
     ```shell
-    read -P 'Enter y if you\'re using AWS EC2, and n otherwise: ' IS_AWS
-    if test $IS_AWS = 'y'
-        sudo passwd ubuntu
-    end
-   
+    sudo passwd ubuntu
+    ```
+2. Prepare for installation:
+
+    ```shell
     #########################
     ## BEGIN: Install fish ##
     #########################
@@ -30,7 +30,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     
     sudo reboot
     ```
-2. Install the toolchain:
+3. Install the toolchain:
 
     ```shell
     sudo apt -y install make build-essential gcc git jq chrony lz4
@@ -76,16 +76,16 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     ## END: Set environment variables ##
     #################################### 
     ```
-3. Set up one of the following nodes:
+4. Set up one of the following nodes:
     - [Juno mainnet archive node](juno.md)
     - [Sei testnet validator node](sei.md)
     - [Stride testnet validator node](stride.md)
-4. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
+5. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
 
     ```shell
     sed 's|enable = true|enable = false|' -i $DAEMON_HOME/config/app.toml
     ```
-5. Follow this step if you want to prune the node (recommended for validator nodes):
+6. Follow this step if you want to prune the node (recommended for validator nodes):
 
     ```shell
     sed \
@@ -96,7 +96,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         -i $DAEMON_HOME/config/app.toml
     sed 's|indexer = .*|indexer = "null"|' -i $DAEMON_HOME/config/config.toml
     ```
-6. This optional but recommended step improves your node's performance and security:
+7. This optional but recommended step improves your node's performance and security:
 
     ```shell
     sed \
@@ -106,7 +106,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         -i $DAEMON_HOME/config/config.toml
     sudo systemctl restart $DAEMON_NAME
     ```
-7. These optional but recommended steps improve your node's security:
+8. These optional but recommended steps improve your node's security:
     - Set up [2FA](https://www.digitalocean.com/community/tutorials/how-to-configure-multi-factor-authentication-on-ubuntu-18-04) for SSH.
     - Set up [Tendermint KMS](https://docs.evmos.org/validators/security/kms.html) if you're running a validator node.
     - Use [Horcrux](https://github.com/strangelove-ventures/horcrux) if you're running a validator node.
