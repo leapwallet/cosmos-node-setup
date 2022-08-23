@@ -19,7 +19,7 @@
         read -P 'Enter the minimum self delegation required on the validator (e.g., 1): ' MIN_SELF_DELEGATION
         read -P '(Optional) Enter the security contact email address (e.g., security@example.com): ' SECURITY_CONTACT
         read -P '(Optional) Enter your website (e.g., https://validators.example.com): ' WEBSITE
-        seid tx staking create-validator \
+        strided tx staking create-validator \
             --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
             --commission-max-rate $COMMISSION_MAX_RATE \
             --commission-rate $COMMISSION_RATE \
