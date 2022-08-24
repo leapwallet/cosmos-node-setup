@@ -19,6 +19,7 @@
         read -P 'Enter the minimum self delegation required on the validator (e.g., 1): ' MIN_SELF_DELEGATION
         read -P '(Optional) Enter the security contact email address (e.g., security@example.com): ' SECURITY_CONTACT
         read -P '(Optional) Enter your website (e.g., https://validators.example.com): ' WEBSITE
+        read -P 'Enter the moniker you entered earlier: ' MONIKER
         strided tx staking create-validator \
             --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
             --commission-max-rate $COMMISSION_MAX_RATE \
@@ -32,5 +33,5 @@
             --from $KEY \
             --moniker $MONIKER \
             --pubkey (strided tendermint show-validator) \
-            --chain-id STRIDE-1
+            --chain-id STRIDE-TESTNET-4
         ```
