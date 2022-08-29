@@ -5,7 +5,17 @@ Since the commands are for Ubuntu, you might have to modify them if you're using
 ## Node Setup
 
 Follow these steps to set up a Juno mainnet archive node, Sei testnet validator node, or Stride testnet validator node:
-1. If you're using AWS, set the password:
+1. If you're running as the `root` user, and don't have another user that you can switch to which has `sudo` privileges, then follow these steps:
+    1. Create the user:
+
+        ```shell
+        read -p 'Enter the user: ' USER
+        adduser $USER
+        usermod -aG sudo $USER
+        exit
+        ```
+    2. SSH back into the server using the new user.
+2. If you're using AWS, set the password:
 
     ```shell
     sudo passwd ubuntu
@@ -47,12 +57,16 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     ## END: Install Go ##
     #####################
    
-    set PROMPT 'Enter the name of the node\'s executable. This is typically the chain\'s name followed by \"d\" (e.g.,'
-    set PROMPT "$PROMPT junod for Juno, seid for Sei): "
+    set PROMPT 'You\'ll be prompted to enter the name of the executable. This is typically the chain\'s name followed'
+    set PROMPT "$PROMPT by the letter \"d\". For example, junod for Juno, and seid for Sei. Enter the node's"
+    set PROMPT "$PROMPT executable: "
     read -P $PROMPT DAEMON_NAME
    
-    read -P 'Enter the name of the configuration and data directory (e.g., .juno for Juno, .sei for Sei): ' DAEMON_HOME 
-   
+    set PROMPT 'You\'ll be prompted to enter the name of a directory. This is typically a period followed by the'
+    set PROMPT "$PROMPT chain\'s name. For example, .juno for Juno, and .sei for Sei. Enter the name of the"
+    set PROMPT "$PROMPT configuration and data directory: "
+    read -P $PROMPT DAEMON_HOME 
+
     ######################################
     ## BEGIN: Set environment variables ##
     ###################################### 

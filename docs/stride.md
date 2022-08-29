@@ -11,9 +11,9 @@
     2. Create the validator:
 
         ```shell
-        read -P 'Enter the maximum commission change rate percentage per day (e.g., 0.01): ' COMMISSION_MAX_CHANGE_RATE
-        read -P 'Enter the maximum commission rate percentage (default: 0.20): ' COMMISSION_MAX_RATE
-        read -P 'Enter the initial commission rate percentage (default: 0.10): ' COMMISSION_RATE
+        read -P 'Enter the max commission change rate percentage per day (example: 0.01): ' COMMISSION_MAX_CHANGE_RATE
+        read -P 'Enter the max commission rate percentage (example: 0.20): ' COMMISSION_MAX_RATE
+        read -P 'Enter the initial commission rate percentage (example: 0.10): ' COMMISSION_RATE
         read -P '(Optional) Enter the details (e.g., The most secure validator in the Cosmos!): ' DETAILS
         read -P 'Enter the fees to pay along with tx (e.g., 2000ustrd): ' FEES
         read -P 'Enter the minimum self delegation required on the validator (e.g., 1): ' MIN_SELF_DELEGATION
@@ -35,3 +35,5 @@
             --pubkey (strided tendermint show-validator) \
             --chain-id STRIDE-TESTNET-4
         ```
+
+        Open `https://stride.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed (e.g., `E6BFE17E108F09A22F517F2092F7FC44B1BC4A5CED9D2B98E9B0C04944650D06`) in your browser to check if the validator was successfully created.

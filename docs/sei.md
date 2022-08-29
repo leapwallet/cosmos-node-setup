@@ -89,14 +89,14 @@
     2. Create the validator:
 
         ```shell
-        read -P 'Enter the maximum commission change rate percentage per day (e.g., 0.01): ' COMMISSION_MAX_CHANGE_RATE
-        read -P 'Enter the maximum commission rate percentage (e.g., 0.2): ' COMMISSION_MAX_RATE
-        read -P 'Enter the initial commission rate percentage (e.g., 0.05): ' COMMISSION_RATE
-        read -P '(Optional) Enter the details (e.g., The most secure validator in the Cosmos!): ' DETAILS
-        read -P 'Enter the fees to pay along with tx (e.g., 2000usei): ' FEES
-        read -P 'Enter the minimum self delegation required on the validator (e.g., 1): ' MIN_SELF_DELEGATION
-        read -P '(Optional) Enter the security contact email address (e.g., security@example.com): ' SECURITY_CONTACT
-        read -P '(Optional) Enter your website (e.g., https://validators.example.com): ' WEBSITE
+        read -P 'Enter the max commission change rate percentage per day (example: 0.01): ' COMMISSION_MAX_CHANGE_RATE
+        read -P 'Enter the max commission rate percentage (example: 0.2): ' COMMISSION_MAX_RATE
+        read -P 'Enter the initial commission rate percentage (example: 0.05): ' COMMISSION_RATE
+        read -P '(Optional) Enter the details (example: The most secure validator in the Cosmos!): ' DETAILS
+        read -P 'Enter the fees to pay along with tx (example: 2000usei): ' FEES
+        read -P 'Enter the minimum self delegation required on the validator (example: 1): ' MIN_SELF_DELEGATION
+        read -P '(Optional) Enter the security contact email address (example: security@example.com): ' SECURITY_CONTACT
+        read -P '(Optional) Enter your website (example: https://validators.example.com): ' WEBSITE
         seid tx staking create-validator \
             --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
             --commission-max-rate $COMMISSION_MAX_RATE \
