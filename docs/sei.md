@@ -1,5 +1,8 @@
 # Sei Node Setup
 
+## `atlantic-1`
+
+Follow these steps if you want to set up a node on the `atlantic-1` chain:
 1. Install Sei:
 
     ```shell
@@ -11,7 +14,7 @@
     cd sei-chain
    
     set PROMPT 'You\'ll be prompted to enter a tag. The tag must be the most recent tag listed on'
-    set PROMPT "$PROMPT https://github.com/sei-protocol/sei-chain/tags (e.g., 1.1.0beta). Enter the tag: "
+    set PROMPT "$PROMPT https://github.com/sei-protocol/sei-chain/tags (example: 1.1.0beta). Enter the tag: "
     read -P $PROMPT TAG
    
     git checkout $TAG
@@ -28,6 +31,7 @@
     
     curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-incentivized-testnet/genesis.json > \
         ~/.sei/config/genesis.json
+   
     curl https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-incentivized-testnet/addrbook.json > \
         ~/.sei/config/addrbook.json
     ```
@@ -114,3 +118,69 @@
         ```
 
        Open `https://sei.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed (e.g., `FDDE67944FBD6111EA9898D6F8B5CF9601B4935B5A17CE18209825311A036210`) in your browser to check if the validator was successfully created.
+
+## Atlantic Subchains
+
+Follow these steps if you want to set up a node on the `atlantic-sub-1` or `atlantic-sub-2` chains:
+1. Install Sei:
+
+    ```shell
+    ########################
+    ## BEGIN: Install Sei ##
+    ########################
+   
+    git clone https://github.com/sei-protocol/sei-chain.git
+    cd sei-chain
+   
+    set PROMPT 'You\'ll be prompted to enter a tag. The tag must be the most recent tag listed on'
+    set PROMPT "$PROMPT https://github.com/sei-protocol/sei-chain/tags (e.g., 1.1.2beta-internal). Enter the tag: "
+    read -P $PROMPT TAG
+   
+    git checkout $TAG
+    make install
+
+    ######################
+    ## END: Install Sei ##
+    ######################
+   
+    read -P 'A moniker is a name of your choosing for your node. Enter the moniker: ' MONIKER
+    printf "set MONIKER $MONIKER\n" >> ~/.config/fish/config.fish
+   
+    read -P 'Enter the chain ID which is either atlantic-sub-1 or atlantic-sub-2: ' CHAIN_ID
+    printf "set CHAIN_ID $CHAIN_ID" >> ~/.config/fish/config.fish
+   
+    seid init $MONIKER --chain-id $CHAIN_ID -o
+    
+    wget -O ~/.sei/config/genesis.json \
+        https://raw.githubusercontent.com/sei-protocol/testnet/main/atlantic-subchains/$CHAIN_ID/genesis.json
+
+    sed 's|minimum-gas-prices = .*|minimum-gas-prices = "0.01usei"|' -i ~/.sei/config/app.toml
+    ```
+2. Set up the [key](key.md).
+3. Set up [Cosmovisor](cosmovisor.md).
+4. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
+
+    ```shell
+    read -P 'Enter the max commission change rate percentage per day (example: 0.01): ' COMMISSION_MAX_CHANGE_RATE
+    read -P 'Enter the max commission rate percentage (example: 0.2): ' COMMISSION_MAX_RATE
+    read -P 'Enter the initial commission rate percentage (example: 0.05): ' COMMISSION_RATE
+    read -P '(Optional) Enter the details (example: The most secure validator in the Cosmos!): ' DETAILS
+    read -P 'Enter the fees to pay along with tx (example: 2000usei): ' FEES
+    read -P 'Enter the minimum self delegation required on the validator (example: 1): ' MIN_SELF_DELEGATION
+    read -P '(Optional) Enter the security contact email address (example: security@example.com): ' SECURITY_CONTACT
+    read -P '(Optional) Enter your website (example: https://validators.example.com): ' WEBSITE
+    seid tx staking create-validator \
+        --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
+        --commission-max-rate $COMMISSION_MAX_RATE \
+        --commission-rate $COMMISSION_RATE \
+        --details $DETAILS \
+        --fees $FEES \
+        --min-self-delegation $MIN_SELF_DELEGATION \
+        --security-contact $SECURITY_CONTACT \
+        --website $WEBSITE \
+        --amount 10000000usei \
+        --from $KEY \
+        --moniker $MONIKER \
+        --pubkey (seid tendermint show-validator) \
+        --chain-id $CHAIN_ID
+    ```

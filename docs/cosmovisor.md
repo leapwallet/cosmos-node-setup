@@ -5,6 +5,7 @@
 ## BEGIN: Install Cosmovisor ##
 ###############################
 
+cd
 git clone https://github.com/cosmos/cosmos-sdk
 cd cosmos-sdk
 git checkout cosmovisor/v1.1.0
@@ -19,7 +20,6 @@ make cosmovisor
 #################################
 
 cp cosmovisor/cosmovisor $GOPATH/bin/cosmovisor
-cd
 mkdir -p $DAEMON_HOME/cosmovisor/genesis/bin
 mkdir -p $DAEMON_HOME/cosmovisor/upgrades
 cp ~/go/bin/$DAEMON_NAME $DAEMON_HOME/cosmovisor/genesis/bin
