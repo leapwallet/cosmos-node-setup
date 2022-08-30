@@ -120,7 +120,37 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         -i $DAEMON_HOME/config/config.toml
     sudo systemctl restart $DAEMON_NAME
     ```
-8. These optional but recommended steps improve your node's security:
+8. Set up the firewall:
+    - Firewall:
+        - Incoming traffic:
+            - In order to get SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
+            - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
+            - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TCP connections on port 26656 from any IP address.
+        - Outgoing traffic: All outgoing traffic is fine.
+   
+    If you're using something like AWS, then you can set the firewall without touching the CLI. Otherwise, here's how to set up the firewall using the CLI:
+
+    ```shell
+    read -P 'Enter y if you require SSH access, and n otherwise: ' REQUIRES_SSH
+    if test $REQUIRES_SSH = 'y'
+        sudo ufw allow ssh
+    end
+   
+    read -P 'Enter y if you require clients to be able to make API calls, and n otherwise: ' REQUIRES_API
+    if test $REQUIRES_API = 'y'
+        sudo ufw allow http
+        sudo ufw allow https
+    end
+   
+    read -P 'Enter y if you want to allow other nodes to sync with yours, and n otherwise: ' REQUIRES_SYNCING
+    if test $REQUIRES_SYNCING = 'y'
+        sudo ufw allow from any to any port 26656 proto tcp
+    end
+   
+    sudo ufw enable
+    sudo ufw status
+    ```
+9. These optional but recommended steps improve your node's security:
     - Set up [2FA](https://www.digitalocean.com/community/tutorials/how-to-configure-multi-factor-authentication-on-ubuntu-18-04) for SSH.
     - Set up [Tendermint KMS](https://docs.evmos.org/validators/security/kms.html) if you're running a validator node.
     - Use [Horcrux](https://github.com/strangelove-ventures/horcrux) if you're running a validator node.

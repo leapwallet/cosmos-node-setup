@@ -23,14 +23,6 @@ Here's how to set up the hardware:
 - The architecture must be x86_64.
 - 16 GiB of RAM.
 - Four 3.2 GHz CPU cores.
-- Firewall:
-    - Incoming traffic:
-        - In order to get SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
-        - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
-        - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TCP connections on port 26656 from any IP address.
-    - Outgoing traffic:
-        - Allow HTTP connections on port 80 from the server's IP address to any IP address to download blocks, GitHub repos, etc. from the internet.
-        - Allow HTTPS connections on port 443 from the server's IP address to any IP address to download blocks, GitHub repos, etc. from the internet.
 
 We recommend the following if you're using AWS:
 - Use AWS EC2 for the computer.
