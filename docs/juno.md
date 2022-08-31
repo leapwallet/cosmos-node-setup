@@ -24,7 +24,10 @@ Follow these steps to set up a Juno mainnet archive node:
     ####################### 
 
     read -P 'A moniker is a name of your choosing for your node. Enter the moniker: ' MONIKER
-    junod init $MONIKER --chain-id juno-1
+   
+    junod config chain-id juno-1
+   
+    junod init $MONIKER
       
     curl https://share.blockpane.com/juno/phoenix/genesis.json > ~/.juno/config/genesis.json
    

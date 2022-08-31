@@ -4,6 +4,7 @@
 
     ```shell
     bash -c "$(curl -sSL install.poolparty.stridelabs.co)"
+    strided config chain-id STRIDE-TESTNET-4
     ```
 2. Set up the [key](key.md).
 3. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
@@ -33,7 +34,6 @@
             --from $KEY \
             --moniker $MONIKER \
             --pubkey (strided tendermint show-validator) \
-            --chain-id STRIDE-TESTNET-4
         ```
 
         Open `https://stride.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed (e.g., `E6BFE17E108F09A22F517F2092F7FC44B1BC4A5CED9D2B98E9B0C04944650D06`) in your browser to check if the validator was successfully created.
