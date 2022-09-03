@@ -379,7 +379,7 @@ $DOMAIN {
         rewrite * {path}
         reverse_proxy :9091
     }
-    handle_path /metrics/* {
+    handle_path /prometheus/* {
         rewrite * {path}
         reverse_proxy :6666
     }
@@ -397,6 +397,6 @@ Except for disabled APIs (e.g., `https://<DOMAIN>/rest-api` won't work if the no
 - REST API: `https://<DOMAIN>/rest-api`
 - gRPC: `https://<DOMAIN>/grpc`
 - gRPC Web: `https://<DOMAIN>/grpc-web`
-- Metrics: `https://<DOMAIN>/metrics`
+- Metrics: `https://<DOMAIN>/prometheus`
 
 For example (assuming that you're running a Juno mainnet archive node with the REST API enabled), you can now query a tx using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
