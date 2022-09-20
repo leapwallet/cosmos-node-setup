@@ -90,16 +90,23 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     ## END: Set environment variables ##
     #################################### 
     ```
-4. Set up one of the following nodes:
+4. This optional but recommended step sets up Fail2ban:
+
+    ```shell
+    sudo apt -y install fail2ban sendmail
+    sudo systemctl enable --now fail2ban
+    sudo reboot
+    ```
+5. Set up one of the following nodes:
     - [Juno mainnet archive node](juno.md)
     - [Sei testnet validator node](sei.md)
     - [Stride testnet validator node](stride.md)
-5. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
+6. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
 
     ```shell
     sed 's|enable = true|enable = false|' -i $DAEMON_HOME/config/app.toml
     ```
-6. Follow this step if you want to prune the node (recommended for validator nodes):
+7. Follow this step if you want to prune the node (recommended for validator nodes):
 
     ```shell
     sed \
@@ -110,7 +117,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         -i $DAEMON_HOME/config/app.toml
     sed 's|indexer = .*|indexer = "null"|' -i $DAEMON_HOME/config/config.toml
     ```
-7. This optional but recommended step improves your node's performance and security:
+8. This optional but recommended step improves your node's performance and security:
 
     ```shell
     sed \
@@ -120,11 +127,12 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         -i $DAEMON_HOME/config/config.toml
     sudo systemctl restart $DAEMON_NAME
     ```
-8. Set up the firewall:
+9. Set up the firewall:
     - Firewall:
         - Incoming traffic:
             - In order to get SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
             - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
+            - If you're going to install [PANIC](https://github.com/SimplyVC/panic), then you must allow HTTPS connections on ports 3333 and 8000.
             - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TCP connections on port 26656 from any IP address.
         - Outgoing traffic: All outgoing traffic is fine.
    
@@ -142,6 +150,12 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         sudo ufw allow https
     end
    
+    read -P 'Enter y if you\'re going to install PANIC, and n otherwise: ' WILL_INSTALL_PANIC
+    if test $WILL_INSTALL_PANIC = 'y'
+        sudo ufw allow https from any to any port 3333 proto tcp
+        sudo ufw allow https from any to any port 8000 proto tcp
+    end
+   
     read -P 'Enter y if you want to allow other nodes to sync with yours, and n otherwise: ' REQUIRES_SYNCING
     if test $REQUIRES_SYNCING = 'y'
         sudo ufw allow from any to any port 26656 proto tcp
@@ -150,21 +164,10 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     sudo ufw enable
     sudo ufw status
     ```
-9. These optional but recommended steps improve your node's security:
-    - Set up [2FA](https://www.digitalocean.com/community/tutorials/how-to-configure-multi-factor-authentication-on-ubuntu-18-04) for SSH.
-    - Set up [Tendermint KMS](https://docs.evmos.org/validators/security/kms.html) if you're running a validator node.
-    - Use [Horcrux](https://github.com/strangelove-ventures/horcrux) if you're running a validator node.
-    - Set up [Unattended Upgrades](https://github.com/mvo5/unattended-upgrades).
-    - Set up a NIDS (network intrusion detection system).
-    - Set up a HIDS (host intrusion detection system).
-    - Set up an SMTP server to get notifications from Unattended Upgrades, etc. 
-    - Save logs to an archival service such as [Grafana Loki](https://grafana.com/oss/loki/) or [Papertrail](https://www.papertrail.com/).
-    - Set up [PANIC](https://github.com/SimplyVC/panic).
-    - Set up rate limiting.
 
-## Monitoring Setup
+## Monitoring and Alerting Setup
 
-This optional but recommended section explains how to set up metrics. We explain it by installing Prometheus directly on the server, and connecting it to Grafana Cloud. Of course, you can run Grafana yourself, use an external Prometheus server, etc. instead.
+This optional but recommended section explains how to set up monitoring and alerting. We explain it by installing Prometheus directly on the server, connecting it to Grafana Cloud, and using PANIC. Of course, you can run Grafana yourself, use an external Prometheus server, use [Tenderduty](https://github.com/blockpane/tenderduty), etc. instead.
 
 1. Sign up for [Grafana Cloud](https://grafana.com/auth/sign-up/create-user).
 2. Set up Node Exporter:
@@ -274,8 +277,6 @@ This optional but recommended section explains how to set up metrics. We explain
     #################################
    
     printf "\
-    global:
-      scrape_interval: 15s
     scrape_configs:
       - job_name: node-exporter
         static_configs:
@@ -322,6 +323,7 @@ This optional but recommended section explains how to set up metrics. We explain
     ## END: Set up systemd unit for Prometheus ##
     #############################################
     ```
+5. Set up [PANIC](https://github.com/SimplyVC/panic).
 
 ## URL Setup
 
@@ -393,7 +395,7 @@ sudo systemctl reload caddy
 ##########################
 ```
 
-Except for disabled APIs (e.g., `https://<DOMAIN>/rest-api` won't work if the node's REST API is disabled), the following URLs will now be available (`<DOMAIN>` is the same as the domain you entered during the prompt):
+The following URLs will now be available, where `<DOMAIN>` is the same as the domain you entered during the prompt. Services which aren't enabled won't exist. For example, `https://<DOMAIN>/rest-api` won't work if the node's REST API is disabled.
 - REST API: `https://<DOMAIN>/rest-api`
 - gRPC: `https://<DOMAIN>/grpc`
 - gRPC Web: `https://<DOMAIN>/grpc-web`
