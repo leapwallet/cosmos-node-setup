@@ -23,8 +23,8 @@ In this case, you must run `$DAEMON_NAME unsafe-reset-all` (such as for `junod`)
 To check if the validator is in the active set, run the following command. If the bond status is `BOND_STATUS_BONDED`, then the validator is part of the active set.
 
 ```shell
-$DAEMON_NAME query staking validators --limit 300 -o json \
-    | jq -r '.validators[] [.operator_address, .status, (.tokens|tonumber / pow(10; 6)),.commission.update_time[0:19], .description.moniker] | @csv' \
+osmosisd query staking validators --limit 300 -o json \
+    | jq -r '.validators[] | [.operator_address, .status, (.tokens|tonumber / pow(10; 6)),.commission.update_time[0:19], .description.moniker] | @csv' \
     | column -t -s"," \
     | grep $MONIKER
 ```
