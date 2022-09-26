@@ -29,6 +29,44 @@ We recommend the following if you're using AWS:
 - Use AWS EBS for storage.
 - If you're running an archive node, and have synced the blocks yourself because there's no snapshot available, use AWS DLM to create a daily backup of the AWS EBS volume.
 
+Set up the firewall:
+- Incoming traffic:
+    - In order to get SSH access to your server, allow SSH connections over TCP on port 22 from your IP address.
+    - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
+    - If you're going to install [PANIC](https://github.com/SimplyVC/panic), then you must allow HTTPS connections on ports 3333 and 8000 from your IP address.
+    - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TCP connections on port 26656 from any IP address.
+- Outgoing traffic: All outgoing traffic is fine.
+
+If you're using something like AWS, then you can set the firewall without touching the CLI. Otherwise, here's how to set up the firewall using the CLI:
+
+```shell
+read -P 'Enter your IP address: ' IP_ADDRESS
+
+read -P 'Enter y if you require SSH access, and n otherwise: ' REQUIRES_SSH
+if test $REQUIRES_SSH = 'y'
+    sudo ufw allow from $IP_ADDRESS proto tcp to any port 22
+end
+   
+read -P 'Enter y if you require clients to be able to make API calls, and n otherwise: ' REQUIRES_API
+if test $REQUIRES_API = 'y'
+    sudo ufw allow http
+    sudo ufw allow https
+end
+   
+read -P 'Enter y if you\'re going to install PANIC, and n otherwise: ' WILL_INSTALL_PANIC
+if test $WILL_INSTALL_PANIC = 'y'
+    sudo ufw allow from $IP_ADDRESS proto tcp to any port 3333,8000
+end
+   
+read -P 'Enter y if you want to allow other nodes to sync with yours, and n otherwise: ' REQUIRES_SYNCING
+if test $REQUIRES_SYNCING = 'y'
+    sudo ufw allow from any to any port 26656 proto tcp
+end
+   
+sudo ufw enable
+sudo ufw status
+```
+
 ## [Software Setup](docs/software-setup.md)
 
 ## [Operating the Node](docs/operating.md)
@@ -38,6 +76,7 @@ We recommend the following if you're using AWS:
 - [Juno Docs](https://docs.junonetwork.io/juno/readme)
 - [Sei Docs](https://docs.seinetwork.io/introduction/overview)
 - [Stride Docs](https://docs.stride.zone/docs)
+- [Osmosis Docs](https://docs.osmosis.zone)
 - [NodeJumper](https://nodejumper.io/)
 - [Validator Security Checklist](https://docs.evmos.org/validators/security/checklist.html)
 

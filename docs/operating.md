@@ -18,6 +18,25 @@ Error: error during handshake: error on replay: validator set is nil in genesis 
 
 In this case, you must run `$DAEMON_NAME unsafe-reset-all` (such as for `junod`) or `$DAEMON_NAME tendermint --home $DAEMON_HOME unsafe-reset-all` (such as for `seid`) which will wipe the DB. This error only has the potential to surface when initially setting up the node, and not after the node has been downloading blocks, upgrading, etc.
 
+## Track Validator Active Set
+
+To check if the validator is in the active set, run the following command. If the bond status is `BOND_STATUS_BONDED`, then the validator is part of the active set.
+
+```shell
+$DAEMON_NAME query staking validators --limit 300 -o json \
+    | jq -r '.validators[] [.operator_address, .status, (.tokens|tonumber / pow(10; 6)),.commission.update_time[0:19], .description.moniker] | @csv' \
+    | column -t -s"," \
+    | grep $MONIKER
+```
+
+## Track Validator Signing
+
+To track the validator's signing history:
+
+```shell
+$DAEMON_NAME query slashing signing-info ($DAEMON_NAME tendermint show-validator)
+```
+
 ## Upgrades
 
 Remember to subscribe to new upgrade notifications. For example, you should join Juno's [#⚡ | validator-lounge](https://discord.com/channels/816256689078403103/816263136491339867) Discord channel where they try to announce new upgrades a few days in advance if you're running a Juno node.

@@ -4,7 +4,7 @@ Since the commands are for Ubuntu, you might have to modify them if you're using
 
 ## Node Setup
 
-Follow these steps to set up a Juno mainnet archive node, Sei testnet validator node, or Stride testnet validator node:
+Follow these steps to set up a Juno mainnet archive node, Sei testnet validator node, Stride testnet validator node, or Osmosis testnet validator node:
 1. If you're running as the `root` user, and don't have another user that you can switch to which has `sudo` privileges, then follow these steps:
     1. Create the user:
 
@@ -57,21 +57,23 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     ## END: Install Go ##
     #####################
    
-    set PROMPT 'You\'ll be prompted to enter the name of the executable. This is typically the chain\'s name followed'
-    set PROMPT "$PROMPT by the letter \"d\". For example, junod for Juno, and seid for Sei. Enter the node's"
-    set PROMPT "$PROMPT executable: "
+    read -P 'Examples of blockchain names are osmosis, sei, and stride. Enter the blockchain\'s name: ' $BLOCKCHAIN
     read -P $PROMPT DAEMON_NAME
    
     set PROMPT 'You\'ll be prompted to enter the name of a directory. This is typically a period followed by the'
     set PROMPT "$PROMPT chain\'s name. For example, .juno for Juno, and .sei for Sei. Enter the name of the"
     set PROMPT "$PROMPT configuration and data directory: "
     read -P $PROMPT DAEMON_HOME 
+   
+    read -P 'A moniker is a name of your choosing for your node. Enter the moniker: ' MONIKER
 
     ######################################
     ## BEGIN: Set environment variables ##
     ###################################### 
    
     printf "\
+   
+    set MONIKER $MONIKER
     
     # Go
     set -x GOROOT /usr/local/go
@@ -80,8 +82,8 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     set PATH /usr/local/go/bin ~/go/bin $PATH
 
     # Cosmovisor
-    set -x DAEMON_NAME $DAEMON_NAME
-    set -x DAEMON_HOME ~/$DAEMON_HOME
+    set -x DAEMON_NAME (printf $BLOCKCHAIN)d
+    set -x DAEMON_HOME ~/.$BLOCKCHAIN
     " >> ~/.config/fish/config.fish
    
     source ~/.config/fish/config.fish
@@ -101,6 +103,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     - [Juno mainnet archive node](juno.md)
     - [Sei testnet validator node](sei.md)
     - [Stride testnet validator node](stride.md)
+    - [Osmosis testnet validator node](osmosis.md)
 6. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
 
     ```shell
@@ -126,43 +129,6 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         -e 's|flush_throttle_timeout = .*|flush_throttle_timeout = "100ms"|' \
         -i $DAEMON_HOME/config/config.toml
     sudo systemctl restart $DAEMON_NAME
-    ```
-9. Set up the firewall:
-    - Firewall:
-        - Incoming traffic:
-            - In order to get SSH access to your server, allow SSH connections over TCP on port 22 for your IP address.
-            - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
-            - If you're going to install [PANIC](https://github.com/SimplyVC/panic), then you must allow HTTPS connections on ports 3333 and 8000.
-            - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TCP connections on port 26656 from any IP address.
-        - Outgoing traffic: All outgoing traffic is fine.
-   
-    If you're using something like AWS, then you can set the firewall without touching the CLI. Otherwise, here's how to set up the firewall using the CLI:
-
-    ```shell
-    read -P 'Enter y if you require SSH access, and n otherwise: ' REQUIRES_SSH
-    if test $REQUIRES_SSH = 'y'
-        sudo ufw allow ssh
-    end
-   
-    read -P 'Enter y if you require clients to be able to make API calls, and n otherwise: ' REQUIRES_API
-    if test $REQUIRES_API = 'y'
-        sudo ufw allow http
-        sudo ufw allow https
-    end
-   
-    read -P 'Enter y if you\'re going to install PANIC, and n otherwise: ' WILL_INSTALL_PANIC
-    if test $WILL_INSTALL_PANIC = 'y'
-        sudo ufw allow https from any to any port 3333 proto tcp
-        sudo ufw allow https from any to any port 8000 proto tcp
-    end
-   
-    read -P 'Enter y if you want to allow other nodes to sync with yours, and n otherwise: ' REQUIRES_SYNCING
-    if test $REQUIRES_SYNCING = 'y'
-        sudo ufw allow from any to any port 26656 proto tcp
-    end
-   
-    sudo ufw enable
-    sudo ufw status
     ```
 
 ## Monitoring and Alerting Setup
