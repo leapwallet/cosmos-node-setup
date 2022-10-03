@@ -14,14 +14,13 @@ if test $IS_NEW_ADDRESS = 'y'
     $DAEMON_NAME keys add $KEY
 
     printf 'In case you need to recreate this validator (e.g., the hardware it was running on got destroyed), '
-    printf "entering the same mnemonic will not generate the same $DAEMON_HOME/config/priv_validator_key.json and "
-    printf "$DAEMON_HOME/config/node_key.json. Therefore, you must back up $DAEMON_HOME/config/priv_validator_key.json "
-    printf "and $DAEMON_HOME/config/node_key.json in case you need to restore your validator later on. Preferably, "
-    printf 'encrypt the backup.\n'
+    printf "entering the same mnemonic will not generate the same $DAEMON_HOME/config/priv_validator_key.json. "
+    printf "Therefore, you must back up $DAEMON_HOME/config/priv_validator_key.json in case you need to restore your "
+    printf 'your validator later on. Preferably, encrypt the backup.\n'
 else
     $DAEMON_NAME keys add $KEY --recover
 
-    printf "If you're recreating a validator, and have a backup of $DAEMON_HOME/config/priv_validator_key.json and "
-    printf "$DAEMON_HOME/config/node_key.json, replace the generated files at the same path with the backup.\n"
+    printf "If you're recreating a validator, and have a backup of $DAEMON_HOME/config/priv_validator_key.json replace "
+    printf 'the generated files at the same path with the backup.\n'
 end
 ```

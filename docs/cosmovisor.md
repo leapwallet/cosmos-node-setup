@@ -48,10 +48,10 @@ Environment="DAEMON_HOME=$DAEMON_HOME"
 
 [Install]
 WantedBy=multi-user.target
-" | sudo tee /etc/systemd/system/$DAEMON_NAME.service
+" | sudo tee /etc/systemd/system/cosmovisor.service
 
-sudo systemctl enable --now $DAEMON_NAME
-sudo systemctl status $DAEMON_NAME
+sudo systemctl enable --now cosmovisor
+sudo systemctl status cosmovisor
 
 #############################################
 ## END: Set up systemd unit for Cosmovisor ##

@@ -10,6 +10,8 @@ This repo is written for people who know nothing about running a Cosmos node. Wh
 
 Using a serverless solution (e.g., AWS Fargate) would've been more scalable since the primary purpose of an archive node is to serve API requests. However, since a blockchain node is a DB and API server combined, it's impossible to use a serverless solution. This is because a serverless solution requires the DB to be scaled separately from the API server. Since the blockchain combines the two, the DB would get corrupted because the API servers would all be writing to the DB, and the DB isn't engineered to handle duplicate writes.
 
+There are no benefits (no cost savings, etc.) to be gained from running anything other than a single blockchain node on a computer. Therefore, for simplicity, this repo assumes that the computer used to run the blockchain node will not run any other software (including other blockchain nodes).
+
 Here's how to set up the hardware:
 - We recommend using a Linux OS; Ubuntu specifically.
 - Use an SSD (preferably NVMe) for storage.
@@ -31,9 +33,17 @@ We recommend the following if you're using AWS:
 
 Set up the firewall:
 - Incoming traffic:
+    - One of the next sections in this repo explains how to set up a reverse proxy server in order to access the API, and [PANIC](https://github.com/SimplyVC/panic). Though you can still access these features without the reverse proxy server, it's recommended that you use one. If you're going to use a reverse proxy server, then allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
+    - If you're not going to use a reverse proxy server, then follow whichever of the following that you want:
+        - In order to get RPC API access, allow HTTP connections over TCP on port 26657 from any IP address.
+        - In order to get REST API access, allow HTTP connections over TCP on port 1317 from any IP address.
+        - In order to get gRPC API access, allow HTTP connections over TCP on port 9090 from any IP address.
+        - In order to get gRPC Web API access, allow HTTP connections over TCP on port 9091 from any IP address.
+        - In order to get Prometheus metrics (aggregates [Node Exporter](https://github.com/prometheus/node_exporter) metrics, and validator metrics) access, allow HTTP connections over TCP on port 6666 from any IP address.
+        - In order to get Node Exporter metrics access, allow HTTP connections over TCP on port 9100 from any IP address.
+        - In order to get validator metrics access, allow HTTP connections over TCP on port 26660 from any IP address.
     - In order to get SSH access to your server, allow SSH connections over TCP on port 22 from your IP address.
-    - If you require that clients be allowed to make API calls, allow HTTP connections on port 80 from any IP address, and HTTPS connections on port 443 from any IP address.
-    - If you're going to install [PANIC](https://github.com/SimplyVC/panic), then you must allow HTTPS connections on ports 3333 and 8000 from your IP address.
+    - If you're going to install PANIC, then you must allow HTTPS connections on ports 3333 and 8000 from your IP address.
     - Similar to how your node retrieves data from other nodes, it's recommended to allow other nodes to sync with yours by allowing TCP connections on port 26656 from any IP address.
 - Outgoing traffic: All outgoing traffic is fine.
 
@@ -47,12 +57,51 @@ if test $REQUIRES_SSH = 'y'
     sudo ufw allow from $IP_ADDRESS proto tcp to any port 22
 end
    
-read -P 'Enter y if you require clients to be able to make API calls, and n otherwise: ' REQUIRES_API
-if test $REQUIRES_API = 'y'
+read -P 'Enter y if you\'re going to use a reverse proxy server, and n otherwise: ' WILL_PROXY
+if test $WILL_PROXY = 'y'
     sudo ufw allow http
     sudo ufw allow https
+else
+    read -P 'Enter y if you require clients to be able to access the RPC API, and n otherwise: ' REQUIRES_RPC_API
+    if test $REQUIRES_RPC_API = 'y'
+        sudo ufw allow from any to any port 26657 proto tcp
+    end
+    
+    read -P 'Enter y if you require clients to be able to access the REST API, and n otherwise: ' REQUIRES_REST_API
+    if test $REQUIRES_REST_API = 'y'
+        sudo ufw allow from any to any port 1317 proto tcp
+    end
+    
+    read -P 'Enter y if you require clients to be able to access the gRPC API, and n otherwise: ' REQUIRES_GRPC_API
+    if test $REQUIRES_GRPC_API = 'y'
+        sudo ufw allow from any to any port 9090 proto tcp
+    end
+    
+    set PROMPT 'Enter y if you require clients to be able to access the gRPC Web API, and n otherwise: '
+    read -P $PROMPT REQUIRES_GRPC_WEB_API
+    if test $REQUIRES_GRPC_API = 'y'
+        sudo ufw allow from any to any port 9091 proto tcp
+    end
+    
+    set PROMPT 'Enter y if you require clients to be able to access Prometheus, and n otherwise: '
+    read -P $PROMPT REQUIRES_PROMETHEUS
+    if test $REQUIRES_PROMETHEUS = 'y'
+        sudo ufw allow from any to any port 6666 proto tcp
+    end
+    
+    set PROMPT 'Enter y if you require clients to be able to access Node Exporter metrics, and n otherwise: '
+    read -P $PROMPT REQUIRES_NODE_EXPORTER
+    if test $REQUIRES_NODE_EXPORTER = 'y'
+        sudo ufw allow from any to any port 9100 proto tcp
+    end
+    
+    set PROMPT 'Enter y if you require clients to be able to access validator metrics, and n otherwise: '
+    read -P $PROMPT VALIDATOR_METRICS
+    if test $REQUIRES_NODE_EXPORTER = 'y'
+        sudo ufw allow from any to any port 26660 proto tcp
+    end
 end
-   
+
 read -P 'Enter y if you\'re going to install PANIC, and n otherwise: ' WILL_INSTALL_PANIC
 if test $WILL_INSTALL_PANIC = 'y'
     sudo ufw allow from $IP_ADDRESS proto tcp to any port 3333,8000

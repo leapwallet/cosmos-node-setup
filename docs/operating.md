@@ -18,7 +18,7 @@ Error: error during handshake: error on replay: validator set is nil in genesis 
 
 In this case, you must run `$DAEMON_NAME unsafe-reset-all` (such as for `junod`) or `$DAEMON_NAME tendermint --home $DAEMON_HOME unsafe-reset-all` (such as for `seid`) which will wipe the DB. This error only has the potential to surface when initially setting up the node, and not after the node has been downloading blocks, upgrading, etc.
 
-## Track Validator Active Set
+## Track Validator
 
 To check if the validator is in the active set, run the following command. If the bond status is `BOND_STATUS_BONDED`, then the validator is part of the active set.
 
@@ -29,9 +29,7 @@ osmosisd query staking validators --limit 300 -o json \
     | grep $MONIKER
 ```
 
-## Track Validator Signing
-
-To track the validator's signing history:
+If the validator is in the active set, then you can track its signing history:
 
 ```shell
 $DAEMON_NAME query slashing signing-info ($DAEMON_NAME tendermint show-validator)

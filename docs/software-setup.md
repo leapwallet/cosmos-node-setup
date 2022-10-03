@@ -20,7 +20,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     ```shell
     sudo passwd ubuntu
     ```
-2. Prepare for installation:
+3. Prepare for installation:
 
     ```shell
     #########################
@@ -40,7 +40,7 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     
     sudo reboot
     ```
-3. Install the toolchain:
+4. Install the toolchain:
 
     ```shell
     sudo apt -y install make build-essential gcc git jq chrony lz4
@@ -57,19 +57,18 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     ## END: Install Go ##
     #####################
    
-    read -P 'Examples of blockchain names are osmosis, sei, and stride. Enter the blockchain\'s name: ' $BLOCKCHAIN
-    read -P $PROMPT DAEMON_NAME
-   
-    set PROMPT 'You\'ll be prompted to enter the name of a directory. This is typically a period followed by the'
-    set PROMPT "$PROMPT chain\'s name. For example, .juno for Juno, and .sei for Sei. Enter the name of the"
-    set PROMPT "$PROMPT configuration and data directory: "
-    read -P $PROMPT DAEMON_HOME 
-   
+    read -P 'Examples of blockchain names are osmosis, sei, and stride. Enter the blockchain\'s name: ' BLOCKCHAIN
     read -P 'A moniker is a name of your choosing for your node. Enter the moniker: ' MONIKER
 
     ######################################
     ## BEGIN: Set environment variables ##
     ###################################### 
+   
+    if test $BLOCKCHAIN = 'osmosis'
+        set DAEMON_HOME ~/.osmosisd
+    else
+        set DAEMON_HOME ~/.$BLOCKCHAIN
+    end
    
     printf "\
    
@@ -82,8 +81,8 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     set PATH /usr/local/go/bin ~/go/bin $PATH
 
     # Cosmovisor
-    set -x DAEMON_NAME (printf $BLOCKCHAIN)d
-    set -x DAEMON_HOME ~/.$BLOCKCHAIN
+    set -x DAEMON_NAME $(printf $BLOCKCHAIN)d
+    set -x DAEMON_HOME $DAEMON_HOME
     " >> ~/.config/fish/config.fish
    
     source ~/.config/fish/config.fish
@@ -92,24 +91,27 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     ## END: Set environment variables ##
     #################################### 
     ```
-4. This optional but recommended step sets up Fail2ban:
+5. This optional but recommended step sets up Fail2ban:
 
     ```shell
     sudo apt -y install fail2ban sendmail
     sudo systemctl enable --now fail2ban
     sudo reboot
     ```
-5. Set up one of the following nodes:
+6. Set up one of the following nodes:
     - [Juno mainnet archive node](juno.md)
     - [Sei testnet validator node](sei.md)
     - [Stride testnet validator node](stride.md)
     - [Osmosis testnet validator node](osmosis.md)
-6. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
+7. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
 
     ```shell
     sed 's|enable = true|enable = false|' -i $DAEMON_HOME/config/app.toml
+    sudo systemctl restart cosmovisor
     ```
-7. Follow this step if you want to prune the node (recommended for validator nodes):
+
+   If you've run the above command, are running a validator, and are going to use PANIC, then set the `enable` key to `true` under the `[api]` section of `$DAEMON_HOME/config/app.toml`. The reason the REST API must be enabled in this particular case is because PANIC can't monitor without it. Don't worry about security in this particular case because the REST API will only be accessible by the server it's running on (we'll whitelist the server's IP address later on). 
+8. Follow this step if you want to prune the node (recommended for validator nodes):
 
     ```shell
     sed \
@@ -119,8 +121,9 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         -e 's|pruning-interval = .*|pruning-interval = "10"|' \
         -i $DAEMON_HOME/config/app.toml
     sed 's|indexer = .*|indexer = "null"|' -i $DAEMON_HOME/config/config.toml
+    sudo systemctl restart cosmovisor
     ```
-8. This optional but recommended step improves your node's performance and security:
+9. This optional but recommended step improves your node's performance and security:
 
     ```shell
     sed \
@@ -128,8 +131,113 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
         -e 's|max_num_outbound_peers = .*|max_num_outbound_peers = 10|' \
         -e 's|flush_throttle_timeout = .*|flush_throttle_timeout = "100ms"|' \
         -i $DAEMON_HOME/config/config.toml
-    sudo systemctl restart $DAEMON_NAME
+    sudo systemctl restart cosmovisor
     ```
+
+## URL Setup
+
+This optional but recommended section explains how to set up the DNS and TLS certificate. We explain it by using Cloudflare for the DNS, and Caddy for the TLS certificate. Of course, you can use different tools such as Google Domains and Traefik instead.
+
+This section explains how to secure the REST API in case you're running a validator node monitored by PANIC, and have enabled the REST API as a result. If you're not going to follow this section, then be sure to prevent IP addresses other than the server itself from accessing the REST API.
+
+### DNS
+
+This section explains how to use your domain name (e.g., example.com) instead of your server's IP address. It assumes that you already have a domain name, and a Cloudflare setup.
+1. Go to your website's DNS section on Cloudflare.
+2. Click **Add record**.
+3. Set the **Type** field to **A**.
+4. Set the **Name (required)** field (e.g., **osmo-test-4**).
+5. Set the **IPv4 address (required)** field to your server's IP address.
+6. Set the **Proxy status** to **DNS only**.
+7. Set the **TTL** to **Auto**.
+
+### TLS Certificate
+
+This section explains how to set up the TLS certificate, and URLs for each API that you want to expose. There's a reference to Prometheus which is a monitoring system that you have the option to set up in the next section.
+
+```shell
+##########################
+## BEGIN: Install Caddy ##
+##########################
+
+sudo apt -y install debian-keyring debian-archive-keyring apt-transport-https
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | \
+    sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt | \
+    sudo tee /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt -y install caddy
+
+########################
+## END: Install Caddy ##
+########################
+
+############################
+## BEGIN: Configure Caddy ##
+############################
+
+read -P 'Enter the domain such as localhost or osmo-test-4.example.com: ' DOMAIN
+
+read -P 'Enter y if you\'re running a validator, and using PANIC, and n otherwise: ' MUST_WHITELIST
+if test $MUST_WHITELIST = 'y'
+    read -P 'Enter the server\'s IP address such as 52.90.54.75: ' IP_ADDRESS
+    set WHITELIST "\n        @denied not remote_ip $IP_ADDRESS\n        abort @denied"
+else
+    set WHITELIST ''
+end
+
+printf "\
+$DOMAIN {
+    handle_path /tendermint-rpc/* {
+        rewrite * {path}
+        reverse_proxy :26657
+    }
+    handle_path /rest-api/* {
+        rewrite * {path}
+        reverse_proxy :1317$WHITELIST
+    }
+    handle_path /grpc/* {
+        rewrite * {path}
+        reverse_proxy :9090
+    }
+    handle_path /grpc-web/* {
+        rewrite * {path}
+        reverse_proxy :9091
+    }
+    handle_path /prometheus/* {
+        rewrite * {path}
+        reverse_proxy :6666
+    }
+    handle_path /node-exporter/* {
+        rewrite * {path}
+        reverse_proxy :9100
+    }
+    handle_path /blockchain-node/* {
+        rewrite * {path}
+        reverse_proxy :26660
+    }
+}
+" | sudo tee /etc/caddy/Caddyfile
+
+sudo systemctl reload caddy
+
+##########################
+## END: Configure Caddy ##
+##########################
+```
+
+The following URLs will now be available, where `<DOMAIN>` is the same as the domain you entered during the prompt. Services which aren't enabled won't exist. For example, `https://<DOMAIN>/rest-api` won't work if the node's REST API is disabled.
+- RPC API: `https://<DOMAIN>/tendermint-rpc`
+- REST API: `https://<DOMAIN>/rest-api`
+- gRPC: `https://<DOMAIN>/grpc`
+- gRPC Web: `https://<DOMAIN>/grpc-web`
+- Prometheus's metrics (for use by Grafana): `https://<DOMAIN>/prometheus`
+- Node Exporter's metrics (for use by PANIC): `https://<DOMAIN>/node-exporter`
+- Blockchain node's metrics (for use by PANIC): `https://<DOMAIN>/blockchain-node`
+
+For example (assuming that you're running a Juno mainnet archive node with the REST API enabled), you can now query a tx using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
+
+Note that if you're using PANIC, then you'll need to access it via `https://<IP>:3333` and `https://<IP>:8000` (where `<IP>` is the server's IP address) rather than through the reverse proxy.
 
 ## Monitoring and Alerting Setup
 
@@ -201,7 +309,7 @@ This optional but recommended section explains how to set up monitoring and aler
     ##############################
    
     sed 's|prometheus = .*|prometheus = true|' -i $DAEMON_HOME/config/config.toml
-    sudo systemctl restart $DAEMON_NAME
+    sudo systemctl restart cosmovisor
     
     ############################
     ## END: Enable Prometheus ##
@@ -290,81 +398,3 @@ This optional but recommended section explains how to set up monitoring and aler
     #############################################
     ```
 5. Set up [PANIC](https://github.com/SimplyVC/panic).
-
-## URL Setup
-
-This optional but recommended section explains how to set up the DNS and TLS certificate. We explain it by using Cloudflare for the DNS, and Caddy for the TLS certificate. Of course, you can use different tools such as Google Domains and Traefik instead.
-
-### DNS
-
-This section explains how to use your domain name (e.g., example.com) instead of your server's IP address. It assumes that you already have a domain name, and a Cloudflare setup.
-1. Go to your website's DNS section on Cloudflare.
-2. Click **Add record**.
-3. Set the **Type** field to **A**.
-4. Set the **Name (required)** field (e.g., **juno-mainnet-archive-node**).
-5. Set the **IPv4 address (required)** field to your server's IP address.
-6. Set the **Proxy status** to **DNS only**.
-7. Set the **TTL** to **Auto**.
-
-### TLS Certificate
-
-This section explains how to set up the TLS certificate, and URLs for each API you want to expose.
-
-```shell
-##########################
-## BEGIN: Install Caddy ##
-##########################
-
-sudo apt -y install debian-keyring debian-archive-keyring apt-transport-https
-curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | \
-    sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt | \
-    sudo tee /etc/apt/sources.list.d/caddy-stable.list
-sudo apt update
-sudo apt -y install caddy
-
-########################
-## END: Install Caddy ##
-########################
-
-############################
-## BEGIN: Configure Caddy ##
-############################
-
-read -P 'Enter the domain (e.g., juno.example.com): ' DOMAIN
-
-printf "\
-$DOMAIN {
-    handle_path /rest-api/* {
-        rewrite * {path}
-        reverse_proxy :1317
-    }
-    handle_path /grpc/* {
-        rewrite * {path}
-        reverse_proxy :9090
-    }
-    handle_path /grpc-web/* {
-        rewrite * {path}
-        reverse_proxy :9091
-    }
-    handle_path /prometheus/* {
-        rewrite * {path}
-        reverse_proxy :6666
-    }
-}
-" | sudo tee /etc/caddy/Caddyfile
-
-sudo systemctl reload caddy
-
-##########################
-## END: Configure Caddy ##
-##########################
-```
-
-The following URLs will now be available, where `<DOMAIN>` is the same as the domain you entered during the prompt. Services which aren't enabled won't exist. For example, `https://<DOMAIN>/rest-api` won't work if the node's REST API is disabled.
-- REST API: `https://<DOMAIN>/rest-api`
-- gRPC: `https://<DOMAIN>/grpc`
-- gRPC Web: `https://<DOMAIN>/grpc-web`
-- Metrics: `https://<DOMAIN>/prometheus`
-
-For example (assuming that you're running a Juno mainnet archive node with the REST API enabled), you can now query a tx using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.

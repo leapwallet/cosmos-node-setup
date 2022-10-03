@@ -10,13 +10,18 @@
     ```shell
     curl -sL https://get.osmosis.zone/install > i.py && python3 i.py
     ```
-3. Set the chain ID:
+3. Exit the terminal multiplexer:
+
+    ```shell
+    exit
+    ```   
+4. Set the chain ID:
 
     ```shell
     osmosisd config chain-id osmo-test-4
     ```
-4. Set up the [key](key.md).
-5. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
+5. Set up the [key](key.md).
+6. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
    1. Get some tokens from the [faucet](https://faucet.osmosis.zone/#/) if you don't have any.
    2. Create the validator:
 
