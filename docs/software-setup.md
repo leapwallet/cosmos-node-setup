@@ -4,7 +4,7 @@ Since the commands are for Ubuntu, you might have to modify them if you're using
 
 ## Node Setup
 
-Follow these steps to set up a Juno mainnet archive node, Sei testnet validator node, Stride testnet validator node, or Osmosis testnet validator node:
+Follow these steps to set up a Juno mainnet archive node, Sei testnet validator node, Stride testnet validator node, Osmosis testnet validator node, or Commercio.network testnet validator node:
 1. If you're running as the `root` user, and don't have another user that you can switch to which has `sudo` privileges, then follow these steps:
     1. Create the user:
 
@@ -103,14 +103,23 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     - [Sei testnet validator node](sei.md)
     - [Stride testnet validator node](stride.md)
     - [Osmosis testnet validator node](osmosis.md)
+    - [Commercio.network testnet validator node](commercio-network.md)
 7. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
 
     ```shell
     sed 's|enable = true|enable = false|' -i $DAEMON_HOME/config/app.toml
+   
+    printf 'If you\'re running a validator, and are going to use PANIC, then the REST API must be enabled as PANIC '
+    printf 'can\'t monitor without it. Don\'t worry about security in this particular case because the REST API will '
+    printf 'only be accessible by the server it\'s running on (we\'ll whitelist the server\'s IP address later on).\n'
+    read -P 'Enter y if you\'re running a validator, and are going to use PANIC, and n otherwise: ' WILL_USE_PANIC
+    if test $WILL_USE_PANIC = 'y'
+        sed '0,/enable = false/{s|enable = false|enable = true|}' -i $DAEMON_HOME/config/app.toml
+    end
+   
     sudo systemctl restart cosmovisor
     ```
 
-   If you've run the above command, are running a validator, and are going to use PANIC, then set the `enable` key to `true` under the `[api]` section of `$DAEMON_HOME/config/app.toml`. The reason the REST API must be enabled in this particular case is because PANIC can't monitor without it. Don't worry about security in this particular case because the REST API will only be accessible by the server it's running on (we'll whitelist the server's IP address later on). 
 8. Follow this step if you want to prune the node (recommended for validator nodes):
 
     ```shell
@@ -180,7 +189,7 @@ read -P 'Enter the domain such as localhost or osmo-test-4.example.com: ' DOMAIN
 
 read -P 'Enter y if you\'re running a validator, and using PANIC, and n otherwise: ' MUST_WHITELIST
 if test $MUST_WHITELIST = 'y'
-    read -P 'Enter the server\'s IP address such as 52.90.54.75: ' IP_ADDRESS
+    set IP_ADDRESS (curl -s https://icanhazip.com/)
     set WHITELIST "\n        @denied not remote_ip $IP_ADDRESS\n        abort @denied"
 else
     set WHITELIST ''

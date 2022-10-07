@@ -126,6 +126,7 @@ sudo ufw status
 - [Sei Docs](https://docs.seinetwork.io/introduction/overview)
 - [Stride Docs](https://docs.stride.zone/docs)
 - [Osmosis Docs](https://docs.osmosis.zone)
+- [Commercio.network Docs](https://docs.commercio.network/)
 - [NodeJumper](https://nodejumper.io/)
 - [Validator Security Checklist](https://docs.evmos.org/validators/security/checklist.html)
 

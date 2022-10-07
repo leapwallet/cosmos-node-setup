@@ -43,8 +43,8 @@ ExecStart=$(which cosmovisor) run start
 Restart=always
 RestartSec=3
 LimitNOFILE=4096
-Environment="DAEMON_NAME=$DAEMON_NAME"
-Environment="DAEMON_HOME=$DAEMON_HOME"
+Environment=\"DAEMON_NAME=$DAEMON_NAME\"
+Environment=\"DAEMON_HOME=$DAEMON_HOME\"
 
 [Install]
 WantedBy=multi-user.target
