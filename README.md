@@ -27,7 +27,7 @@ Here's how to set up the hardware:
 - Four 3.2 GHz CPU cores.
 
 We recommend the following if you're using AWS:
-- Use AWS EC2 for the computer.
+- Use AWS EC2 for the computer using the `t2.xlarge` instance type.
 - Use AWS EBS for storage.
 - If you're running an archive node, and have synced the blocks yourself because there's no snapshot available, use AWS DLM to create a daily backup of the AWS EBS volume.
 

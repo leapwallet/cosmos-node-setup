@@ -6,7 +6,7 @@
     bash -c "$(curl -sSL install.poolparty.stridelabs.co)"
     strided config chain-id STRIDE-TESTNET-4
     ```
-2. Set up the [key](key.md).
+2. Set up the [key](../key.md).
 3. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
     1. Get some Stride testnet tokens from the [💧 | token-faucet](https://discord.com/channels/988945059783278602/992572020535599244) Discord channel.
     2. Create the validator:

@@ -99,11 +99,11 @@ Follow these steps to set up a Juno mainnet archive node, Sei testnet validator 
     sudo reboot
     ```
 6. Set up one of the following nodes:
-    - [Juno mainnet archive node](juno.md)
-    - [Sei testnet validator node](sei.md)
-    - [Stride testnet validator node](stride.md)
+    - [Juno mainnet archive node](blockchains/juno.md)
+    - [Sei testnet validator node](blockchains/sei.md)
+    - [Stride testnet validator node](blockchains/stride.md)
     - [Osmosis testnet validator node](osmosis.md)
-    - [Commercio.network testnet validator node](commercio-network.md)
+    - [Commercio.network testnet validator node](blockchains/commercio-network.md)
 7. Follow this step if you want to disable the REST, gRPC, and gRPC Web APIs (recommended for validator nodes):
 
     ```shell

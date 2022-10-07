@@ -36,8 +36,8 @@ Follow these steps if you want to set up a node on the `atlantic-1` chain:
    
     sed 's|minimum-gas-prices = .*|minimum-gas-prices = "0.01usei"|' -i ~/.sei/config/app.toml
     ```
-2. Set up the [key](key.md).
-3. Set up [Cosmovisor](cosmovisor.md).
+2. Set up the [key](../key.md).
+3. Set up [Cosmovisor](../cosmovisor.md).
 4. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
     1. Get Sei testnet tokens from the [🚰 | atlantic-1-faucet](https://discord.com/channels/973057323805311026/979272741150687262) Discord channel by sending the message `!faucet <ADDRESS>` where `<ADDRESS>` is the address associated with this validator.
     2. Create the validator:
@@ -104,8 +104,8 @@ Follow these steps if you want to set up a node on the `atlantic-sub-1` or `atla
 
     sed 's|minimum-gas-prices = .*|minimum-gas-prices = "0.01usei"|' -i ~/.sei/config/app.toml
     ```
-2. Set up the [key](key.md).
-3. Set up [Cosmovisor](cosmovisor.md).
+2. Set up the [key](../key.md).
+3. Set up [Cosmovisor](../cosmovisor.md).
 4. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
 
     ```shell
