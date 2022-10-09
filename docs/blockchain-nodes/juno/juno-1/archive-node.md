@@ -1,6 +1,6 @@
-# Juno Node Setup
+# Archive Node
 
-Follow these steps to set up a Juno mainnet archive node:
+Follow these steps to set up a Juno `juno-1` archive node:
 1. Install Juno:
 
     ```shell
@@ -42,4 +42,4 @@ Follow these steps to set up a Juno mainnet archive node:
     ####################    
     ```
 2. Follow this step if you want to enable the REST API. In the `[api]` section of `~/.juno/config/app.toml`, set the `enable` key's value to `true`.
-3. Set up [Cosmovisor](../cosmovisor.md).
+3. Set up [Cosmovisor](../../../cosmovisor.md).

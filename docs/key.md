@@ -6,8 +6,8 @@ We recommend using a 3/5 multisig wallet. We recommend 3/5 because you don't wan
 read -P 'A key is named whatever you want. Enter they key: ' KEY
 printf "\nset KEY $KEY\n" >> ~/.config/fish/config.fish
 
-set PROMPT 'Enter y if you want to create and use a new wallet for the validator node. Enter n if you want to use an'
-set PROMPT "$PROMPT existing wallet for the validator node: "
+set PROMPT 'Enter y if you want to create and use a new wallet for the validator. Enter n if you want to use an'
+set PROMPT "$PROMPT existing wallet for the validator: "
 read -P $PROMPT IS_NEW_ADDRESS
 
 if test $IS_NEW_ADDRESS = 'y'

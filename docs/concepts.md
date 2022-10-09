@@ -1,6 +1,32 @@
 # Concepts
 
-## Archive Nodes
+## [PANIC Monitoring and Alerting for Blockchains](https://github.com/SimplyVC/panic/)
+
+_PANIC Monitoring and Alerting for Blockchains_ is abbreviated as _PANIC_.
+
+## [Horcrux](https://github.com/strangelove-ventures/horcrux/)
+
+_Sentry node_ is abbreviated as _sentry_.
+
+## Monitor
+
+By _monitor_, we mean a server that runs monitoring and alerting software such as PANIC and Prometheus.
+
+## Validator Node
+
+_Validator node_ is abbreviated as _validator_.
+
+Validators will be jailed if they double sign. Double signing can only occur if two instances of a validator using the same private key are active at the same time. You needn't worry about a validator double signing if it restarts during a block because it locally stores which blocks it's processed.
+
+## Full Node
+
+A full node is any non-validator blockchain node such as an RPC or archive node.
+
+## Blockchain Node
+
+_Blockchain node_ refers to _sentry_, _validator_, or _full node_.
+
+## Archive Node
 
 Nodes can be run by simply installing the latest version of the node, and downloading a snapshot. A snapshot is the blockchain's DB. There are different types of snapshots (e.g., full node snapshots, archive node snapshots). For example, the snapshot for a full node might only contain the latest 300 MiB of state even if the entire blockchain is 4.3 TiB. Since archive node snapshots are hard to come across (e.g., [ChainLayer](https://www.chainlayer.io/quicksync/) is one of the few services that provide archive node snapshots, but they don't have snapshots for most chains), archive nodes usually have to go through a significantly more complicated process before they can be used since they need to download the entire blockchain.
 
@@ -16,7 +42,3 @@ Here's how to set up an archive node with a snapshot:
 Here's how to set up an archive node without a snapshot:
 1. Install the first version of the node.
 2. Repeatedly upgrade the node until all the older blocks have been downloaded.
-
-## Validator Nodes
-
-Validator nodes will be jailed if they double sign. Double signing can only occur if two instances of a validator node using the same private key are active at the same time. You needn't worry about a validator node double signing if it restarts during a block because it locally stores which blocks it's processed.

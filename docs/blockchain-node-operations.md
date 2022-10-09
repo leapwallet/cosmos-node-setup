@@ -1,4 +1,6 @@
-# Operating the Node
+# Blockchain Node Operations
+
+This document explains common operations you may want to perform on blockchain nodes such as how to upgrade them.
 
 ## Sync Status
 
@@ -39,7 +41,7 @@ $DAEMON_NAME query slashing signing-info ($DAEMON_NAME tendermint show-validator
 
 Remember to subscribe to new upgrade notifications. For example, you should join Juno's [#⚡ | validator-lounge](https://discord.com/channels/816256689078403103/816263136491339867) Discord channel where they try to announce new upgrades a few days in advance if you're running a Juno node.
 
-### Available Upgrades for Juno Mainnet Archive Nodes
+### Available Upgrades for Juno `juno-1` Archive Nodes
 
 After installing the first version (i.e., 3.0.0), the following versions must be installed at their respective block heights (certain versions such as 7.0.0 must be skipped due to bugs, and are therefore left out):
 
