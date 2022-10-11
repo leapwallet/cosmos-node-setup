@@ -2,7 +2,7 @@
 
 This document explains how to set up the firewall for each type of server. Regardless of what the server is for, all outgoing traffic must be allowed.
 
-## Sentry
+## Sentries
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
 - Allow HTTP connections on port 80 from the monitors' IP addresses, and HTTPS connections on port 443 from the monitors' IP addresses. This is for the reverse proxy server which deals with things such as the metrics endpoints.
@@ -48,14 +48,14 @@ sudo ufw allow from any to any port 26656 proto tcp
 ## BEGIN: Enable cosigners ##
 #############################
 
-read -P 'Enter the IP address of the first cosigner: ' COSIGNER1
-sudo ufw allow from $COSIGNER1 proto tcp to any port 1234
+read -P 'Enter the IP address of the first cosigner: ' COSIGNER_1
+sudo ufw allow from $COSIGNER_1 proto tcp to any port 1234
 
-read -P 'Enter the IP address of the second cosigner: ' COSIGNER2
-sudo ufw allow from $COSIGNER2 proto tcp to any port 1234
+read -P 'Enter the IP address of the second cosigner: ' COSIGNER_2
+sudo ufw allow from $COSIGNER_2 proto tcp to any port 1234
 
-read -P 'Enter the IP address of the third cosigner: ' COSIGNER3
-sudo ufw allow from $COSIGNER3 proto tcp to any port 1234
+read -P 'Enter the IP address of the third cosigner: ' COSIGNER_3
+sudo ufw allow from $COSIGNER_3 proto tcp to any port 1234
 
 ###########################
 ## END: Enable cosigners ##
@@ -65,7 +65,7 @@ sudo ufw enable
 sudo ufw status
 ```
 
-## Cosigner
+## Cosigners
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
 - Allow HTTP connections on port 80 from the monitors' IP addresses, and HTTPS connections on port 443 from the monitors' IP addresses. This is for the reverse proxy server which deals with things such as the metrics endpoints.
@@ -100,35 +100,34 @@ sudo ufw allow https
 ## BEGIN: Enable Horcrux ##
 ###########################
 
-read -P 'Enter which cosigner (1, 2, or 3) this is: ' COSIGNER
-read -P 'Enter the first cosigner\'s IP address: ' COSIGNER1
-read -P 'Enter the second cosigner\'s IP address: ' COSIGNER2
-read -P 'Enter the third cosigner\'s IP address: ' COSIGNER3
 switch $COSIGNER
     case 1
-        read -P 'Enter the first sentry\'s IP address: ' SENTRY1
-        horcrux config init ($DAEMON_NAME config chain-id) tcp://$SENTRY1:1234 \
-            -c \
-            -p "tcp://$COSIGNER2:2222|2,tcp://$COSIGNER3:2222|3" \
-            -l tcp://$COSIGNER1:2222 \
-            -t 2 \
-            --timeout 1500ms
+        read -P 'Enter the first sentry\'s IP address: ' SENTRY_1
+        sudo ufw allow from $SENTRY_1
+        
+        read -P 'Enter the second cosigner\'s IP address: ' COSIGNER_2
+        sudo ufw allow from $COSIGNER_2
+        
+        read -P 'Enter the third cosigner\'s IP address: ' COSIGNER_3
+        sudo ufw allow from $COSIGNER_3
     case 2
-        read -P 'Enter the second sentry\'s IP address: ' SENTRY2
-        horcrux config init ($DAEMON_NAME config chain-id) tcp://$SENTRY2:1234 \
-            -c \
-            -p "tcp://$COSIGNER1:2222|1,tcp://$COSIGNER3:2222|3" \
-            -l tcp://$COSIGNER2:2222 \
-            -t 2 \
-            --timeout 1500ms
+        read -P 'Enter the second sentry\'s IP address: ' SENTRY_2
+        sudo ufw allow from $SENTRY_2
+        
+        read -P 'Enter the first cosigner\'s IP address: ' COSIGNER_1
+        sudo ufw allow from $COSIGNER_1
+        
+        read -P 'Enter the third cosigner\'s IP address: ' COSIGNER_3
+        sudo ufw allow from $COSIGNER_3
     case 3
-        read -P 'Enter the third sentry\'s IP address: ' SENTRY3
-        horcrux config init ($DAEMON_NAME config chain-id) tcp://$SENTRY3:1234 \
-            -c \
-            -p "tcp://$COSIGNER1:2222|1,tcp://$COSIGNER2:2222|2" \
-            -l tcp://$COSIGNER3:2222 \
-            -t 2 \
-            --timeout 1500ms
+        read -P 'Enter the third sentry\'s IP address: ' SENTRY_3
+        sudo ufw allow from $SENTRY_3
+        
+        read -P 'Enter the first cosigner\'s IP address: ' COSIGNER_1
+        sudo ufw allow from $COSIGNER_1
+        
+        read -P 'Enter the second cosigner\'s IP address: ' COSIGNER_2
+        sudo ufw allow from $COSIGNER_2
 end
 
 #########################
@@ -139,7 +138,7 @@ sudo ufw enable
 sudo ufw status
 ```
 
-## Monitor
+## Monitors
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
 - Allow HTTP connections on port 80 from the monitors' IP addresses, and HTTPS connections on port 443 from the monitors' IP addresses. This is for the reverse proxy server which deals with things such as the metrics endpoints.
@@ -184,7 +183,7 @@ sudo ufw enable
 sudo ufw status
 ```
 
-## Full Node
+## Validators and Full Nodes
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
 - Allow HTTP connections on port 80 from the monitors' IP addresses, and HTTPS connections on port 443 from the monitors' IP addresses. This is for the reverse proxy server which deals with things such as the metrics endpoints.

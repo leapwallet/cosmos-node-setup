@@ -64,9 +64,9 @@ Follow these steps to set up a Commercio.network `testnet11k` validator:
         ```shell
         exit
         ```   
-3. Set up the [key](../../../key.md).
+3. Only follow this step on servers for validators. Set up the [key](../../../key.md).
 4. Set up [Cosmovisor](../../../cosmovisor.md).
-5. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
+5. Only follow this step on servers for validators where you haven't previously created a validator with the key's address. Create the validator:
     1. Get testnet tokens by asking on the [🤝Discussion](https://discord.com/channels/973149882032468029/984721633585553429) Discord channel.
     2. Create the validator:
 

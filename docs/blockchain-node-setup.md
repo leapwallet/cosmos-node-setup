@@ -1,42 +1,6 @@
 # Blockchain Node Setup
 
-1. If you're running as the `root` user, and don't have another user that you can switch to which has `sudo` privileges, then follow these steps:
-    1. Create the user:
-
-        ```shell
-        read -p 'Enter the user: ' USER
-        adduser $USER
-        usermod -aG sudo $USER
-        exit
-        ```
-    2. SSH back into the server using the new user.
-2. If you're using AWS, set the password:
-
-    ```shell
-    sudo passwd ubuntu
-    ```
-3. Prepare for installation:
-
-    ```shell
-    #########################
-    ## BEGIN: Install fish ##
-    #########################
-   
-    sudo apt-add-repository -y ppa:fish-shell/release-3
-    sudo apt update
-    sudo apt -y install fish
-    chsh -s /usr/bin/fish
-
-    #######################
-    ## END: Install fish ##
-    #######################
-   
-    sudo apt -y full-upgrade
-    
-    sudo reboot
-    ```
-4. Set up the [firewall](firewall.md).
-5. Only follow this step if you're setting up a blockchain node. Install the toolchain:
+1. Install the toolchain:
 
     ```shell
     sudo apt -y install make build-essential gcc git jq chrony lz4
@@ -109,13 +73,33 @@
     ## END: Set environment variables ##
     #################################### 
     ```
-6. Only follow this step if you're setting up a blockchain node. Set up the relevant blockchain node by picking the relevant link from the following list. If the blockchain node you're interested in isn't listed below, then pick a similar link anyway such as a validator setup link if you're setting up a validator, and follow similar instructions by referring to the blockchain node's official docs:
-    - [Commercio.network testnet validator](blockchain-nodes/commercio-network/testnet11k/validator.md)
-    - [Juno mainnet archive node](blockchain-nodes/juno/juno-1/archive-node.md)
-    - [Osmosis testnet validator](blockchain-nodes/osmosis/osmo-test-4/validator.md)
-    - [Sei testnet validator](blockchain-nodes/sei/atlantic-sub-1/validator.md)
-    - [Stride testnet validator](blockchain-nodes/stride/STRIDE-TESTNET-4/validator.md)
-7. Only follow this step if you're setting up a validator. Configure:
+2. Set up the relevant blockchain node by picking the relevant link from the following list. If the blockchain node you're interested in isn't listed below, then pick a similar link anyway such as a validator setup link if you're setting up a validator, and follow similar instructions by referring to the blockchain node's official docs:
+    - Commercio.network:
+        - `testnet11k`:
+            - [Validator](blockchain-nodes/commercio-network/testnet11k/validator.md)
+    - Juno:
+        - `juno-1`:
+            - [Archive node](blockchain-nodes/juno/juno-1/archive-node.md)
+    - Osmosis:
+        - `osmo-test-4`:
+            - [Archive node](blockchain-nodes/osmosis/osmo-test-4/validator.md)
+    - Sei:
+        - `atlantic-1`:
+            - [Validator](blockchain-nodes/sei/atlantic-1/validator.md)
+        - `atlantic-sub-1`:
+            - [Validator](blockchain-nodes/sei/atlantic-sub-1/validator.md)
+        - `atlantic-sub-2`:
+            - [Validator](blockchain-nodes/sei/atlantic-sub-2/validator.md)
+    - Stride:
+        - `STRIDE-TESTNET-4`:
+            - [Validator](blockchain-nodes/stride/stride-testnet-4/validator.md)
+3. Enable Prometheus:
+
+    ```shell
+    sed 's|prometheus = .*|prometheus = true|' -i $DAEMON_HOME/config/config.toml
+    sudo systemctl restart cosmovisor
+    ```
+4. Only follow this step on servers for validators or sentries. Configure:
 
     ```shell
     #########################

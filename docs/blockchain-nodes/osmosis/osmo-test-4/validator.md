@@ -21,8 +21,8 @@ Follow these steps to set up a Osmosis `osmo-test-4` validator:
     ```shell
     osmosisd config chain-id osmo-test-4
     ```
-5. Set up the [key](../../../key.md).
-6. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
+5. Only follow this step on servers for validators. Set up the [key](../../../key.md).
+6. Only follow this step on servers for validators where you haven't previously created a validator with the key's address. Create the validator:
    1. Get some tokens from the [faucet](https://faucet.osmosis.zone/#/) if you don't have any.
    2. Create the validator:
 

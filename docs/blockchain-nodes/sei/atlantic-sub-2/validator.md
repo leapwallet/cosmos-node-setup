@@ -26,16 +26,16 @@ Follow these steps to set up a Sei `atlantic-sub-2` validator:
    
     seid init $MONIKER -o
     
-    wget -O ~/.sei/config/genesis.json https://raw.githubusercontent.com/sei-protocol/testnet/main/atlantic-subchains/(seid config chain-id)/genesis.json
+    wget -O ~/.sei/config/genesis.json https://raw.githubusercontent.com/sei-protocol/testnet/main/atlantic-subchains/atlantic-sub-2/genesis.json
    
     wget -O ~/.sei/config/addrbook.json \
-        https://raw.githubusercontent.com/sei-protocol/testnet/main/atlantic-subchains/(seid config chain-id)/addrbook.json
+        https://raw.githubusercontent.com/sei-protocol/testnet/main/atlantic-subchains/atlantic-sub-2/addrbook.json
 
     sed 's|minimum-gas-prices = .*|minimum-gas-prices = "0.01usei"|' -i ~/.sei/config/app.toml
     ```
-2. Set up the [key](../../../key.md).
+2. Only follow this step on servers for validators. Set up the [key](../../../key.md).
 3. Set up [Cosmovisor](../../../cosmovisor.md).
-4. Skip this step if you've previously created a validator with the address associated with this node. Create the validator:
+4. Only follow this step on servers for validators where you haven't previously created a validator with the key's address. Create the validator:
 
     ```shell
     read -P 'Enter the max commission change rate percentage per day (example: 0.01): ' COMMISSION_MAX_CHANGE_RATE
