@@ -34,13 +34,12 @@ Provision the necessary servers before proceeding further. If you're running a f
 
 ## Software
 
-Follow each step for each server before moving on to the next step. For example, if a step requires you to set up a blockchain node, and there are two servers provisioned for it, then follow the step for both servers before moving on to the next step.
+Here are common [operations](blockchain-node-operations.md) that you can refer to throughout the setup process as well as long after that for blockchain nodes.
 
-You can speed up this process by configuring each relevant server in parallel for each step. For example, when following the second step, perform each sub-step on each relevant server before moving on to the next sub-step.
-
-1. Set up the [server](server-setup.md).
-2. Only follow this step on servers for blockchain nodes. Set up the [blockchain node](blockchain-node-setup.md).
-3. Skip this step on servers for validators. Set up the [URL](url-setup.md).
-4. Only follow this step on servers for monitors. Set up [observability](observability.md).
-5. Only follow this step on servers for blockchain nodes. Operate the [blockchain node](blockchain-node-operations.md).
-6. If you had created a server for a validator, delete it now.
+Set up the software:
+1. Follow [this](server-setup.md) step on each server.
+2. Follow [this](blockchain-node-setup.md) step on each validator, sentry, full node, and cosigner.
+3. Follow [this](url-setup.md) step on each sentry, cosigner, full node, and monitor.
+4. Follow [this](cosigner-setup.md) step.
+5. If you had created a server for a validator, delete it now.
+6. Follow [this](observability.md) step on each monitor.

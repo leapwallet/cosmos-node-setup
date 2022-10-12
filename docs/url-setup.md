@@ -53,6 +53,8 @@ This section explains how to set up the TLS certificate, and URLs for each API t
     - Follow this step if the server you're configuring is for a sentry:
 
         ```shell
+        read -P 'Enter the IP address of this sentry\'s respective cosigner: ' COSIGNER
+      
         printf "\
         $DOMAIN {
             handle_path /tendermint-rpc/* {
@@ -74,6 +76,12 @@ This section explains how to set up the TLS certificate, and URLs for each API t
                 rewrite * {path}
                 reverse_proxy :26660
                 $WHITELIST
+            }
+            handle_path /private-validator/* {
+                rewrite * {path}
+                reverse_proxy :1234
+                @denied not remote_ip $COSIGNER
+                abort @denied
             }
         }
         " | sudo tee /etc/caddy/Caddyfile
@@ -162,6 +170,8 @@ The following URLs will now be available except services which weren't reverse p
 - Prometheus's metrics (for use by Grafana): `https://<DOMAIN>/prometheus`
 - Node Exporter's metrics (for use by PANIC): `https://<DOMAIN>/node-exporter`
 - Blockchain node's metrics (for use by PANIC): `https://<DOMAIN>/blockchain-node`
+- Cosigner port (for use by the respective sentry): `https://<DOMAIN>/signer`
+- Private validator port (for use by the respective cosigner): `https://<DOMAIN>/private-validator`
 
 For example, if you're running a Juno `juno-1` archive node, then you can query a transaction using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
 

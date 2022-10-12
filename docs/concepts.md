@@ -1,16 +1,28 @@
 # Concepts
 
-## [PANIC Monitoring and Alerting for Blockchains](https://github.com/SimplyVC/panic/)
+## Prerequisites
 
-_PANIC Monitoring and Alerting for Blockchains_ is abbreviated as _PANIC_. Learn PANIC by reading their docs before moving on.
+Prior to using this repo, it's recommended that you learn the following:
+- Sysadmin skills such as Linux commands (`systemd`, `sed`, `tmux`, etc.), firewalls, DNS, etc. 
+- [Tendermint](https://docs.tendermint.com/)
+- [Cosmos SDK](https://docs.cosmos.network/)
+- (Required if you're setting up a validator.) [Horcrux](https://github.com/strangelove-ventures/horcrux)
+- (Required if you want to monitor your blockchain node.) [PANIC](https://github.com/SimplyVC/panic)
+- (Required if you want to monitor your blockchain node.) [Prometheus](https://prometheus.io/)
+- (Required if you want to monitor your blockchain node.) [Grafana](https://grafana.com/docs/grafana/latest/)
+- (Optional) [Caddy](https://caddyserver.com/)
+
+## PANIC Monitoring and Alerting for Blockchains
+
+_PANIC Monitoring and Alerting for Blockchains_ is abbreviated as _PANIC_.
 
 ## Full Node
 
 A full node is any non-validator blockchain node such as an RPC or archive node.
 
-## [Horcrux](https://github.com/strangelove-ventures/horcrux/)
+## Horcrux
 
-_Sentry node_ is abbreviated as _sentry_. A sentry is a full node. Learn Horcrux by reading their docs before moving on.
+_Sentry node_ is abbreviated as _sentry_. A sentry is a full node that connects to cosigners to sign blocks.
 
 ## Monitor
 
@@ -24,7 +36,7 @@ Validators will be jailed if they double sign. Double signing can only occur if 
 
 ## Blockchain Node
 
-_Blockchain node_ refers to _sentry_, _validator_, or _full node_.
+_Blockchain node_ refers to _validator_ or _full node_.
 
 ## Archive Node
 
