@@ -16,9 +16,13 @@ Prior to using this repo, it's recommended that you learn the following:
 
 _PANIC Monitoring and Alerting for Blockchains_ is abbreviated as _PANIC_.
 
+## Validator Node
+
+_Validator node_ is abbreviated as _validator_.
+
 ## Full Node
 
-A full node is any non-validator blockchain node such as an RPC or archive node.
+A full node is any non-validator blockchain node such as an RPC node, sentry, archive node but not a validator.
 
 ## Horcrux
 
@@ -27,10 +31,6 @@ _Sentry node_ is abbreviated as _sentry_. A sentry is a full node that connects 
 ## Monitor
 
 By _monitor_, we mean a server that runs monitoring and alerting software such as PANIC and Prometheus.
-
-## Validator Node
-
-_Validator node_ is abbreviated as _validator_.
 
 Validators will be jailed if they double sign. Double signing can only occur if two instances of a validator using the same private key are active at the same time. You needn't worry about a validator double signing if it restarts during a block because it locally stores which blocks it's processed.
 

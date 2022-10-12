@@ -111,7 +111,7 @@ This section explains how to set up the TLS certificate, and URLs for each API t
      
         sudo systemctl reload caddy
         ```
-    - Follow this step if the server you're configuring is for a full node:
+    - Follow this step if the server you're configuring is for a full node other than a sentry:
 
         ```shell
         printf "\
