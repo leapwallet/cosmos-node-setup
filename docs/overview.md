@@ -15,9 +15,9 @@ Here's how to set up the hardware:
 - Use an SSD (preferably NVMe) for storage.
 
     Here are specific recommendations for storage requirements:
-        - Juno mainnet archive node: 1 TiB
-        - Non-archive blockchain node: 100 GiB
-        - Cosigner/monitor: 20 GiB
+    - Juno mainnet archive node: 1 TiB
+    - Non-archive blockchain node: 100 GiB
+    - Cosigner/monitor: 20 GiB
 - This point only applies to archive nodes since other nodes can quickly be restored via a snapshot or state sync. 
 
     Since the DB can easily get corrupted, and syncing all over again can take days, it's highly recommended taking a daily backup of either the entire storage device (this way you'll have the correct version of the node installed for the backup's DB) or the `$DAEMON_HOME/data` directory (i.e., the DB). You should keep two backups because if you only keep one, and the backup takes place just after the DB gets corrupted, then the only backup will also be corrupted.
