@@ -43,6 +43,7 @@
         case 5
             set DAEMON_NAME strided
             set DAEMON_HOME ~/.stride
+    end
    
     ############################
     ## END: Select blockchain ##
@@ -82,7 +83,9 @@
             - [Archive node](blockchain-nodes/juno/juno-1/archive-node.md)
     - Osmosis:
         - `osmo-test-4`:
-            - [Archive node](blockchain-nodes/osmosis/osmo-test-4/validator.md)
+            - [Validator](blockchain-nodes/osmosis/osmo-test-4/validator.md)
+        - `osmosis-1`:
+            - [Full node](blockchain-nodes/osmosis/osmosis-1/full-node.md) 
     - Sei:
         - `atlantic-1`:
             - [Validator](blockchain-nodes/sei/atlantic-1/validator.md)

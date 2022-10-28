@@ -53,8 +53,6 @@ After installing the first version (i.e., 3.0.0), the following versions must be
 |6.0.0|3,159,650|
 |8.0.0|3,851,750|
 
-Since this document may be outdated, please additionally check [this](https://docs.junonetwork.io/validators/mainnet-upgrades) page for versions and block heights. Only check the version tags (e.g., `v8.0.0`), and their respective block heights on the page because the upgradation instructions are confusing. Instead, use the [upgradation](#upgrading) section of this document.
-
 ### Upgrading
 
 This section explains how to upgrade a node.

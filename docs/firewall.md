@@ -5,7 +5,7 @@ This document explains how to set up the firewall for each type of server. Regar
 ## Sentries
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
-- Allow HTTP connections on port 80 from the monitors' IP addresses, and HTTPS connections on port 443 from the monitors' IP addresses. This is for the reverse proxy server which deals with things such as the metrics endpoints.
+- Allow HTTP connections on port 80, and HTTPS connections on port 443. This is for the reverse proxy server which deals with things such as the metrics endpoints.
 - Allow TCP connections on port 26656 from any IP address. This is to allow other nodes to sync with yours.
 - Allow TCP connections on port 1234 to each cosigner. This is to allow the cosigner to access the private validator port.
 
@@ -68,7 +68,7 @@ sudo ufw status
 ## Cosigners
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
-- Allow HTTP connections on port 80 from the monitors' IP addresses, and HTTPS connections on port 443 from the monitors' IP addresses. This is for the reverse proxy server which deals with things such as the metrics endpoints.
+- Allow HTTP connections on port 80, and HTTPS connections on port 443. This is for the reverse proxy server which deals with things such as the metrics endpoints.
 - Allow all traffic from each sentry and cosigner.
 
 If you're using something like AWS, then you can configure the firewall using a GUI. Otherwise, here's how to set up the firewall using the CLI:
@@ -141,7 +141,7 @@ sudo ufw status
 ## Monitors
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
-- Allow HTTP connections on port 80 from the monitors' IP addresses, and HTTPS connections on port 443 from the monitors' IP addresses. This is for the reverse proxy server which deals with things such as the metrics endpoints.
+- Allow HTTP connections on port 80, and HTTPS connections on port 443. This is for the reverse proxy server which deals with things such as the metrics endpoints.
 - Allow HTTPS connections on ports 3333 and 8000 from your IP address. This is to allow you to access PANIC.
 
 If you're using something like AWS, then you can configure the firewall using a GUI. Otherwise, here's how to set up the firewall using the CLI:
@@ -186,7 +186,7 @@ sudo ufw status
 ## Validators and Full Nodes
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
-- Allow HTTP connections on port 80 from the monitors' IP addresses, and HTTPS connections on port 443 from the monitors' IP addresses. This is for the reverse proxy server which deals with things such as the metrics endpoints.
+- Allow HTTP connections on port 80, and HTTPS connections on port 443. This is for the reverse proxy server which deals with things such as the metrics endpoints.
 - Allow TCP connections on port 26656 from any IP address. This is to allow other nodes to sync with yours.
 
 If you're using something like AWS, then you can configure the firewall using a GUI. Otherwise, here's how to set up the firewall using the CLI:

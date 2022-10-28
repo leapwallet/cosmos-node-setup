@@ -1,6 +1,6 @@
 # Validator
 
-Follow these steps to set up a Osmosis `osmo-test-4` validator:
+Follow these steps to set up an Osmosis `osmo-test-4` validator:
 1. Enter a terminal multiplexer session because the next step is a long-running process:
 
     ```shell

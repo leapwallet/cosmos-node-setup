@@ -10,12 +10,12 @@ This section explains how to use your domain name (e.g., example.com) instead of
 1. Go to your website's DNS section on Cloudflare.
 2. Click **Add record**.
 3. Set the **Type** field to **A**.
-4. Set the **Name (required)** field. We recommend using the format `<SERVER>.<CHAIN>.<DOMAIN>`, where `<SERVER>` is the server provisioned such as `archive-node-1`, `<CHAIN>` is the chain name such as `osmo-test-4`, and `<DOMAIN>` is your domain name such as `example.com`. We recommend you use the following `<SERVER>` names:
+4. Set the **Name (required)** field. We recommend using the format `<SERVER>.<DOMAIN>` for monitors, and `<SERVER>.<CHAIN>.<DOMAIN>` for other servers; `<SERVER>` is the server provisioned such as `archive-node-1`, `<CHAIN>` is the chain name such as `osmo-test-4`, and `<DOMAIN>` is your domain name such as `example.com`. We recommend you use the following `<SERVER>` names:
     - `sentry-1`, `sentry-2`, and `sentry-3` for the three sentry servers.
     - `cosigner-1`, `cosigner-2`, and `cosigner-3` for the three cosigner servers.
     - `archive-node-1` and `archive-node-2` for the two archive node servers.
-    - `rpc-node1` and `rpc-node2` for the two RPC node servers.
-    - `monitor1` and `monitor2` for the two monitor servers.
+    - `rpc-node-1` and `rpc-node2-` for the two RPC node servers.
+    - `monitor-1` and `monitor-2` for the two monitor servers.
 5. Set the **IPv4 address (required)** field to your server's IP address.
 6. Set the **Proxy status** to **DNS only**.
 7. Set the **TTL** to **Auto**.
@@ -45,9 +45,12 @@ This section explains how to set up the TLS certificate, and URLs for each API t
    
     read -P 'Enter the domain such as localhost or archive-node-1.osmo-test-4.example.com: ' DOMAIN
    
-    read -P 'Enter the IP address of the first monitor: ' MONITOR1
-    read -P 'Enter the IP address of the second monitor: ' MONITOR2
-    set WHITELIST "        @denied not remote_ip $MONITOR1 $MONITOR2\n        abort @denied" 
+    read -P 'Enter y if you\'re setting up a monitor, and n otherwise: ' IS_MONITOR
+    if test $IS_MONITOR = 'y'
+        read -P 'Enter the IP address of the first monitor: ' MONITOR1
+        read -P 'Enter the IP address of the second monitor: ' MONITOR2
+        set WHITELIST "@denied not remote_ip $MONITOR1 $MONITOR2\n        abort @denied" 
+    end
     ```
 2. Configure Caddy:
     - Follow this step if the server you're configuring is for a sentry:
