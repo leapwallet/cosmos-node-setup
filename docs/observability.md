@@ -157,4 +157,4 @@ This optional but recommended section explains how to set up monitoring and aler
     sudo systemctl enable --now prometheus
     sudo systemctl status prometheus
     ```
-6. Set up [PANIC](https://github.com/SimplyVC/panic).
+6. Set up [PANIC](https://github.com/SimplyVC/panic). We recommend using `tmux` during the setup since there are long-running commands.

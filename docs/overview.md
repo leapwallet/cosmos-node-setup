@@ -33,6 +33,10 @@ We recommend the following if you're using AWS:
 
 Provision the necessary servers before proceeding further. If you're running a full node, then provision two servers for blockchain nodes (one as a backup), and two servers for monitors (one as a backup). If you're running a validator, then provision three servers for sentries, three servers for cosigners, two servers for monitors (one as a backup), and a server for a validator which is only required to set up Horcrux.
 
+Here are monthly cost estimates if you're using AWS:
+- 364 USD for a validator setup (two monitors, three sentries, and three cosigners).
+- 256 USD for a full node setup (two monitors, and two blockchain nodes).
+
 ## Software
 
 Here are common [operations](blockchain-node-operations.md) that you can refer to throughout the setup process as well as long after that for blockchain nodes.
