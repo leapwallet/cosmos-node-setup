@@ -109,9 +109,13 @@
     sed 's|prometheus = .*|prometheus = true|' -i $DAEMON_HOME/config/config.toml
     sudo systemctl restart cosmovisor
     ```
-4. Only follow this step on full nodes that must have the API enabled.
+4. Only follow this step on full nodes that must have the API enabled. Enable the API:
+    1. In the `[api]` section of `$DAEMON_HOME/config/app.toml`, set the `enable` key's value to `true`.
+    2. Apply changes:
 
-    In the `[api]` section of `$DAEMON_HOME/config/app.toml`, set the `enable` key's value to `true`.
+        ```shell
+        sudo systemctl restart cosmovisor
+        ```
 5. Only follow this step on servers for validators or sentries. Configure:
 
     ```shell
