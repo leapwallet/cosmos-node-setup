@@ -50,7 +50,7 @@ Follow these steps to set up a Cosmos Hub `cosmoshub-4` full node:
     ## END: Sync ##
     ###############
    
-    curl https://quicksync.io/addrbook.cosmos.json > $DAEMON_HOME/config/addrbook.json
+    curl https://dl2.quicksync.io/json/addrbook.cosmos.json > $DAEMON_HOME/config/addrbook.json
    
     # Set pruning to retain the last 22 days of blocks.
     sed \
