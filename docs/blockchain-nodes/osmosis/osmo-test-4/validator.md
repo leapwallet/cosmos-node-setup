@@ -1,28 +1,18 @@
 # Validator
 
 Follow these steps to set up an Osmosis `osmo-test-4` validator:
-1. Enter a terminal multiplexer session because the next step is a long-running process:
-
-    ```shell
-    tmux
-    ```
-2. Install:
+1. Install:
 
     ```shell
     curl -sL https://get.osmosis.zone/install > i.py && python3 i.py
     ```
-3. Exit the terminal multiplexer:
+2. Set the chain ID:
 
     ```shell
-    exit
-    ```   
-4. Set the chain ID:
-
-    ```shell
-    osmosisd config chain-id osmo-test-4
+    $DAEMON_NAME config chain-id osmo-test-4
     ```
-5. Only follow this step on servers for validators. Set up the [key](../../../key.md).
-6. Only follow this step on servers for validators where you haven't previously created a validator with the key's address. Create the validator:
+3. Only follow this step on servers for validators. Set up the [key](../../../key.md).
+4. Only follow this step on servers for validators where you haven't previously created a validator with the key's address. Create the validator:
    1. Get some tokens from the [faucet](https://faucet.osmosis.zone/#/) if you don't have any.
    2. Create the validator:
 
@@ -35,7 +25,7 @@ Follow these steps to set up an Osmosis `osmo-test-4` validator:
       read -P 'Enter the minimum self delegation required on the validator (example: 1): ' MIN_SELF_DELEGATION
       read -P '(Optional) Enter the security contact email address (example: security@example.com): ' SECURITY_CONTACT
       read -P '(Optional) Enter your website (example: https://validators.example.com): ' WEBSITE
-      osmosisd tx staking create-validator \
+      $DAEMON_NAME tx staking create-validator \
           --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
           --commission-max-rate $COMMISSION_MAX_RATE \
           --commission-rate $COMMISSION_RATE \
@@ -47,7 +37,7 @@ Follow these steps to set up an Osmosis `osmo-test-4` validator:
           --amount 2000uosmo \
           --from $KEY \
           --moniker $MONIKER \
-          --pubkey (osmosisd tendermint show-validator)
+          --pubkey ($DAEMON_NAME tendermint show-validator)
       ```
 
       Note down the transaction hash (the value of the `txhash` field printed) which looks like `FDDE67944FBD6111EA9898D6F8B5CF9601B4935B5A17CE18209825311A036210`. Open `https://testnet.mintscan.io/osmosis-testnet/txs/<HASH>` (where `<HASH>` is the transaction hash) in your browser to check if the validator was successfully created.

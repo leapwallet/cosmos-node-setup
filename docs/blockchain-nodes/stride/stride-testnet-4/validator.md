@@ -5,7 +5,7 @@ Follow these steps to set up a Stride `STRIDE-TESTNET-4` validator:
 
     ```shell
     bash -c "$(curl -sSL install.poolparty.stridelabs.co)"
-    strided config chain-id STRIDE-TESTNET-4
+    $DAEMON_NAME config chain-id STRIDE-TESTNET-4
     ```
 2. Only follow this step on servers for validators. Set up the [key](../../../key.md).
 3. Only follow this step on servers for validators where you haven't previously created a validator with the key's address. Create the validator:
@@ -22,7 +22,7 @@ Follow these steps to set up a Stride `STRIDE-TESTNET-4` validator:
         read -P '(Optional) Enter the security contact email address (e.g., security@example.com): ' SECURITY_CONTACT
         read -P '(Optional) Enter your website (e.g., https://validators.example.com): ' WEBSITE
         read -P 'Enter the moniker you entered earlier: ' MONIKER
-        strided tx staking create-validator \
+        $DAEMON_NAME tx staking create-validator \
             --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
             --commission-max-rate $COMMISSION_MAX_RATE \
             --commission-rate $COMMISSION_RATE \
@@ -34,7 +34,7 @@ Follow these steps to set up a Stride `STRIDE-TESTNET-4` validator:
             --amount 900000ustrd \
             --from $KEY \
             --moniker $MONIKER \
-            --pubkey (strided tendermint show-validator) \
+            --pubkey ($DAEMON_NAME tendermint show-validator) \
         ```
 
        Open `https://stride.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed (e.g., `E6BFE17E108F09A22F517F2092F7FC44B1BC4A5CED9D2B98E9B0C04944650D06`) in your browser to check if the validator was successfully created.

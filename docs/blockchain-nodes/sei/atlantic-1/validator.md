@@ -22,17 +22,17 @@ Follow these steps to set up a Sei `atlantic-1` validator:
     ## END: Install Sei ##
     ######################
    
-    seid config chain-id atlantic-1
+    $DAEMON_NAME config chain-id atlantic-1
    
-    seid init $MONIKER -o
+    $DAEMON_NAME init $MONIKER -o
     
-    wget -O ~/.sei/config/genesis.json \
+    wget -O $DAEMON_HOME/config/genesis.json \
         https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-incentivized-testnet/genesis.json
         
-    wget -O ~/.sei/config/addrbook.json \
+    wget -O $DAEMON_HOME/config/addrbook.json \
         https://raw.githubusercontent.com/sei-protocol/testnet/master/sei-incentivized-testnet/addrbook.json
    
-    sed 's|minimum-gas-prices = .*|minimum-gas-prices = "0.01usei"|' -i ~/.sei/config/app.toml
+    sed 's|minimum-gas-prices = .*|minimum-gas-prices = "0.01usei"|' -i $DAEMON_HOME/config/app.toml
     ```
 2. Only follow this step on servers for validators. Set up the [key](../../../key.md).
 3. Set up [Cosmovisor](../../../cosmovisor.md).
@@ -49,7 +49,7 @@ Follow these steps to set up a Sei `atlantic-1` validator:
         read -P 'Enter the minimum self delegation required on the validator (example: 1): ' MIN_SELF_DELEGATION
         read -P '(Optional) Enter the security contact email address (example: security@example.com): ' SECURITY_CONTACT
         read -P '(Optional) Enter your website (example: https://validators.example.com): ' WEBSITE
-        seid tx staking create-validator \
+        $DAEMON_NAME tx staking create-validator \
             --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
             --commission-max-rate $COMMISSION_MAX_RATE \
             --commission-rate $COMMISSION_RATE \
@@ -61,7 +61,7 @@ Follow these steps to set up a Sei `atlantic-1` validator:
             --amount 900000usei \
             --from $KEY \
             --moniker $MONIKER \
-            --pubkey (seid tendermint show-validator)
+            --pubkey ($DAEMON_NAME tendermint show-validator)
         ```
 
        Open `https://sei.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed (e.g., `FDDE67944FBD6111EA9898D6F8B5CF9601B4935B5A17CE18209825311A036210`) in your browser to check if the validator was successfully created.

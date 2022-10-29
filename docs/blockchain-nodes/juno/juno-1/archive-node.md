@@ -23,11 +23,14 @@ Follow these steps to set up a Juno `juno-1` archive node:
     ## END: Install Juno ##
     ####################### 
 
-    junod config chain-id juno-1
+    $DAEMON_NAME config chain-id juno-1
    
-    junod init $MONIKER
+    $DAEMON_NAME init $MONIKER
       
-    curl https://share.blockpane.com/juno/phoenix/genesis.json > ~/.juno/config/genesis.json
+    curl https://share.blockpane.com/juno/phoenix/genesis.json > $DAEMON_HOME/config/genesis.json
+   
+    # Prevent mempool from getting spammed.
+    sed 's|minimum-gas-prices = .*|minimum-gas-prices = "0.0025ujuno"|' -i $DAEMON_HOME/config/app.toml
    
     ######################
     ## BEGIN: Set peers ##
@@ -35,11 +38,10 @@ Follow these steps to set up a Juno `juno-1` archive node:
    
     set CHAIN_REPO https://raw.githubusercontent.com/CosmosContracts/mainnet/main/juno-1
     set PEERS (curl -sL $CHAIN_REPO/persistent_peers.txt)
-    sed "s|persistent_peers = .*|persistent_peers = \"$PEERS\"|" -i ~/.juno/config/config.toml
+    sed "s|persistent_peers = .*|persistent_peers = \"$PEERS\"|" -i $DAEMON_HOME/config/config.toml
        
     ####################
     ## END: Set peers ##
     ####################    
     ```
-2. In the `[api]` section of `~/.juno/config/app.toml`, set the `enable` key's value to `true`.
-3. Set up [Cosmovisor](../../../cosmovisor.md).
+2. Set up [Cosmovisor](../../../cosmovisor.md).

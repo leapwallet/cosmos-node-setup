@@ -42,9 +42,19 @@ Here are monthly cost estimates if you're using AWS:
 Here are common [operations](blockchain-node-operations.md) that you can refer to throughout the setup process as well as long after that for blockchain nodes.
 
 Set up the software:
-1. Follow this step on each server. Set up the [server](server-setup.md).
-2. Follow this step on each that's for a blockchain node. Set up the [blockchain node](blockchain-node-setup.md).
-3. Follow this step on each cosigner, full node, and monitor. Set up the [URL](url-setup.md).
-4. If you're setting up a validator, then set up the [cosigners](cosigner-setup.md).
-5. If you had created a server for a validator, delete it now.
-6. Foll this step on each monitor. Set up [observability](observability.md).
+1. Enter a terminal multiplexer on every server in order to prevent losing progress during long commands in case your SSH connection gets disrupted:
+
+    ```shell
+    tmux
+    ```
+2. Follow this step on each server. Set up the [server](server-setup.md).
+3. Follow this step on each that's for a blockchain node. Set up the [blockchain node](blockchain-node-setup.md).
+4. Follow this step on each cosigner, full node, and monitor. Set up the [URL](url-setup.md).
+5. If you're setting up a validator, then set up the [cosigners](cosigner-setup.md).
+6. If you had created a server for a validator, delete it now.
+7. Foll this step on each monitor. Set up [observability](observability.md).
+8. Exit the terminal multiplexer on every server:
+
+    ```shell
+    exit
+    ```

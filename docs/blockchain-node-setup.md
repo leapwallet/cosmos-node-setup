@@ -3,7 +3,7 @@
 1. Install the toolchain:
 
     ```shell
-    sudo apt -y install make build-essential gcc git jq chrony lz4
+    sudo apt -y install make build-essential gcc git jq chrony lz4 wget liblz4-tool aria2
    
     #######################
     ## BEGIN: Install Go ##
@@ -23,8 +23,8 @@
     ## BEGIN: Select blockchain ##
     ############################## 
    
-    set PROMPT '1 is for Commercio.network, 2 is for Juno, 3 is for Osmosis, 4 is for Sei, and 5 is for Stride. Enter'
-    set PROMPT "$PROMPT which node you\re setting up: "
+    set PROMPT '1 is for Commercio.network, 2 is for Cosmos Hub, 3 is for Juno, 4 is for Osmosis, 5 is for Sei, and 6'
+    set PROMPT "$PROMPT is for Stride. Enter which node you\re setting up: "
     read -P $PROMPT BLOCKCHAIN
 
     switch $BLOCKCHAIN
@@ -32,15 +32,18 @@
             set DAEMON_NAME commercionetworkd
             set DAEMON_HOME ~/.commercionetwork
         case 2
+            set DAEMON_NAME gaiad
+            set DAEMON_HOME ~/.gaia
+        case 3
             set DAEMON_NAME junod
             set DAEMON_HOME ~/.juno
-        case 3
+        case 4
             set DAEMON_NAME osmosisd
             set DAEMON_HOME ~/.osmosisd
-        case 4
+        case 5
             set DAEMON_NAME seid
             set DAEMON_HOME ~/.sei
-        case 5
+        case 6
             set DAEMON_NAME strided
             set DAEMON_HOME ~/.stride
     end
@@ -78,6 +81,9 @@
     - Commercio.network:
         - `testnet11k`:
             - [Validator](blockchain-nodes/commercio-network/testnet11k/validator.md)
+    - Cosmos Hub:
+        - `cosmoshub-4`:
+            - [Full node](blockchain-nodes/cosmos-hub/cosmoshub-4/full-node.md)
     - Juno:
         - `juno-1`:
             - [Archive node](blockchain-nodes/juno/juno-1/archive-node.md)
@@ -102,7 +108,10 @@
     sed 's|prometheus = .*|prometheus = true|' -i $DAEMON_HOME/config/config.toml
     sudo systemctl restart cosmovisor
     ```
-4. Only follow this step on servers for validators or sentries. Configure:
+4. Only follow this step on full nodes that must have the API enabled.
+
+    In the `[api]` section of `$DAEMON_HOME/config/app.toml`, set the `enable` key's value to `true`.
+5. Only follow this step on servers for validators or sentries. Configure:
 
     ```shell
     #########################
