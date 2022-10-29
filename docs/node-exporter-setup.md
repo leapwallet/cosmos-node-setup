@@ -14,7 +14,7 @@ set PROMPT "$PROMPT URL: "
 read -P $PROMPT URL
 
 wget $URL
-tar xvzf (basename $URL(
+tar xvzf (basename $URL)
 rm (basename $URL)
 
 ################################
