@@ -9,9 +9,10 @@
     ## BEGIN: Install Go ##
     #######################
    
-    wget https://golang.org/dl/go1.18.2.linux-amd64.tar.gz
-    sudo tar xzvf go1.18.2.linux-amd64.tar.gz -C /usr/local
-    rm go1.18.2.linux-amd64.tar.gz
+    set URL https://golang.org/dl/go1.18.2.linux-amd64.tar.gz
+    wget $URL
+    sudo tar xzvf (basename $URL) -C /usr/local
+    rm (basename $URL)
    
     #####################
     ## END: Install Go ##
@@ -67,7 +68,7 @@
     set PATH /usr/local/go/bin ~/go/bin $PATH
 
     # Cosmovisor
-    set -x DAEMON_NAME $(printf $BLOCKCHAIN)d
+    set -x DAEMON_NAME $DAEMON_NAME
     set -x DAEMON_HOME $DAEMON_HOME
     " >> ~/.config/fish/config.fish
    

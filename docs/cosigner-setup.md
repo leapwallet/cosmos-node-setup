@@ -5,11 +5,12 @@
     ############################
     ## BEGIN: Install Horcrux ##
     ############################
-            
-    wget https://github.com/strangelove-ventures/horcrux/releases/download/v2.0.0/horcrux_2.0.0_linux_amd64.tar.gz
-    tar xvzf horcrux_2.0.0_linux_amd64.tar.gz
+
+    set URL https://github.com/strangelove-ventures/horcrux/releases/download/v2.0.0/horcrux_2.0.0_linux_amd64.tar.gz            
+    wget $URL
+    tar xvzf (basename $URL)
     sudo mv horcrux /usr/bin/horcrux
-    rm horcrux_2.0.0_linux_amd64.tar.gz README.md LICENSE.md
+    rm (basename $URL) README.md LICENSE.md
             
     ##########################
     ## END: Install Horcrux ##

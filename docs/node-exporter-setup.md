@@ -14,9 +14,8 @@ set PROMPT "$PROMPT URL: "
 read -P $PROMPT URL
 
 wget $URL
-set FILE (printf $URL | sed 's|.*/||')
-tar xvzf $FILE
-rm $FILE
+tar xvzf (basename $URL(
+rm (basename $URL)
 
 ################################
 ## END: Install Node Exporter ##
@@ -26,7 +25,7 @@ rm $FILE
 ## BEGIN: Set up systemd unit for Node Exporter ##
 ##################################################
 
-set DIR (printf $FILE | sed 's|.tar.gz||')
+set DIR (basename $URL | sed 's|.tar.gz||')
 
 printf "\
 [Unit]

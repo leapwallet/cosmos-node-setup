@@ -47,10 +47,11 @@ Follow these steps to set up a Commercio.network `testnet11k` validator:
     ## BEGIN: Sync ##
     #################
    
-    wget https://quicksync.commercio.network/commercio-testnet11k.latest.tgz -P $DAEMON_HOME/
+    set URL https://quicksync.commercio.network/commercio-testnet11k.latest.tgz
+    wget $URL -P $DAEMON_HOME/
     cd $DAEMON_HOME
-    tar xvzf commercio-testnet11k.latest.tgz
-    rm commercio-testnet11k.latest.tgz
+    tar xvzf (basename $URL)
+    rm (basename $URL)
    
     ###############
     ## END: Sync ##

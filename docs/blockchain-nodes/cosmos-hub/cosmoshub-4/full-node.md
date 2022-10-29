@@ -44,8 +44,7 @@ Follow these steps to set up a Cosmos Hub `cosmoshub-4` full node:
     set URL (curl -L https://quicksync.io/cosmos.json | jq -r '.[] | select(.file == "cosmoshub-4-pruned") | .url')
     aria2c -x5 $URL
     lz4 -cd (basename $URL) | tar xvf -
-    set FILENAME (printf $URL | sed 's|https://dl2.quicksync.io/||')
-    rm $FILENAME
+    rm (basename $URL)
    
     ###############
     ## END: Sync ##

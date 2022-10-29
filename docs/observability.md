@@ -20,15 +20,14 @@ This optional but recommended section explains how to set up monitoring and aler
     read -P $PROMPT PROM_URL
    
     wget $PROM_URL
-    set FILE (printf $PROM_URL | sed 's|.*/||')
-    tar xvzf $FILE
-    rm $FILE
+    tar xvzf (basename $PROM_URL)
+    rm (basename $PROM_URL)
 
     #############################
     ## END: Install Prometheus ##
     #############################
    
-    set DIR (printf $FILE | sed 's|.tar.gz||')
+    set DIR (basename $PROM_URL | sed 's|.tar.gz||')
    
     set PROMPT 'Enter your Prometheus instance\'s URL (e.g.,'
     set PROMPT "$PROMPT https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push): "
