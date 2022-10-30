@@ -36,7 +36,11 @@ We recommend the following if you're using AWS:
 - Use AWS EBS for storage.
 - If you're running an archive node, and have synced the blocks yourself because there's no snapshot available, use AWS DLM to create a daily backup of the AWS EBS volume.
 
-Provision the necessary servers before proceeding further. If you're running a full node, then provision two servers for blockchain nodes (one as a backup), and two servers for monitors (one as a backup). If you're running a validator, then provision three servers for sentries, three servers for cosigners, two servers for monitors (one as a backup), and a server for a validator which is only required to set up Horcrux.
+Provision the necessary servers before proceeding further.
+
+If you're running a full node, then provision two servers for blockchain nodes (one as a backup), and two servers for monitors (one as a backup). If you're running a validator, then provision three servers for sentries, three servers for cosigners, two servers for monitors (one as a backup), and a server for a validator which is only required to set up Horcrux.
+
+Remember to place the backup server such as the second RPC node's server in a different region that the primary server.
 
 Here are monthly cost estimates if you're using AWS without a savings plan:
 - Monitor: 26 USD
