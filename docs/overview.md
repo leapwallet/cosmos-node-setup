@@ -12,12 +12,11 @@ The same monitors can be used for every blockchain node that you set up. So, eve
 
 Here's how to set up the hardware:
 - We recommend using a Linux OS; Ubuntu specifically. Since this repo uses Ubuntu commands, you'll have to modify them if you're using a different OS.
-- Use an SSD (preferably NVMe) for storage.
-
-    Here are specific recommendations for storage requirements:
-    - Juno `juno-1` archive node: 1 TiB
-    - Non-archive blockchain node: 200 GiB
-    - Cosigner/monitor: 20 GiB
+- Use an SSD (preferably NVMe) for storage. Here are the storage size requirements for different servers:
+    - RPC node: 1.5 TiB
+    - Validator: 100 GiB
+    - Monitor: 20 GiB
+    - Cosigner: 20 GiB
 - If you're running an RPC node, then we recommend keeping state for one more than the number of days required to unbond tokens. This way, queriers can see relevant transactions regarding unstaking while you keep storage costs down.
 - This point only applies to archive nodes since other nodes can quickly be restored via a snapshot or state sync. 
 
@@ -30,7 +29,7 @@ Here's how to set up the hardware:
 - CPU:
     - Blockchain node: Four 3.2 GHz CPU cores
     - Monitor: Two CPU cores
-    - Cosigners: One CPU core
+    - Cosigner: One CPU core
 
 We recommend the following if you're using AWS:
 - Use AWS EC2 for the computer. Use the `t2.micro` instance type for cosigners, `t2.medium` for monitors, and `t2.xlarge` for blockchain nodes.
@@ -39,9 +38,13 @@ We recommend the following if you're using AWS:
 
 Provision the necessary servers before proceeding further. If you're running a full node, then provision two servers for blockchain nodes (one as a backup), and two servers for monitors (one as a backup). If you're running a validator, then provision three servers for sentries, three servers for cosigners, two servers for monitors (one as a backup), and a server for a validator which is only required to set up Horcrux.
 
-Here are monthly cost estimates if you're using AWS:
-- 364 USD for a validator setup (two monitors, three sentries, and three cosigners).
-- 256 USD for a full node setup (two monitors, and two blockchain nodes).
+Here are monthly cost estimates if you're using AWS without a savings plan:
+- Monitor: 26 USD
+- Cosigner: 8 USD
+- Sentry: 108 USD
+- RPC node: 248 USD
+- RPC node setup (two monitors, and two RPC nodes): 548 USD
+- Validator setup (two monitors, three sentries, and three cosigners): 400 USD
 
 ## Software
 
