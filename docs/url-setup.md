@@ -15,7 +15,7 @@ This section explains how to use your domain name (e.g., example.com) instead of
     - `cosigner-1`, `cosigner-2`, and `cosigner-3` for the three cosigner servers.
     - `archive-node-1` and `archive-node-2` for the two archive node servers.
     - `rpc-node-1` and `rpc-node-2` for the two RPC node servers.
-    - `monitor-1` and `monitor-2` for the two monitor servers.
+    - `cosmos-node-monitor-1` and `cosmos-node-monitor-2` for the two monitor servers.
 5. Set the **IPv4 address (required)** field to your server's IP address.
 6. Set the **Proxy status** to **DNS only**.
 7. Set the **TTL** to **Auto**.
