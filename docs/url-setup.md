@@ -46,7 +46,7 @@ This section explains how to set up the TLS certificate, and URLs for each API t
     read -P 'Enter the domain such as localhost or archive-node-1.osmo-test-4.example.com: ' DOMAIN
    
     read -P 'Enter y if you\'re setting up a monitor, and n otherwise: ' IS_MONITOR
-    if test $IS_MONITOR = 'y'
+    if test $IS_MONITOR = 'n'
         read -P 'Enter the IP address of the first monitor: ' MONITOR1
         read -P 'Enter the IP address of the second monitor: ' MONITOR2
         set WHITELIST "@denied not remote_ip $MONITOR1 $MONITOR2\n        abort @denied" 
@@ -165,17 +165,20 @@ This section explains how to set up the TLS certificate, and URLs for each API t
        sudo systemctl reload caddy
        ```
 
-The following URLs will now be available except services which weren't reverse proxied. `<DOMAIN>` is the same as the domain you entered during the prompt.
-- RPC API: `https://<DOMAIN>/tendermint-rpc`
-- REST API: `https://<DOMAIN>/rest-api`
-- gRPC: `https://<DOMAIN>/grpc`
-- gRPC Web: `https://<DOMAIN>/grpc-web`
-- Prometheus's metrics (for use by Grafana): `https://<DOMAIN>/prometheus`
-- Node Exporter's metrics (for use by PANIC): `https://<DOMAIN>/node-exporter`
-- Blockchain node's metrics (for use by PANIC): `https://<DOMAIN>/blockchain-node`
-- Cosigner port (for use by the respective sentry): `https://<DOMAIN>/signer`
-- Private validator port (for use by the respective cosigner): `https://<DOMAIN>/private-validator`
+The following URLs will now be available, where `<DOMAIN>` is the same as the domain you entered during the prompt, and `<IP>` is the server's IP address:
+
+|          Service          | Servers Available On           | URL                                  | Note                                             |
+|:-------------------------:|--------------------------------|--------------------------------------|--------------------------------------------------|
+|          RPC API          | Full nodes                     | `https://<DOMAIN>/tendermint-rpc`    ||
+|         REST API          | Full nodes                     | `https://<DOMAIN>/rest-api`          ||
+|         gRPC API          | Full nodes other than sentries | `https://<DOMAIN>/grpc`              ||            
+|         gRPC Web          | Full nodes other than sentries | `https://<DOMAIN>/grpc-web`          ||
+|   Prometheus's metrics    | Monitors                       | `https://<DOMAIN>/prometheus`        | For use by Grafana.                              |
+|  Node Exporter's metrics  | Cosigners and full nodes       | `https://<DOMAIN>/node-exporter`     | For use by PANIC.                                |
+| Blockchain node's metrics | Full nodes                     | `https://<DOMAIN>/blockchain-node`   | For use by PANIC.                                |
+|       Cosigner port       | Cosigners                      | `https://<DOMAIN>/signer`            | For use by the respective sentry.                |
+|  Private validator port   | Sentries                       | `https://<DOMAIN>/private-validator` | For use by the respective cosigner.              |
+|      PANIC installer      |Monitors| `https://<IP>:8000`                  | Cannot be accessed via the reverse proxy server. |
+|     PANIC visualizer      |Monitors| `https://<IP>:3333`                  | Cannot be accessed via the reverse proxy server. |
 
 For example, if you're running a Juno `juno-1` archive node, then you can query a transaction using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
-
-Note that you'll need to access PANIC via `https://<IP>:3333` and `https://<IP>:8000`, where `<IP>` is the server's IP address rather than through the reverse proxy.
