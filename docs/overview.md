@@ -16,7 +16,7 @@ Here's how to set up the hardware:
 
     Here are specific recommendations for storage requirements:
     - Juno `juno-1` archive node: 1 TiB
-    - Non-archive blockchain node: 100 GiB
+    - Non-archive blockchain node: 200 GiB
     - Cosigner/monitor: 20 GiB
 - If you're running an RPC node, then we recommend keeping state for one more than the number of days required to unbond tokens. This way, queriers can see relevant transactions regarding unstaking while you keep storage costs down.
 - This point only applies to archive nodes since other nodes can quickly be restored via a snapshot or state sync. 
