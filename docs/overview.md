@@ -15,7 +15,7 @@ Here's how to set up the hardware:
 - Use an SSD (preferably NVMe) for storage.
 
     Here are specific recommendations for storage requirements:
-    - Juno mainnet archive node: 1 TiB
+    - Juno `juno-1` archive node: 1 TiB
     - Non-archive blockchain node: 100 GiB
     - Cosigner/monitor: 20 GiB
 - If you're running an RPC node, then we recommend keeping state for one more than the number of days required to unbond tokens. This way, queriers can see relevant transactions regarding unstaking while you keep storage costs down.
@@ -23,11 +23,17 @@ Here's how to set up the hardware:
 
     Since the DB can easily get corrupted, and syncing all over again can take days, it's highly recommended taking a daily backup of either the entire storage device (this way you'll have the correct version of the node installed for the backup's DB) or the `$DAEMON_HOME/data` directory (i.e., the DB). You should keep two backups because if you only keep one, and the backup takes place just after the DB gets corrupted, then the only backup will also be corrupted.
 - The architecture must be x86_64.
-- 16 GiB of RAM for blockchain nodes, and 1 GiB for cosigners/monitors.
-- Four 3.2 GHz CPU cores for blockchain nodes, and 1 CPU core for cosigners/monitors.
+- RAM:
+    - Blockchain node: 16 GiB
+    - Monitor: 4 GiB
+    - Cosigner: 1 GiB
+- CPU:
+    - Blockchain node: Four 3.2 GHz CPU cores
+    - Monitor: Two CPU cores
+    - Cosigners: One CPU core
 
 We recommend the following if you're using AWS:
-- Use AWS EC2 for the computer. Use the `t2.micro` instance type for cosigners and monitors, and `t2.xlarge` for blockchain nodes.
+- Use AWS EC2 for the computer. Use the `t2.micro` instance type for cosigners, `t2.medium` for monitors, and `t2.xlarge` for blockchain nodes.
 - Use AWS EBS for storage.
 - If you're running an archive node, and have synced the blocks yourself because there's no snapshot available, use AWS DLM to create a daily backup of the AWS EBS volume.
 
