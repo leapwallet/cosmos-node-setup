@@ -18,8 +18,8 @@ Only follow this section if you're setting up the monitor for the first time.
     ###############################
    
     set PROMPT 'You\'ll be prompted to enter a Prometheus download link. The Prometheus download link is the relevant'
-    set PROMPT "$PROMPT URL from https://prometheus.io/download/#prometheus) (e.g., https://github.com/prometheus/"
-    set PROMPT "$PROMPT[1]prometheus/releases/download/v2.37.0/prometheus-2.37.0.linux-amd64.tar.gz). Enter the "
+    set PROMPT "$PROMPT URL from https://prometheus.io/download/#prometheus) such as https://github.com/prometheus/"
+    set PROMPT "$PROMPT[1]prometheus/releases/download/v2.37.0/prometheus-2.37.0.linux-amd64.tar.gz. Enter the "
     set PROMPT "$PROMPT Prometheus download link: "
     read -P $PROMPT PROM_URL
    
@@ -40,7 +40,7 @@ Only follow this section if you're setting up the monitor for the first time.
     set PROMPT 'Enter your Prometheus instance\'s URL such as'
     set PROMPT "$PROMPT https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push: "
     read -P $PROMPT GRAFANA_URL
-   
+
     read -P 'Enter your Grafana username such as 986969: ' GRAFANA_USERNAME
    
     set PROMPT 'Enter your Grafana password such as'
@@ -306,3 +306,4 @@ Only follow this section if you've previously set up a monitor, and are updating
     ```shell
     sudo systemctl restart prometheus
     ```
+4. Update the PANIC configuration to monitor the blockchain node you just set up.

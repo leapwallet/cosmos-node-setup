@@ -16,11 +16,11 @@ Follow these steps to set up a Stride `STRIDE-TESTNET-4` validator:
         read -P 'Enter the max commission change rate percentage per day (example: 0.01): ' COMMISSION_MAX_CHANGE_RATE
         read -P 'Enter the max commission rate percentage (example: 0.20): ' COMMISSION_MAX_RATE
         read -P 'Enter the initial commission rate percentage (example: 0.10): ' COMMISSION_RATE
-        read -P '(Optional) Enter the details (e.g., The most secure validator in the Cosmos!): ' DETAILS
-        read -P 'Enter the fees to pay along with tx (e.g., 2000ustrd): ' FEES
-        read -P 'Enter the minimum self delegation required on the validator (e.g., 1): ' MIN_SELF_DELEGATION
-        read -P '(Optional) Enter the security contact email address (e.g., security@example.com): ' SECURITY_CONTACT
-        read -P '(Optional) Enter your website (e.g., https://validators.example.com): ' WEBSITE
+        read -P '(Optional) Enter the details such as "The most secure validator in the Cosmos!": ' DETAILS
+        read -P 'Enter the fees to pay along with tx such as 2000ustrd: ' FEES
+        read -P 'Enter the minimum self delegation required on the validator such as 1: ' MIN_SELF_DELEGATION
+        read -P '(Optional) Enter the security contact email address such as security@example.com: ' SECURITY_CONTACT
+        read -P '(Optional) Enter your website such as https://validators.example.com: ' WEBSITE
         read -P 'Enter the moniker you entered earlier: ' MONIKER
         $DAEMON_NAME tx staking create-validator \
             --commission-max-change-rate $COMMISSION_MAX_CHANGE_RATE \
@@ -37,4 +37,4 @@ Follow these steps to set up a Stride `STRIDE-TESTNET-4` validator:
             --pubkey ($DAEMON_NAME tendermint show-validator) \
         ```
 
-       Open `https://stride.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed (e.g., `E6BFE17E108F09A22F517F2092F7FC44B1BC4A5CED9D2B98E9B0C04944650D06`) in your browser to check if the validator was successfully created.
+       Open `https://stride.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed such as `E6BFE17E108F09A22F517F2092F7FC44B1BC4A5CED9D2B98E9B0C04944650D06` in your browser to check if the validator was successfully created.

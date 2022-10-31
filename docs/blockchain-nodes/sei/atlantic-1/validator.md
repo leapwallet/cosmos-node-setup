@@ -64,4 +64,4 @@ Follow these steps to set up a Sei `atlantic-1` validator:
             --pubkey ($DAEMON_NAME tendermint show-validator)
         ```
 
-       Open `https://sei.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed (e.g., `FDDE67944FBD6111EA9898D6F8B5CF9601B4935B5A17CE18209825311A036210`) in your browser to check if the validator was successfully created.
+       Open `https://sei.explorers.guru/transaction/<HASH>`, where `<HASH>` is the value of the `txhash` field printed such as `FDDE67944FBD6111EA9898D6F8B5CF9601B4935B5A17CE18209825311A036210` in your browser to check if the validator was successfully created.

@@ -1,6 +1,6 @@
 # Server Setup
 
-1. If you're running as the `root` user, and don't have another user that you can switch to which has `sudo` privileges, then follow these steps:
+1. Skip this step if you're using AWS. If you're running as the `root` user, and don't have another user that you can switch to which has `sudo` privileges, then follow these steps:
     1. Create the user:
 
         ```shell

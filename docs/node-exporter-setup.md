@@ -8,8 +8,8 @@ cd
 ##################################
 
 set PROMPT 'You\'ll be prompted to enter a URL. The URL is the relevant download link from'
-set PROMPT "$PROMPT[1]https://prometheus.io/download/#node_exporter (e.g., https://github.com/prometheus/"
-set PROMPT "$PROMPT[1]node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz). Enter the"
+set PROMPT "$PROMPT[1]https://prometheus.io/download/#node_exporter such as https://github.com/prometheus/"
+set PROMPT "$PROMPT[1]node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz. Enter the"
 set PROMPT "$PROMPT URL: "
 read -P $PROMPT URL
 

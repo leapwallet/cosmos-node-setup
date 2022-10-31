@@ -6,7 +6,7 @@ This section explains how to secure the REST API in case you're running a sentry
 
 ## DNS
 
-This section explains how to use your domain name (e.g., example.com) instead of your server's IP address. It assumes that you already have a domain name, and a Cloudflare setup.
+This section explains how to use your domain name such as example.com instead of your server's IP address. It assumes that you already have a domain name, and a Cloudflare setup.
 1. Go to your website's DNS section on Cloudflare.
 2. Click **Add record**.
 3. Set the **Type** field to **A**.

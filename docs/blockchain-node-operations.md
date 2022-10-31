@@ -59,11 +59,11 @@ This section explains how to upgrade a node.
 
 ```shell
 cd
-read -P "Enter the directory the node's GitHub repo was downloaded to relative to $HOME (e.g., sei-chain): " DIR
+read -P "Enter the directory the node's GitHub repo was downloaded to relative to $HOME such as sei-chain: " DIR
 cd $DIR
 git fetch --tags
 
-set PROMPT 'Enter the upgrade\'s git tag (e.g., v3.1.1), or commit hash (e.g.,'
+set PROMPT 'Enter the upgrade\'s git tag such as v3.1.1, or commit hash such as'
 set PROMPT "$PROMPT 4ec1b0ca818561cef04f8e6df84069b14399590e): "
 read -P $PROMPT VERSION
 

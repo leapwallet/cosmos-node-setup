@@ -12,7 +12,7 @@ Follow these steps to set up a Sei `atlantic-sub-1` validator:
     cd sei-chain
    
     set PROMPT 'You\'ll be prompted to enter a tag. The tag must be the most recent tag listed on'
-    set PROMPT "$PROMPT https://github.com/sei-protocol/sei-chain/tags (e.g., 1.1.2beta-internal). Enter the tag: "
+    set PROMPT "$PROMPT https://github.com/sei-protocol/sei-chain/tags such as 1.1.2beta-internal). Enter the tag: "
     read -P $PROMPT TAG
    
     git checkout $TAG
