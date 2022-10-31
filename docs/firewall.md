@@ -142,7 +142,7 @@ sudo ufw status
 
 - Allow SSH connections over TCP on port 22 from your IP address. This is to allow you to access the server.
 - Allow HTTP connections on port 80, and HTTPS connections on port 443. This is for the reverse proxy server which deals with things such as the metrics endpoints.
-- Allow HTTPS connections on ports 3333 and 8000 from your IP address. This is to allow you to access PANIC.
+- Allow HTTPS connections on ports 3333 from your IP address. This is to allow you to access PANIC.
 
 If you're using something like AWS, then you can configure the firewall using a GUI. Otherwise, here's how to set up the firewall using the CLI:
 
@@ -173,7 +173,7 @@ sudo ufw allow https
 ## BEGIN: Enable PANIC ##
 #########################
 
-sudo ufw allow from $IP_ADDRESS proto tcp to any port 3333,8000
+sudo ufw allow from $IP_ADDRESS proto tcp to any port 3333
 
 #######################
 ## END: Enable PANIC ##

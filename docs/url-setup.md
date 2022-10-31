@@ -178,7 +178,6 @@ The following URLs will now be available, where `<DOMAIN>` is the same as the do
 | Blockchain node's metrics | Full nodes                     | `https://<DOMAIN>/blockchain-node`   | For use by PANIC.                                |
 |       Cosigner port       | Cosigners                      | `https://<DOMAIN>/signer`            | For use by the respective sentry.                |
 |  Private validator port   | Sentries                       | `https://<DOMAIN>/private-validator` | For use by the respective cosigner.              |
-|      PANIC installer      |Monitors| `https://<IP>:8000`                  | Cannot be accessed via the reverse proxy server. |
-|     PANIC visualizer      |Monitors| `https://<IP>:3333`                  | Cannot be accessed via the reverse proxy server. |
+|           PANIC           |Monitors| `https://<IP>:3333`                  | Cannot be accessed via the reverse proxy server. |
 
 For example, if you're running a Juno `juno-1` archive node, then you can query a transaction using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.

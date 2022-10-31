@@ -65,7 +65,7 @@ Set up the software:
 4. Follow this step on each cosigner, full node, and monitor. Set up the [URL](url-setup.md).
 5. If you're setting up a validator, then set up the [cosigners](cosigner-setup.md).
 6. If you had created a server for a validator, delete it now.
-7. Foll this step on each monitor. Set up [observability](observability.md).
+7. Follow this step on each monitor. Set up [observability](observability.md).
 8. Exit the terminal multiplexer on every server:
 
     ```shell

@@ -195,7 +195,7 @@ Only follow this section if you're setting up the monitor for the first time.
     sudo systemctl enable --now prometheus
     sudo systemctl status prometheus
     ```
-6. Set up [PANIC](https://github.com/SimplyVC/panic).
+6. Set up [PANIC](https://github.com/SimplyVC/panic). If the website on port 3,333 doesn't open, open port 9,000, make an API call via the UI, open port 3,333 again, and wait about a minute - it should work now.
 
 ## Not First Time
 
