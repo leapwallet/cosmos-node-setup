@@ -8,7 +8,7 @@ Using a serverless solution such as AWS Fargate would've been more scalable sinc
 
 There are no benefits (no cost savings, etc.) to be gained from running anything other than a single blockchain node on a computer. Therefore, for simplicity, this repo assumes that the computer used to run the blockchain node will not run any other software (including other blockchain nodes).
 
-The same monitors can be used for every blockchain node that you set up. So, even though you'll set up separate servers for sentries, cosigners, full nodes, and/or validators, the same two servers used to monitor the first blockchain node can and should be used for subsequent blockchain nodes you set up.
+The same monitor can be used for every blockchain node that you set up. So, even though you'll set up separate servers for sentries, cosigners, full nodes, and/or validators, the same two servers used to monitor the first blockchain node can and should be used for subsequent blockchain nodes you set up.
 
 Here's how to set up the hardware:
 - We recommend using a Linux OS; Ubuntu specifically. Since this repo uses Ubuntu commands, you'll have to modify them if you're using a different OS.
@@ -38,7 +38,7 @@ We recommend the following if you're using AWS:
 
 Provision the necessary servers before proceeding further.
 
-If you're running a full node, then provision two servers for blockchain nodes (one as a backup), and two servers for monitors (one as a backup). If you're running a validator, then provision three servers for sentries, three servers for cosigners, two servers for monitors (one as a backup), and a server for a validator which is only required to set up Horcrux.
+If you're running a full node, then provision two servers for blockchain nodes (one as a backup), and one server for the monitor. If you're running a validator, then provision three servers for sentries, three servers for cosigners, one server for the monitor, and a server for a validator which is only required to set up Horcrux.
 
 Remember to place the backup server such as the second RPC node's server in a different region that the primary server.
 
@@ -47,8 +47,8 @@ Here are monthly cost estimates if you're using AWS without a savings plan:
 - Cosigner: 8 USD
 - Sentry: 108 USD
 - RPC node: 248 USD
-- RPC node setup (two monitors, and two RPC nodes): 548 USD
-- Validator setup (two monitors, three sentries, and three cosigners): 400 USD
+- RPC node setup (one monitor, and two RPC nodes): 522 USD
+- Validator setup (monitor, three sentries, and three cosigners): 374 USD
 
 ## Software
 
@@ -65,7 +65,7 @@ Set up the software:
 4. Follow this step on each cosigner, full node, and monitor. Set up the [URL](url-setup.md).
 5. If you're setting up a validator, then set up the [cosigners](cosigner-setup.md).
 6. If you had created a server for a validator, delete it now.
-7. Follow this step on each monitor. Set up [observability](observability.md).
+7. Follow this step on the monitor. Set up [observability](observability/observability.md).
 8. Exit the terminal multiplexer on every server:
 
     ```shell

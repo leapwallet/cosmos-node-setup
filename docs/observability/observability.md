@@ -1,6 +1,6 @@
 # Observability
 
-This optional but recommended section explains how to set up monitoring and alerting. We explain it by using Prometheus, connecting Prometheus to Grafana Cloud, and using PANIC. Of course, you can run Grafana yourself, use an external Prometheus server, use [Tenderduty](https://github.com/blockpane/tenderduty), etc. instead. It's assumed that you've followed the [URL Setup](url-setup.md) doc because this doc assumes URLs that look like https://rpc-node-1.osmosis-1.example.com/blockchain-node.
+This optional but recommended section explains how to set up monitoring and alerting. We explain it by using Prometheus, connecting Prometheus to Grafana Cloud, and using PANIC. Of course, you can run Grafana yourself, use an external Prometheus server, use [Tenderduty](https://github.com/blockpane/tenderduty), etc. instead. It's assumed that you've followed the [URL Setup](../url-setup.md) doc because this doc assumes URLs that look like https://rpc-node-1.osmosis-1.example.com/blockchain-node.
 
 ## First Time
 
@@ -195,7 +195,14 @@ Only follow this section if you're setting up the monitor for the first time.
     sudo systemctl enable --now prometheus
     sudo systemctl status prometheus
     ```
-6. Set up [PANIC](https://github.com/SimplyVC/panic). If the website on port 3,333 doesn't open, open port 9,000, make an API call via the UI, open port 3,333 again, and wait about a minute - it should work now.
+6. Monitor the monitoring system:
+    1. [Add](https://grafana.com/docs/grafana/latest/datasources/add-a-data-source/) a Prometheus data source in Grafana Cloud, and connect it to the monitor. For example:
+    
+        ![Data source](data-source.png)
+    2. [Create](https://grafana.com/docs/grafana/latest/alerting/alerting-rules/create-grafana-managed-rule/) a Grafana alert to notify you when the monitor is down so that you know to fix the monitor and/or manually monitor the blockchain nodes while the monitor is down. For example:
+   
+        ![Alert](alert.png)
+7. Set up [PANIC](https://github.com/SimplyVC/panic). If the website on port 3,333 doesn't open, open port 9,000, make an API call via the UI, open port 3,333 again, and wait about a minute - it should work now.
 
 ## Not First Time
 
