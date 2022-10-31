@@ -7,9 +7,9 @@ Prior to using this repo, it's recommended that you learn the following:
 - [Tendermint](https://docs.tendermint.com/)
 - [Cosmos SDK](https://docs.cosmos.network/)
 - (Required if you're setting up a validator.) [Horcrux](https://github.com/strangelove-ventures/horcrux)
-- (Required if you want to monitor your blockchain node.) [PANIC](https://github.com/SimplyVC/panic)
-- (Required if you want to monitor your blockchain node.) [Prometheus](https://prometheus.io/)
-- (Required if you want to monitor your blockchain node.) [Grafana](https://grafana.com/docs/grafana/latest/)
+- [PANIC](https://github.com/SimplyVC/panic)
+- [Prometheus](https://prometheus.io/)
+- [Grafana](https://grafana.com/docs/grafana/latest/)
 - (Optional) [Caddy](https://caddyserver.com/)
 
 ## PANIC Monitoring and Alerting for Blockchains
@@ -19,6 +19,8 @@ _PANIC Monitoring and Alerting for Blockchains_ is abbreviated as _PANIC_.
 ## Validator Node
 
 _Validator node_ is abbreviated as _validator_.
+
+Validators will be jailed if they double sign. Double signing can only occur if two instances of a validator using the same private key are active at the same time. You needn't worry about a validator double signing if it restarts during a block because it locally stores which blocks it's processed.
 
 ## Full Node
 
@@ -31,8 +33,6 @@ _Sentry node_ is abbreviated as _sentry_. A sentry is a full node that connects 
 ## Monitor
 
 By _monitor_, we mean a server that runs monitoring and alerting software such as PANIC and Prometheus.
-
-Validators will be jailed if they double sign. Double signing can only occur if two instances of a validator using the same private key are active at the same time. You needn't worry about a validator double signing if it restarts during a block because it locally stores which blocks it's processed.
 
 ## Blockchain Node
 

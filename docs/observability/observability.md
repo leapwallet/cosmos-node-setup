@@ -2,10 +2,6 @@
 
 This optional but recommended section explains how to set up monitoring and alerting. We explain it by using Prometheus, connecting Prometheus to Grafana Cloud, and using PANIC. Of course, you can run Grafana yourself, use an external Prometheus server, use [Tenderduty](https://github.com/blockpane/tenderduty), etc. instead. It's assumed that you've followed the [URL Setup](../url-setup.md) doc because this doc assumes URLs that look like https://rpc-node-1.osmosis-1.example.com/blockchain-node.
 
-## First Time
-
-Only follow this section if you're setting up the monitor for the first time.
-
 1. Sign up for [Grafana Cloud](https://grafana.com/auth/sign-up/create-user).
 2. On your Grafana Cloud instance, create an [API key](https://grafana.com/docs/grafana-cloud/reference/create-api-key/)s for the Prometheus integration with the **Role** set to **MetricsPublisher**. Note down the URL, username, and password for use later on.
 3. Install Prometheus:
@@ -72,7 +68,7 @@ Only follow this section if you're setting up the monitor for the first time.
     ##########################################################
     ```
 4. Configure Prometheus using one of the following:
-    - Only follow this step if you're monitoring Horcrux:
+    - Only follow this step if you're monitoring a validator setup:
 
         ```shell
         read -P 'Enter the first sentry\'s hostname such as sentry-1.osmo-test-4.example.com: ' SENTRY_1
@@ -82,7 +78,7 @@ Only follow this section if you're setting up the monitor for the first time.
         read -P 'Enter the first cosigner\'s hostname such as cosigner-1.osmo-test-4.example.com: ' COSIGNER_1
         read -P 'Enter the first cosigner\'s hostname such as cosigner-2.osmo-test-4.example.com: ' COSIGNER_2
         read -P 'Enter the first cosigner\'s hostname such as cosigner-3.osmo-test-4.example.com: ' COSIGNER_3
-
+ 
         printf "\
         scrape_configs:
         - job_name: node-exporter-for-monitor
@@ -131,7 +127,7 @@ Only follow this section if you're setting up the monitor for the first time.
             password: $GRAFANA_PASSWORD
         " > $DIR/prometheus.yml
         ```
-    - Only follow this step if you're monitoring a full node:
+    - Only follow this step if you're not monitoring a validator setup:
 
         ```shell
         read -P 'Enter the first full node\'s hostname such as rpc-node-1.osmo-test-4.example.com: ' FULL_NODE_1
@@ -197,120 +193,9 @@ Only follow this section if you're setting up the monitor for the first time.
     ```
 6. Monitor the monitoring system:
     1. [Add](https://grafana.com/docs/grafana/latest/datasources/add-a-data-source/) a Prometheus data source in Grafana Cloud, and connect it to the monitor. For example:
-    
-        ![Data source](data-source.png)
+
+       ![Data source](data-source.png)
     2. [Create](https://grafana.com/docs/grafana/latest/alerting/alerting-rules/create-grafana-managed-rule/) a Grafana alert to notify you when the monitor is down so that you know to fix the monitor and/or manually monitor the blockchain nodes while the monitor is down. For example:
-   
-        ![Alert](alert.png)
+
+       ![Alert](alert.png)
 7. Set up [PANIC](https://github.com/SimplyVC/panic). If the website on port 3,333 doesn't open, open port 9,000, make an API call via the UI, open port 3,333 again, and wait about a minute - it should work now.
-
-## Not First Time
-
-Only follow this section if you've previously set up a monitor, and are updating it to monitor another Cosmos node.
-
-1. Edit the Prometheus config file. For example:
-
-    ```shell
-    nano /home/ubuntu/prometheus-2.37.0.linux-amd64/prometheus.yml
-    ```
-2. Add entries for the metrics endpoints of the blockchain node, and Node exporter of both the servers.
-
-   For example, if the file previously looked like:
-
-    ```yaml
-    scrape_configs:
-    
-    # Monitor
-    - job_name: node-exporter-for-monitor
-      static_configs:
-      - targets: ['localhost:9100']
-    
-    # Blockchain nodes for osmosis-1 RPC node
-    - job_name: blockchain-node-for-osmosis-1-rpc-node-1
-      static_configs:
-      - targets: [rpc-node-1.osmosis-1.example.com]
-      metrics_path: /blockchain-node
-    - job_name: blockchain-node-for-osmosis-1-rpc-node-2
-      static_configs:
-      - targets: [rpc-node-2.osmosis-1.example.com]
-      metrics_path: /blockchain-node
-    
-    # Node Exporters for osmosis-1 RPC node
-    - job_name: node-exporter-for-osmosis-1-rpc-node-1
-      static_configs:
-      - targets: [rpc-node-1.osmosis-1.example.com]
-      metrics_path: /node-exporter
-    - job_name: node-exporter-for-osmosis-1-rpc-node-2
-      static_configs:
-      - targets: [rpc-node-2.osmosis-1.example.com]
-      metrics_path: /node-exporter
-    
-    remote_write:
-    - url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
-      basic_auth:
-        username: 986969
-        password: oop09ikiM2YxZDJjOGY5YmJlODUxMmNpoiuyt2IzZDI3YWFlNzQyZGE2ZDdjYiIsIm4iOiJzZWktdGVzdG5ldC12Ykj3
-    ```
-
-   Now, it'll look like:
-
-    ```yaml
-    scrape_configs:
-    
-    # Monitor
-    - job_name: node-exporter-for-monitor
-      static_configs:
-      - targets: ['localhost:9100']
-    
-    # Blockchain nodes for osmosis-1 RPC node
-    - job_name: blockchain-node-for-osmosis-1-rpc-node-1
-      static_configs:
-      - targets: [rpc-node-1.osmosis-1.example.com]
-      metrics_path: /blockchain-node
-    - job_name: blockchain-node-for-osmosis-1-rpc-node-2
-      static_configs:
-      - targets: [rpc-node-2.osmosis-1.example.com]
-      metrics_path: /blockchain-node
-    
-    # Blockchain nodes for cosmoshub-4 RPC node
-    - job_name: blockchain-node-for-cosmoshub-4-rpc-node-1
-      static_configs:
-      - targets: [rpc-node-1.cosmoshub-4.example.com]
-      metrics_path: /blockchain-node
-    - job_name: blockchain-node-for-cosmoshub-4-rpc-node-2
-      static_configs:
-      - targets: [rpc-node-2.cosmoshub-4.example.com]
-      metrics_path: /blockchain-node
-    
-    # Node Exporters for osmosis-1 RPC node
-    - job_name: node-exporter-for-osmosis-1-rpc-node-1
-      static_configs:
-      - targets: [rpc-node-1.osmosis-1.example.com]
-      metrics_path: /node-exporter
-    - job_name: node-exporter-for-osmosis-1-rpc-node-2
-      static_configs:
-      - targets: [rpc-node-2.osmosis-1.example.com]
-      metrics_path: /node-exporter
-    
-    # Node Exporters for cosmoshub-4 RPC node
-    - job_name: node-exporter-for-cosmoshub-4-rpc-node-1
-      static_configs:
-      - targets: [rpc-node-1.cosmoshub-4.example.com]
-      metrics_path: /node-exporter
-    - job_name: node-exporter-for-cosmoshub-4-rpc-node-2
-      static_configs:
-      - targets: [rpc-node-2.cosmoshub-4.example.com]
-      metrics_path: /node-exporter
-    
-    remote_write:
-    - url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
-      basic_auth:
-        username: 986969
-        password: oop09ikiM2YxZDJjOGY5YmJlODUxMmNpoiuyt2IzZDI3YWFlNzQyZGE2ZDdjYiIsIm4iOiJzZWktdGVzdG5ldC12Ykj3
-    ```
-3. Apply changes:
-
-    ```shell
-    sudo systemctl restart prometheus
-    ```
-4. Update the PANIC configuration to monitor the blockchain node you just set up.

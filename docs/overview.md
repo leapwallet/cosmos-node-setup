@@ -8,8 +8,6 @@ Using a serverless solution such as AWS Fargate would've been more scalable sinc
 
 There are no benefits (no cost savings, etc.) to be gained from running anything other than a single blockchain node on a computer. Therefore, for simplicity, this repo assumes that the computer used to run the blockchain node will not run any other software (including other blockchain nodes).
 
-The same monitor can be used for every blockchain node that you set up. So, even though you'll set up separate servers for sentries, cosigners, full nodes, and/or validators, the same two servers used to monitor the first blockchain node can and should be used for subsequent blockchain nodes you set up.
-
 Here's how to set up the hardware:
 - We recommend using a Linux OS; Ubuntu specifically. Since this repo uses Ubuntu commands, you'll have to modify them if you're using a different OS.
 - Use an SSD (preferably NVMe) for storage. Here are the storage size requirements for different servers:

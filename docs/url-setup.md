@@ -1,8 +1,6 @@
 # URL Setup
 
-This optional but recommended section explains how to set up the DNS and TLS certificate. We explain it by using Cloudflare for the DNS, and Caddy for the TLS certificate. Of course, you can use different tools such as Google Domains and Traefik instead.
-
-This section explains how to secure the REST API in case you're running a sentry monitored by PANIC, and have enabled the REST API as a result. If you're not going to follow this section, then be sure to prevent IP addresses other than the server itself from accessing the REST API.
+This section explains how to set up the DNS and TLS certificate. We explain it by using Cloudflare for the DNS, and Caddy for the TLS certificate. Of course, you can use different tools such as Google Domains and Traefik instead.
 
 ## DNS
 
@@ -10,19 +8,19 @@ This section explains how to use your domain name such as example.com instead of
 1. Go to your website's DNS section on Cloudflare.
 2. Click **Add record**.
 3. Set the **Type** field to **A**.
-4. Set the **Name (required)** field. We recommend using the format `<SERVER>.<DOMAIN>` for monitors, and `<SERVER>.<CHAIN>.<DOMAIN>` for other servers; `<SERVER>` is the server provisioned such as `archive-node-1`, `<CHAIN>` is the chain name such as `osmo-test-4`, and `<DOMAIN>` is your domain name such as `example.com`. We recommend you use the following `<SERVER>` names:
+4. Set the **Name (required)** field. We recommend using the format `<SERVER>.<CHAIN>.<DOMAIN>` for servers; `<SERVER>` is the server provisioned such as `archive-node-1`, `<CHAIN>` is the chain name such as `osmo-test-4`, and `<DOMAIN>` is your domain name such as `example.com`. We recommend you use the following `<SERVER>` names:
     - `sentry-1`, `sentry-2`, and `sentry-3` for the three sentry servers.
     - `cosigner-1`, `cosigner-2`, and `cosigner-3` for the three cosigner servers.
     - `archive-node-1` and `archive-node-2` for the two archive node servers.
     - `rpc-node-1` and `rpc-node-2` for the two RPC node servers.
-    - `cosmos-node-monitor` for the monitor server.
+    - `monitor` for the monitor server.
 5. Set the **IPv4 address (required)** field to your server's IP address.
 6. Set the **Proxy status** to **DNS only**.
 7. Set the **TTL** to **Auto**.
 
 ## TLS Certificate
 
-This section explains how to set up the TLS certificate, and URLs for each API that you want to expose. There's a reference to Prometheus which is a monitoring system that you have the option to set up later on.
+This section explains how to set up the TLS certificate, and URLs for each API that you want to expose. There's a reference to Prometheus which is a monitoring system that you will set up later on.
 
 1. Install Caddy:
 
@@ -177,6 +175,7 @@ The following URLs will now be available, where `<DOMAIN>` is the same as the do
 | Blockchain node's metrics | Full nodes                   | `https://<DOMAIN>/blockchain-node`   | For use by PANIC.                                |
 |       Cosigner port       | Cosigners                    | `https://<DOMAIN>/signer`            | For use by the respective sentry.                |
 |  Private validator port   | Sentries                     | `https://<DOMAIN>/private-validator` | For use by the respective cosigner.              |
-|           PANIC           |Monitor| `https://<IP>:3333`                  | Cannot be accessed via the reverse proxy server. |
+|         PANIC UI          |Monitor| `https://<IP>:3333`                  | Cannot be accessed via the reverse proxy server. |
+|      PANIC API docs       |Monitor| `https://<IP>:9000`                  | Cannot be accessed via the reverse proxy server. |
 
 For example, if you're running a Juno `juno-1` archive node, then you can query a transaction using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
