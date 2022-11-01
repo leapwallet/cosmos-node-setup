@@ -78,7 +78,12 @@
     ## END: Set environment variables ##
     #################################### 
     ```
-2. Set up the relevant blockchain node by picking the relevant link from the following list. If the blockchain node you're interested in isn't listed below, then pick a similar link anyway such as a validator setup link if you're setting up a validator, and follow similar instructions by referring to the blockchain node's official docs:
+2. Set up the relevant blockchain node by picking the relevant link from the following list.
+
+    If the blockchain node you're interested in isn't listed below, then pick a similar link anyway such as a validator setup link if you're setting up a validator, and follow similar instructions by referring to the blockchain node's official docs.
+
+    If you're running an RPC node, then we recommend keeping state for one more than the number of days required to unbond tokens. This way, queriers can see relevant transactions regarding unstaking while you keep storage costs down.
+ 
     - Commercio.network:
         - `testnet11k`:
             - [Validator](blockchain-nodes/commercio-network/testnet11k/validator.md)

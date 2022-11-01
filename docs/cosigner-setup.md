@@ -51,19 +51,19 @@
     read -P 'Enter the chain ID such as osmo-test-4: ' CHAIN_ID
         
     set PROMPT 'Enter the respective sentry\'s Horcrux URL such as tcp://10.168.0.1:1234 or'
-    set PROMPT "$PROMPT sentry-1.osmo-test-4.example.com/private-validator: "
+    set PROMPT "$PROMPT sentry-1.osmosis.osmo-test-4.example.com/private-validator: "
     read -P $PROMPT SENTRY
     
     set PROMPT 'Enter the first cosigner\'s Horcrux URL such as tcp://10.168.1.1:2222 or'
-    set PROMPT "$PROMPT cosigner-1.osmo-test-4.example.com/signer: "
+    set PROMPT "$PROMPT cosigner-1.osmosis.osmo-test-4.example.com/signer: "
     read -P $PROMPT COSIGNER_1
     
     set PROMPT 'Enter the second cosigner\'s Horcrux URL such as tcp://10.168.1.2:2222 or'
-    set PROMPT "$PROMPT cosigner-2.osmo-test-4.example.com/signer: "
+    set PROMPT "$PROMPT cosigner-2.osmosis.osmo-test-4.example.com/signer: "
     read -P $PROMPT COSIGNER_2
     
     set PROMPT 'Enter the third cosigner\'s Horcrux URL such as tcp://10.168.1.3:2222 or'
-    set PROMPT "$PROMPT cosigner-3.osmo-test-4.example.com/signer: "
+    set PROMPT "$PROMPT cosigner-3.osmosis.osmo-test-4.example.com/signer: "
     read -P $PROMPT COSIGNER_3
        
     read -P 'Enter which cosigner this is [1/2/3]: ' COSIGNER

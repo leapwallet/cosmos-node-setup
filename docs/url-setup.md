@@ -8,12 +8,14 @@ This section explains how to use your domain name such as example.com instead of
 1. Go to your website's DNS section on Cloudflare.
 2. Click **Add record**.
 3. Set the **Type** field to **A**.
-4. Set the **Name (required)** field. We recommend using the format `<SERVER>.<CHAIN>.<DOMAIN>` for servers; `<SERVER>` is the server provisioned such as `archive-node-1`, `<CHAIN>` is the chain name such as `osmo-test-4`, and `<DOMAIN>` is your domain name such as `example.com`. We recommend you use the following `<SERVER>` names:
+4. Set the **Name (required)** field. We recommend using the format `<SERVER>.<NETWORK>.<CHAIN>.<DOMAIN>` for servers; `<SERVER>` is the server provisioned such as `archive-node-1`, `<NETWORK>` is the blockchain's network such as `osmo-test-4`, `<CHAIN>` is the name of the blockchain such as `cosmos-hub`, and `<DOMAIN>` is your domain name such as `example.com`. We recommend you use the following `<SERVER>` names:
     - `sentry-1`, `sentry-2`, and `sentry-3` for the three sentry servers.
     - `cosigner-1`, `cosigner-2`, and `cosigner-3` for the three cosigner servers.
     - `archive-node-1` and `archive-node-2` for the two archive node servers.
     - `rpc-node-1` and `rpc-node-2` for the two RPC node servers.
-    - `monitor` for the monitor server.
+    - `rpc-node-monitor` for the RPC node setup's monitor.
+    - `archive-node-monitor` for the archive node setup's monitor.
+    - `validator-monitor` for the validator node setup's monitor.
 5. Set the **IPv4 address (required)** field to your server's IP address.
 6. Set the **Proxy status** to **DNS only**.
 7. Set the **TTL** to **Auto**.
@@ -41,7 +43,7 @@ This section explains how to set up the TLS certificate, and URLs for each API t
     ## END: Install Caddy ##
     ########################
    
-    read -P 'Enter the domain such as localhost or archive-node-1.osmo-test-4.example.com: ' DOMAIN
+    read -P 'Enter the domain such as localhost or archive-node-1.osmo-test-4.osmosis.example.com: ' DOMAIN
    
     read -P 'Enter y if you\'re setting up a monitor, and n otherwise: ' IS_MONITOR
     if test $IS_MONITOR = 'n'

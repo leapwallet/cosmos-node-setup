@@ -10,7 +10,7 @@ Prior to using this repo, it's recommended that you learn the following:
 - [PANIC](https://github.com/SimplyVC/panic)
 - [Prometheus](https://prometheus.io/)
 - [Grafana](https://grafana.com/docs/grafana/latest/)
-- (Optional) [Caddy](https://caddyserver.com/)
+- [Caddy](https://caddyserver.com/)
 
 ## PANIC Monitoring and Alerting for Blockchains
 
