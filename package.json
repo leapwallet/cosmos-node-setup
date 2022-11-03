@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "scripts": {
+    "lint": "prettier . --ignore-path .gitignore",
+    "lint:check": "yarn lint -c",
+    "lint:fix": "yarn lint -w"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "devDependencies": {
+    "prettier": "2.5.1"
+  },
+  "prettier": {
+    "printWidth": 120
+  }
+}

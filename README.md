@@ -6,6 +6,51 @@ This repo is written for people who know nothing about running a Cosmos node. Co
 
 Here's the [overview](docs/overview.md).
 
+## Contributing
+
+### Installation
+
+1. Install [Node.js 16](https://nodejs.org/en/download/).
+2. Clone the repo using one of the following methods:
+
+   - SSH:
+
+     ```shell
+     git@github.com:leapwallet/cosmos-node-setup.git
+     ```
+
+   - HTTPS:
+
+     ```shell
+     https://github.com/leapwallet/cosmos-node-setup.git
+     ```
+
+3. Change the directory:
+
+   ```shell
+   cd notification-system-architecture
+   ```
+
+4. Install the package manager:
+
+   ```shell
+   corepack enable
+   ```
+
+5. Install the dependencies:
+
+   ```shell
+   yarn
+   ```
+
+### Usage
+
+Lint:
+
+```shell
+yarn lint:fix
+```
+
 ## Credits
 
 - [Juno Docs](https://docs.junonetwork.io/juno/readme)

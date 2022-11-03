@@ -14,14 +14,14 @@ If you're using something like AWS, then you can configure the firewall using a 
 ```shell
 #######################
 ## BEGIN: Enable SSH ##
-####################### 
+#######################
 
 read -P 'Enter your IP address: ' IP_ADDRESS
 sudo ufw allow from $IP_ADDRESS proto tcp to any port 22
 
 #####################
 ## END: Enable SSH ##
-##################### 
+#####################
 
 ########################################
 ## BEGIN: Enable reverse proxy server ##
@@ -76,7 +76,7 @@ If you're using something like AWS, then you can configure the firewall using a 
 ```shell
 #######################
 ## BEGIN: Enable SSH ##
-####################### 
+#######################
 
 read -P 'Enter your IP address: ' IP_ADDRESS
 sudo ufw allow from $IP_ADDRESS proto tcp to any port 22
@@ -104,28 +104,28 @@ switch $COSIGNER
     case 1
         read -P 'Enter the first sentry\'s IP address: ' SENTRY_1
         sudo ufw allow from $SENTRY_1
-        
+
         read -P 'Enter the second cosigner\'s IP address: ' COSIGNER_2
         sudo ufw allow from $COSIGNER_2
-        
+
         read -P 'Enter the third cosigner\'s IP address: ' COSIGNER_3
         sudo ufw allow from $COSIGNER_3
     case 2
         read -P 'Enter the second sentry\'s IP address: ' SENTRY_2
         sudo ufw allow from $SENTRY_2
-        
+
         read -P 'Enter the first cosigner\'s IP address: ' COSIGNER_1
         sudo ufw allow from $COSIGNER_1
-        
+
         read -P 'Enter the third cosigner\'s IP address: ' COSIGNER_3
         sudo ufw allow from $COSIGNER_3
     case 3
         read -P 'Enter the third sentry\'s IP address: ' SENTRY_3
         sudo ufw allow from $SENTRY_3
-        
+
         read -P 'Enter the first cosigner\'s IP address: ' COSIGNER_1
         sudo ufw allow from $COSIGNER_1
-        
+
         read -P 'Enter the second cosigner\'s IP address: ' COSIGNER_2
         sudo ufw allow from $COSIGNER_2
 end
@@ -149,7 +149,7 @@ If you're using something like AWS, then you can configure the firewall using a 
 ```shell
 #######################
 ## BEGIN: Enable SSH ##
-####################### 
+#######################
 
 read -P 'Enter your IP address: ' IP_ADDRESS
 sudo ufw allow from $IP_ADDRESS proto tcp to any port 22
@@ -194,14 +194,14 @@ If you're using something like AWS, then you can configure the firewall using a 
 ```shell
 #######################
 ## BEGIN: Enable SSH ##
-####################### 
+#######################
 
 read -P 'Enter your IP address: ' IP_ADDRESS
 sudo ufw allow from $IP_ADDRESS proto tcp to any port 22
 
 #####################
 ## END: Enable SSH ##
-##################### 
+#####################
 
 ########################################
 ## BEGIN: Enable reverse proxy server ##

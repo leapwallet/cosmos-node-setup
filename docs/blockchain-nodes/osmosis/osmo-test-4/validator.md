@@ -1,18 +1,22 @@
 # Validator
 
 Follow these steps to set up an Osmosis `osmo-test-4` validator:
+
 1. Install:
 
-    ```shell
-    curl -sL https://get.osmosis.zone/install > i.py && python3 i.py
-    ```
+   ```shell
+   curl -sL https://get.osmosis.zone/install > i.py && python3 i.py
+   ```
+
 2. Set the chain ID:
 
-    ```shell
-    $DAEMON_NAME config chain-id osmo-test-4
-    ```
+   ```shell
+   $DAEMON_NAME config chain-id osmo-test-4
+   ```
+
 3. Only follow this step on servers for validators. Set up the [key](../../../key.md).
 4. Only follow this step on servers for validators where you haven't previously created a validator with the key's address. Create the validator:
+
    1. Get some tokens from the [faucet](https://faucet.osmosis.zone/#/) if you don't have any.
    2. Create the validator:
 

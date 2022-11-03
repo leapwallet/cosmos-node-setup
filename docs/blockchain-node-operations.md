@@ -45,13 +45,13 @@ Remember to subscribe to new upgrade notifications. For example, you should join
 
 After installing the first version (i.e., 3.0.0), the following versions must be installed at their respective block heights (certain versions such as 7.0.0 must be skipped due to bugs, and are therefore left out):
 
-|Version|Block height|
-|:---:|:---:|
-|3.1.1|2,616,300|
-|4.0.0|2,951,100|
-|5.0.1|3,035,000|
-|6.0.0|3,159,650|
-|8.0.0|3,851,750|
+| Version | Block height |
+| :-----: | :----------: |
+|  3.1.1  |  2,616,300   |
+|  4.0.0  |  2,951,100   |
+|  5.0.1  |  3,035,000   |
+|  6.0.0  |  3,159,650   |
+|  8.0.0  |  3,851,750   |
 
 ### Upgrading
 
