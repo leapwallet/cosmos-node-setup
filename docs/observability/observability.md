@@ -13,12 +13,7 @@ This optional but recommended section explains how to set up monitoring and aler
     ## BEGIN: Install Prometheus ##
     ###############################
    
-    set PROMPT 'You\'ll be prompted to enter a Prometheus download link. The Prometheus download link is the relevant'
-    set PROMPT "$PROMPT URL from https://prometheus.io/download/#prometheus) such as https://github.com/prometheus/"
-    set PROMPT "$PROMPT[1]prometheus/releases/download/v2.37.0/prometheus-2.37.0.linux-amd64.tar.gz. Enter the "
-    set PROMPT "$PROMPT Prometheus download link: "
-    read -P $PROMPT PROM_URL
-   
+    set PROM_URL https://github.com/prometheus/prometheus/releases/download/v2.37.0/prometheus-2.37.0.linux-amd64.tar.gz
     wget $PROM_URL
     tar xvzf (basename $PROM_URL)
     rm (basename $PROM_URL)
