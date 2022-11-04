@@ -32,7 +32,6 @@ This section explains how to set up the TLS certificate, and URLs for each API t
    ## BEGIN: Install Caddy ##
    ##########################
 
-   # Install Caddy package (systemd unit file, etc.)
    sudo apt -y install debian-keyring debian-archive-keyring apt-transport-https
    curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key | \
        sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
@@ -40,18 +39,6 @@ This section explains how to set up the TLS certificate, and URLs for each API t
        sudo tee /etc/apt/sources.list.d/caddy-stable.list
    sudo apt update
    sudo apt -y install caddy
-
-   # Install Caddy with rate limit module
-   wget https://github.com/caddyserver/xcaddy/releases/download/v0.3.1/xcaddy_0.3.1_linux_amd64.tar.gz
-   tar xvf xcaddy_0.3.1_linux_amd64.tar.gz
-   ./xcaddy build --with github.com/mholt/caddy-ratelimit
-   rm LICENSE README.md xcaddy xcaddy_0.3.1_linux_amd64.tar.gz
-
-   # Replace the default Caddy binary with the one with rate limit module
-   sudo dpkg-divert --divert /usr/bin/caddy.default --rename /usr/bin/caddy
-   sudo mv ./caddy /usr/bin/caddy.custom
-   sudo update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.default 10
-   sudo update-alternatives --install /usr/bin/caddy caddy /usr/bin/caddy.custom 50
 
    ########################
    ## END: Install Caddy ##
@@ -62,7 +49,7 @@ This section explains how to set up the TLS certificate, and URLs for each API t
    read -P 'Enter y if you\'re setting up a monitor, and n otherwise: ' IS_MONITOR
    if test $IS_MONITOR = 'n'
        read -P 'Enter the IP address of the monitor: ' MONITOR
-       set WHITELIST "@denied not remote_ip $MONITOR1\n        abort @denied"
+       set WHITELIST "@denied not remote_ip $MONITOR\n        abort @denied"
    end
    ```
 
@@ -135,45 +122,34 @@ This section explains how to set up the TLS certificate, and URLs for each API t
 
      ```shell
      printf "\
-     {
-         order rate_limit before basicauth
-     }
-
-     $DOMAIN
-
-     rate_limit {
-         zone ip {
-             key    {remote_host}
-             events 180
-             window 60s
+     :80, $DOMAIN {
+         respond /health 204
+         handle_path /tendermint-rpc/* {
+             rewrite * {path}
+             reverse_proxy :26657
          }
-     }
-
-     handle_path /tendermint-rpc/* {
-         rewrite * {path}
-         reverse_proxy :26657
-     }
-     handle_path /rest-api/* {
-         rewrite * {path}
-         reverse_proxy :1317
-     }
-     handle_path /grpc/* {
-         rewrite * {path}
-         reverse_proxy :9090
-     }
-     handle_path /grpc-web/* {
-         rewrite * {path}
-         reverse_proxy :9091
-     }
-     handle_path /node-exporter/* {
-         rewrite * {path}
-         reverse_proxy :9100
-         $WHITELIST
-     }
-     handle_path /blockchain-node/* {
-         rewrite * {path}
-         reverse_proxy :26660
-         $WHITELIST
+         handle_path /rest-api/* {
+             rewrite * {path}
+             reverse_proxy :1317
+         }
+         handle_path /grpc/* {
+             rewrite * {path}
+             reverse_proxy :9090
+         }
+         handle_path /grpc-web/* {
+             rewrite * {path}
+             reverse_proxy :9091
+         }
+         handle_path /node-exporter/* {
+             rewrite * {path}
+             reverse_proxy :9100
+             $WHITELIST
+         }
+         handle_path /blockchain-node/* {
+             rewrite * {path}
+             reverse_proxy :26660
+             $WHITELIST
+         }
      }
      " | sudo tee /etc/caddy/Caddyfile
 
@@ -212,3 +188,7 @@ The following URLs will now be available, where `<DOMAIN>` is the same as the do
 |      PANIC API docs       | Monitor                        | `https://<IP>:9000`                  | Cannot be accessed via the reverse proxy server. |
 
 For example, if you're running a Juno `juno-1` archive node, then you can query a transaction using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
+
+### Load Balancer
+
+If you're not setting up a validator, then create a load balancer for the two full nodes with a rate limit of 180 requests per minute per IP address. The domain name can look like `<SERVER>.<NETWORK>.<CHAIN>.<DOMAIN>` where `<SERVER>` is the server provisioned such as `archive-node`, `<NETWORK>` is the blockchain's network such as `osmo-test-4`, `<CHAIN>` is the name of the blockchain such as `cosmos-hub`, and `<DOMAIN>` is your domain name such as `example.com`.

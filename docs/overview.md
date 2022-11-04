@@ -41,7 +41,7 @@ Provision the necessary servers before proceeding further.
 
 If you're running a full node other than a sentry, then provision two servers for blockchain nodes (one as a backup), and one server for the monitor. If you're running a validator, then provision three servers for sentries, three servers for cosigners, one server for the monitor, and a server for a validator which is only required to set up Horcrux.
 
-Remember to place the backup server such as the second RPC node's server in a different region that the primary server.
+Remember to place the backup server such as the second RPC node's server in a different region that the primary server. For example, if you're using AWS, and the primary RPC node is in the `us-east-1a` availability zone, then place the backup RPC node in the `us-east-1b` availability zone (use availability zones within the same region so that AWS ELB can access both the RPC nodes).
 
 Here are monthly cost estimates if you're using AWS without a savings plan:
 
