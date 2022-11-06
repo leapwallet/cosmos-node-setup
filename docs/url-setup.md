@@ -9,7 +9,7 @@ This section explains how to use your domain name such as example.com instead of
 1. Go to your website's DNS section on Cloudflare.
 2. Click **Add record**.
 3. Set the **Type** field to **A**.
-4. Set the **Name (required)** field. We recommend using the format `<SERVER>.<NETWORK>.<CHAIN>.<DOMAIN>` for servers; `<SERVER>` is the server provisioned such as `archive-node-1`, `<NETWORK>` is the blockchain's network such as `osmo-test-4`, `<CHAIN>` is the name of the blockchain such as `cosmos-hub`, and `<DOMAIN>` is your domain name such as `example.com`. We recommend you use the following `<SERVER>` names:
+4. Set the **Name (required)** field. We recommend using the format `<SERVER>.<CHAIN_ID>.<CHAIN>.<DOMAIN>` for servers; `<SERVER>` is the server provisioned such as `archive-node-1`, `<CHAIN_ID>` is the chain ID such as `osmo-test-4`, `<CHAIN>` is the name of the blockchain such as `cosmos-hub`, and `<DOMAIN>` is your domain name such as `example.com`. We recommend you use the following `<SERVER>` names:
    - `sentry-1`, `sentry-2`, and `sentry-3` for the three sentry servers.
    - `cosigner-1`, `cosigner-2`, and `cosigner-3` for the three cosigner servers.
    - `archive-node-1` and `archive-node-2` for the two archive node servers.
@@ -61,6 +61,12 @@ This section explains how to set up the TLS certificate, and URLs for each API t
      read -P 'Enter the IP address of this sentry\'s respective cosigner: ' COSIGNER
 
      printf "\
+     {
+         servers {
+             metrics
+         }
+     }
+
      $DOMAIN {
          handle_path /tendermint-rpc/* {
              rewrite * {path}
@@ -88,6 +94,11 @@ This section explains how to set up the TLS certificate, and URLs for each API t
              @denied not remote_ip $COSIGNER
              abort @denied
          }
+         handle_path /reverse-proxy/* {
+             rewrite * {path}
+             reverse_proxy :2019
+             $WHITELIST
+         }
      }
      " | sudo tee /etc/caddy/Caddyfile
 
@@ -100,6 +111,12 @@ This section explains how to set up the TLS certificate, and URLs for each API t
      read -P 'Enter the IP address of this cosigner\'s respective sentry: ' SENTRY
 
      printf "\
+     {
+         servers {
+             metrics
+         }
+     }
+
      $DOMAIN {
          handle_path /signer/* {
              rewrite * {path}
@@ -112,6 +129,11 @@ This section explains how to set up the TLS certificate, and URLs for each API t
              reverse_proxy :9100
              $WHITELIST
          }
+         handle_path /reverse-proxy/* {
+             rewrite * {path}
+             reverse_proxy :2019
+             $WHITELIST
+         }
      }
      " | sudo tee /etc/caddy/Caddyfile
 
@@ -121,6 +143,12 @@ This section explains how to set up the TLS certificate, and URLs for each API t
    - Follow this step if the server you're configuring is for a full node other than a sentry:
 
      ```shell
+     {
+         servers {
+             metrics
+         }
+     }
+
      printf "\
      :80, $DOMAIN {
          respond /health 204
@@ -150,6 +178,11 @@ This section explains how to set up the TLS certificate, and URLs for each API t
              reverse_proxy :26660
              $WHITELIST
          }
+         handle_path /reverse-proxy/* {
+             rewrite * {path}
+             reverse_proxy :2019
+             $WHITELIST
+         }
      }
      " | sudo tee /etc/caddy/Caddyfile
 
@@ -160,6 +193,12 @@ This section explains how to set up the TLS certificate, and URLs for each API t
 
      ```shell
      printf "\
+     {
+         servers {
+             metrics
+         }
+     }
+
      $DOMAIN {
          handle_path /prometheus/* {
              rewrite * {path}
@@ -173,22 +212,23 @@ This section explains how to set up the TLS certificate, and URLs for each API t
 
 The following URLs will now be available, where `<DOMAIN>` is the same as the domain you entered during the prompt, and `<IP>` is the server's IP address:
 
-|          Service          | Servers Available On           | URL                                  | Note                                             |
-| :-----------------------: | ------------------------------ | ------------------------------------ | ------------------------------------------------ |
-|          RPC API          | Full nodes                     | `https://<DOMAIN>/tendermint-rpc`    |                                                  |
-|         REST API          | Full nodes                     | `https://<DOMAIN>/rest-api`          |                                                  |
-|         gRPC API          | Full nodes other than sentries | `https://<DOMAIN>/grpc`              |                                                  |
-|         gRPC Web          | Full nodes other than sentries | `https://<DOMAIN>/grpc-web`          |                                                  |
-|   Prometheus's metrics    | Monitor                        | `https://<DOMAIN>/prometheus`        | For use by Grafana.                              |
-|  Node Exporter's metrics  | Cosigners and full nodes       | `https://<DOMAIN>/node-exporter`     | For use by PANIC.                                |
-| Blockchain node's metrics | Full nodes                     | `https://<DOMAIN>/blockchain-node`   | For use by PANIC.                                |
-|       Cosigner port       | Cosigners                      | `https://<DOMAIN>/signer`            | For use by the respective sentry.                |
-|  Private validator port   | Sentries                       | `https://<DOMAIN>/private-validator` | For use by the respective cosigner.              |
-|         PANIC UI          | Monitor                        | `https://<IP>:3333`                  | Cannot be accessed via the reverse proxy server. |
-|      PANIC API docs       | Monitor                        | `https://<IP>:9000`                  | Cannot be accessed via the reverse proxy server. |
+|          Service          | Servers Available On                | URL                                  | Note                                             |
+| :-----------------------: | ----------------------------------- | ------------------------------------ | ------------------------------------------------ |
+|          RPC API          | Full nodes                          | `https://<DOMAIN>/tendermint-rpc`    |                                                  |
+|         REST API          | Full nodes                          | `https://<DOMAIN>/rest-api`          |                                                  |
+|         gRPC API          | Full nodes other than sentries      | `https://<DOMAIN>/grpc`              |                                                  |
+|         gRPC Web          | Full nodes other than sentries      | `https://<DOMAIN>/grpc-web`          |                                                  |
+|   Prometheus's metrics    | Monitors                            | `https://<DOMAIN>/prometheus`        | For use by Grafana.                              |
+|  Node Exporter's metrics  | Cosigners and full nodes            | `https://<DOMAIN>/node-exporter`     | For use by PANIC.                                |
+| Blockchain node's metrics | Full nodes                          | `https://<DOMAIN>/blockchain-node`   | For use by PANIC.                                |
+|  Reverse proxy's metrics  | Monitors, cosigners, and full nodes | `https://<DOMAIN>/reverse-proxy`     |                                                  |
+|       Cosigner port       | Cosigners                           | `https://<DOMAIN>/signer`            | For use by the respective sentry.                |
+|  Private validator port   | Sentries                            | `https://<DOMAIN>/private-validator` | For use by the respective cosigner.              |
+|         PANIC UI          | Monitors                            | `https://<IP>:3333`                  | Cannot be accessed via the reverse proxy server. |
+|      PANIC API docs       | Monitors                            | `https://<IP>:9000`                  | Cannot be accessed via the reverse proxy server. |
 
 For example, if you're running a Juno `juno-1` archive node, then you can query a transaction using the REST API base URL of `https://<DOMAIN>/rest-api` by opening `https://<DOMAIN>/rest-api/cosmos/tx/v1beta1/txs/8E9623B92C4501432EFDE993E6077B1FD021613CE1980859A1B4F0BB374BC1A9` in a browser.
 
 ### Load Balancer
 
-If you're not setting up a validator, then create a load balancer for the two full nodes with a rate limit of 180 requests per minute per IP address. The domain name can look like `<SERVER>.<NETWORK>.<CHAIN>.<DOMAIN>` where `<SERVER>` is the server provisioned such as `archive-node`, `<NETWORK>` is the blockchain's network such as `osmo-test-4`, `<CHAIN>` is the name of the blockchain such as `cosmos-hub`, and `<DOMAIN>` is your domain name such as `example.com`.
+If you're not setting up a validator, then create a load balancer for the two full nodes. We recommend applying a rate limit of 180 requests per minute per IP address. The domain name can look like `<SERVER>.<CHAIN_ID>.<CHAIN>.<DOMAIN>` where `<SERVER>` is the server provisioned such as `archive-node`, `<CHAIN_ID>` is the chain ID such as `osmo-test-4`, `<CHAIN>` is the name of the blockchain such as `cosmos-hub`, and `<DOMAIN>` is your domain name such as `example.com`.

@@ -78,9 +78,8 @@ This optional but recommended section explains how to set up monitoring and aler
 
      printf "\
      scrape_configs:
-     - job_name: node-exporter-for-monitor
-       static_configs:
-       - targets: [localhost:9100]
+
+     # Blockchain nodes
      - job_name: blockchain-node-for-sentry-1
        static_configs:
        - targets: [$SENTRY_1]
@@ -93,6 +92,11 @@ This optional but recommended section explains how to set up monitoring and aler
        static_configs:
        - targets: [$SENTRY_3]
        metrics_path: /blockchain-node
+
+     # Node Exporters
+     - job_name: node-exporter-for-monitor
+       static_configs:
+       - targets: [localhost:9100]
      - job_name: node-exporter-for-sentry-1
        static_configs:
        - targets: [$SENTRY_1]
@@ -117,6 +121,36 @@ This optional but recommended section explains how to set up monitoring and aler
        static_configs:
        - targets: [$COSIGNER_3]
        metrics_path: /node-exporter
+
+     # Reverse proxies
+     - job_name: reverse-proxy-for-monitor
+       static_configs:
+       - targets: [localhost:2019]
+     - job_name: reverse-proxy-for-sentry-1
+       static_configs:
+       - targets: [$SENTRY_1]
+       metrics_path: /reverse-proxy
+     - job_name: reverse-proxy-for-sentry-2
+       static_configs:
+       - targets: [$SENTRY_2]
+       metrics_path: /reverse-proxy
+     - job_name: reverse-proxy-for-sentry-3
+       static_configs:
+       - targets: [$SENTRY_3]
+       metrics_path: /reverse-proxy
+     - job_name: reverse-proxy-for-cosigner-1
+       static_configs:
+       - targets: [$COSIGNER_1]
+       metrics_path: /reverse-proxy
+     - job_name: reverse-proxy-for-cosigner-2
+       static_configs:
+       - targets: [$COSIGNER_2]
+       metrics_path: /reverse-proxy
+     - job_name: reverse-proxy-for-cosigner-3
+       static_configs:
+       - targets: [$COSIGNER_3]
+       metrics_path: /reverse-proxy
+
      remote_write:
      - url: $GRAFANA_URL
        basic_auth:
@@ -134,11 +168,6 @@ This optional but recommended section explains how to set up monitoring and aler
      printf "\
      scrape_configs:
 
-     # Monitor
-     - job_name: node-exporter-for-monitor
-       static_configs:
-       - targets: ['localhost:9100']
-
      # Blockchain nodes
      - job_name: blockchain-node-for-full-node-1
        static_configs:
@@ -150,6 +179,9 @@ This optional but recommended section explains how to set up monitoring and aler
        metrics_path: /blockchain-node
 
      # Node Exporters
+     - job_name: node-exporter-for-monitor
+       static_configs:
+       - targets: [localhost:9100]
      - job_name: node-exporter-for-full-node-1
        static_configs:
        - targets: [$FULL_NODE_1]
@@ -158,6 +190,19 @@ This optional but recommended section explains how to set up monitoring and aler
        static_configs:
        - targets: [$FULL_NODE_2]
        metrics_path: /node-exporter
+
+     # Reverse proxies
+     - job_name: reverse-proxy-for-monitor
+       static_configs:
+       - targets: [localhost:2019]
+     - job_name: reverse-proxy-for-full-node-1
+       static_configs:
+       - targets: [$FULL_NODE_1]
+       metrics_path: /reverse-proxy
+     - job_name: reverse-proxy-for-full-node-2
+       static_configs:
+       - targets: [$FULL_NODE_2]
+       metrics_path: /reverse-proxy
 
      remote_write:
      - url: $GRAFANA_URL
