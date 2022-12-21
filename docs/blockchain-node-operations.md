@@ -85,7 +85,7 @@ read -P "Enter y if the version matches $VERSION, and n otherwise: " IS_SUCCESSF
 
 if test $IS_SUCCESSFUL = 'y'
     printf "Successfully installed $VERSION\n"
-    
+
     read -P 'Enter p if this is a planned upgrade, and m if this is a missed upgrade: ' TYPE
     if test $TYPE = 'p'
         mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
@@ -96,11 +96,11 @@ if test $IS_SUCCESSFUL = 'y'
         set PROMPT "$PROMPT /home/ubuntu/.osmosisd/cosmovisor/upgrades/v13/bin/osmosisd, then the directory's name is"
         set PROMPT "$PROMPT v13 (even if the version you're installing is v13.0.0). Enter the directory's name: "
         read -P $PROMPT DIR
-        
+
         mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$DIR/bin
         cp $HOME/go/bin/$DAEMON_NAME $DAEMON_HOME/cosmovisor/upgrades/$DIR/bin
     end
-    
+
     printf 'Successfully set up upgrade for v'
     $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin/$DAEMON_NAME version
     printf "The upgrade succeeded if the above version matches $VERSION.\n"
