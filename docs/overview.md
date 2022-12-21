@@ -24,7 +24,7 @@ Here's how to set up the hardware:
 - The architecture must be x86_64.
 - RAM:
   - Blockchain node: 32 GiB
-  - Monitor: 4 GiB
+  - Monitor: 8 GiB
   - Cosigner: 1 GiB
 - CPU:
   - Blockchain node: Four 3.2 GHz CPU cores
@@ -33,7 +33,7 @@ Here's how to set up the hardware:
 
 We recommend the following if you're using AWS:
 
-- Use AWS EC2 for the computer. Use the `t2.micro` instance type for cosigners, `t2.medium` for monitors, and `m6a.2xlarge` for blockchain nodes.
+- Use AWS EC2 for the computer with elastic IP addresses. Use the `t2.micro` instance type for cosigners, `t2.large` for monitors, and `m6a.2xlarge` for blockchain nodes.
 - Use AWS EBS for storage.
 - If you're running an archive node, and have synced the blocks yourself because there's no snapshot available, use AWS DLM to create a daily backup of the AWS EBS volume.
 
@@ -45,7 +45,7 @@ Remember to place the backup server such as the second RPC node's server in a di
 
 Here are monthly cost estimates if you're using AWS without a savings plan:
 
-- Monitor: 26 USD
+- Monitor: 68 USD
 - Cosigner: 8 USD
 - Sentry: 157 USD
 - RPC node: 297 USD

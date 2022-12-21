@@ -55,34 +55,56 @@ After installing the first version (i.e., 3.0.0), the following versions must be
 
 ### Upgrading
 
-This section explains how to upgrade a node.
+There are two types of upgrades - planned and missed. An example of a planned upgrade is if the node is on v12, and v13 must be installed tomorrow. An example of a missed upgrade is if the node is on v12, and v13 was supposed to be installed in the past. An error that looks like the following will gets printed if an upgrade was missed:
 
 ```shell
+Dec 20 05:41:59 ip-10-0-13-196 cosmovisor[1278885]: 5:41AM ERR  error="binary not present, downloading disabled: cannot stat dir /home/ubuntu/.osmosisd/cosmovisor/upgrades/v13/bin/osmosisd: stat /home/ubuntu/.osmosisd/cosmovisor/upgrades/v13/bin/osmosisd: no such file or directory" module=cosmovisor
+Dec 20 05:41:59 ip-10-0-13-196 systemd[1]: cosmovisor.service: Main process exited, code=exited, status=1/FAILURE
+Dec 20 05:41:59 ip-10-0-13-196 systemd[1]: cosmovisor.service: Failed with result 'exit-code'.
+```
+
+```shell
+# We can't write code like <if test ($DAEMON_NAME version) = $VERSION> because <$DAEMON_NAME version> outputs to stdout
+# even if you redirect the output, etc.
+
 cd
 read -P "Enter the directory the node's GitHub repo was downloaded to relative to $HOME such as sei-chain: " DIR
 cd $DIR
 git fetch --tags
 
-set PROMPT 'Enter the upgrade\'s git tag such as v3.1.1, or commit hash such as'
+set PROMPT 'Enter the upgrade\'s git tag such as v13.0.0, or commit hash such as'
 set PROMPT "$PROMPT 4ec1b0ca818561cef04f8e6df84069b14399590e): "
 read -P $PROMPT VERSION
 
 git checkout $VERSION
 make install
 
-if test ($DAEMON_NAME version) = $VERSION
+printf 'Installed v'
+$DAEMON_NAME version
+read -P "Enter y if the version matches $VERSION, and n otherwise: " IS_SUCCESSFUL
+
+if test $IS_SUCCESSFUL = 'y'
     printf "Successfully installed $VERSION\n"
+    
+    read -P 'Enter p if this is a planned upgrade, and m if this is a missed upgrade: ' TYPE
+    if test $TYPE = 'p'
+        mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
+        cp $HOME/go/bin/$DAEMON_NAME $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
+    else
+        set PROMPT 'The error printed regarding the missed upgrade will specify the name of the directory it expects'
+        set PROMPT "$PROMPT the binary to get saved to. For example, if it printed "
+        set PROMPT "$PROMPT /home/ubuntu/.osmosisd/cosmovisor/upgrades/v13/bin/osmosisd, then the directory's name is"
+        set PROMPT "$PROMPT v13 (even if the version you're installing is v13.0.0). Enter the directory's name: "
+        read -P $PROMPT DIR
+        
+        mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$DIR/bin
+        cp $HOME/go/bin/$DAEMON_NAME $DAEMON_HOME/cosmovisor/upgrades/$DIR/bin
+    end
+    
+    printf 'Successfully set up upgrade for v'
+    $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin/$DAEMON_NAME version
+    printf "The upgrade succeeded if the above version matches $VERSION.\n"
 else
     printf "Failed to install $VERSION\n"
-    exit 1
-end
-
-mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
-cp $HOME/go/bin/$DAEMON_NAME $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
-
-if test ($DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin/$DAEMON_NAME version) = $VERSION
-    printf 'Successfully scheduled upgrade\n'
-else
-    printf 'Failed to schedule upgrade\n'
 end
 ```
