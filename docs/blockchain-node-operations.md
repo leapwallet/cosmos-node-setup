@@ -88,8 +88,9 @@ if test $IS_SUCCESSFUL = 'y'
 
     read -P 'Enter p if this is a planned upgrade, and m if this is a missed upgrade: ' TYPE
     if test $TYPE = 'p'
-        mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
-        cp $HOME/go/bin/$DAEMON_NAME $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin
+        set DIR $VERSION
+        mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$DIR/bin
+        cp $HOME/go/bin/$DAEMON_NAME $DAEMON_HOME/cosmovisor/upgrades/$DIR/bin
     else
         set PROMPT 'The error printed regarding the missed upgrade will specify the name of the directory it expects'
         set PROMPT "$PROMPT the binary to get saved to. For example, if it printed "
@@ -102,7 +103,7 @@ if test $IS_SUCCESSFUL = 'y'
     end
 
     printf 'Successfully set up upgrade for v'
-    $DAEMON_HOME/cosmovisor/upgrades/$VERSION/bin/$DAEMON_NAME version
+    $DAEMON_HOME/cosmovisor/upgrades/$DIR/bin/$DAEMON_NAME version
     printf "The upgrade succeeded if the above version matches $VERSION.\n"
 else
     printf "Failed to install $VERSION\n"
