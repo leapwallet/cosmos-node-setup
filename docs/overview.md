@@ -49,29 +49,20 @@ Here are monthly cost estimates if you're using AWS without a savings plan:
 - Cosigner: 8 USD
 - Sentry: 157 USD
 - RPC node: 297 USD
-- RPC node setup (one monitor, and two RPC nodes): 620 USD
-- Validator setup (one monitor, three sentries, and three cosigners): 521 USD
+- RPC node setup (one monitor, and two RPC nodes): 662 USD
+- Validator setup (one monitor, three sentries, and three cosigners): 563 USD
 
 ## Software
 
 Here are common [operations](blockchain-node-operations.md) that you can refer to throughout the setup process as well as long after that for blockchain nodes.
 
+Use a terminal multiplexer on every server in order to prevent losing progress during long commands in case your SSH connection gets disrupted.
+
 Set up the software:
 
-1. Enter a terminal multiplexer on every server in order to prevent losing progress during long commands in case your SSH connection gets disrupted:
-
-   ```shell
-   tmux
-   ```
-
-2. Follow this step on each server. Set up the [server](server-setup.md).
-3. Follow this step on each that's for a blockchain node. Set up the [blockchain node](blockchain-node-setup.md).
-4. Follow this step on each cosigner, full node, and monitor. Set up the [URL](url-setup.md).
-5. If you're setting up a validator, then set up the [cosigners](cosigner-setup.md).
-6. If you had created a server for a validator, delete it now.
-7. Follow this step on the monitor. Set up [observability](observability/observability.md).
-8. Exit the terminal multiplexer on every server:
-
-   ```shell
-   exit
-   ```
+1. Follow this step on each server. Set up the [server](server-setup.md).
+2. Follow this step on each that's for a blockchain node. Set up the [blockchain node](blockchain-node-setup.md).
+3. Follow this step on each cosigner, full node, and monitor. Set up the [URL](url-setup.md).
+4. If you're setting up a validator, then set up the [cosigners](cosigner-setup.md).
+5. If you had created a server for a validator, delete it now.
+6. Follow this step on the monitor. Set up [observability](observability/observability.md).
